@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Extracted Product Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+        }
+
+        .container {
+            display: flex;
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #ccc;
+        }
+
+        .form-section {
+            flex: 2;
+            padding: 32px 40px;
+        }
+
+        .image-section {
+            flex: 1;
+            padding: 32px 20px;
+            border-left: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        td {
+            padding: 8px 4px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        button {
+            background: #0078d4;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        button:hover {
+            background: #005fa3;
+        }
+
+        .special-diet-group {
+            margin-top: 10px;
+        }
+
+        .special-diet-group label {
+            font-weight: normal;
+            margin-right: 12px;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 320px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .helptext {
+            color: #888;
+            font-size: 0.95em;
+        }
+
+        .nutrition-section {
+            margin: 18px 0 8px 0;
+            font-weight: bold;
+            color: #0078d4;
+            font-size: 1.1em;
+        }
+
+        .nutrition-table {
+            width: 100%;
+            background: #f5faff;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-section">
+            <h1>Edit Extracted Product Data</h1>
+            <form method="post">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <td>{{ form.prod_name.label_tag }}</td>
+                        <td>{{ form.prod_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.prod_type.label_tag }}</td>
+                        <td>{{ form.prod_type }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.price.label_tag }}</td>
+                        <td>{{ form.price }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.ingredients.label_tag }}</td>
+                        <td>{{ form.ingredients }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="nutrition-section">
+                                Nutritional Information
+                            </div>
+                            <table class="nutrition-table">
+                                <tr>
+                                    <td>{{ form.energy_kcal.label_tag }}</td>
+                                    <td>{{ form.energy_kcal }}</td>
+                                    <td>{{ form.protein_g.label_tag }}</td>
+                                    <td>{{ form.protein_g }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ form.total_fat_g.label_tag }}</td>
+                                    <td>{{ form.total_fat_g }}</td>
+                                    <td>{{ form.saturated_fat_g.label_tag }}</td>
+                                    <td>{{ form.saturated_fat_g }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ form.trans_fat_g.label_tag }}</td>
+                                    <td>{{ form.trans_fat_g }}</td>
+                                    <td>{{ form.cholesterol_mg.label_tag }}</td>
+                                    <td>{{ form.cholesterol_mg }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ form.carbohydrate_g.label_tag }}</td>
+                                    <td>{{ form.carbohydrate_g }}</td>
+                                    <td>{{ form.sugars_g.label_tag }}</td>
+                                    <td>{{ form.sugars_g }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ form.fiber_g.label_tag }}</td>
+                                    <td>{{ form.fiber_g }}</td>
+                                    <td>{{ form.sodium_mg.label_tag }}</td>
+                                    <td>{{ form.sodium_mg }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ form.calcium_mg.label_tag }}</td>
+                                    <td>{{ form.calcium_mg }}</td>
+                                    <td>{{ form.iron_mg.label_tag }}</td>
+                                    <td>{{ form.iron_mg }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ form.potassium_mg.label_tag }}</td>
+                                    <td>{{ form.potassium_mg }}</td>
+                                    <td>{{ form.vitamin_c_mg.label_tag }}</td>
+                                    <td>{{ form.vitamin_c_mg }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ form.vitamin_d_mcg.label_tag }}</td>
+                                    <td>{{ form.vitamin_d_mcg }}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.allergen_info.label_tag }}</td>
+                        <td>{{ form.allergen_info }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.barcode.label_tag }}</td>
+                        <td>{{ form.barcode }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.manufacturing_date.label_tag }}</td>
+                        <td>{{ form.manufacturing_date }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.expiry_tenure.label_tag }}</td>
+                        <td>{{ form.expiry_tenure }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.expiry_date.label_tag }}</td>
+                        <td>{{ form.expiry_date }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.special_diet.label_tag }}</td>
+                        <td class="special-diet-group">
+                            {{ form.special_diet }}
+                        </td>
+                    </tr>
+                </table>
+                <button type="submit">Save to Database</button>
+            </form>
+        </div>
+        <div class="image-section">
+            {% if image_urls %}
+            {% for img in image_urls %}
+            <img src="{{ img }}" alt="Packet Image" class="image-preview" style="margin-bottom:10px;">
+            {% endfor %}
+            <div style="margin-top:10px; color:#555;">
+                Packet Image{% if image_urls|length > 1 %}s{% endif %}
+            </div>
+            {% elif image_url %}
+            <img src="{{ image_url }}" alt="Packet Image" class="image-preview">
+            <div style="margin-top:10px; color:#555;">Packet Image</div>
+            {% else %}
+            <div style="color:#aaa;">No image available</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>
