@@ -1,0 +1,6 @@
+django
+pymongo
+python-dotenv
+azure-ai-formrecognizer
+azure-ai-inference
+azure-core
