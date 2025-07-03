@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "pymongo",
-    "seller"
+    "seller",
+    "consumer"
 ]
 
 MIDDLEWARE = [
