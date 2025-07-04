@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-#$ym-ur6m7-+9rfidgw^2r^uo-h*n5gie16q-%mvi)u!2eqlwe"
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-for-dev')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -83,10 +83,10 @@ WSGI_APPLICATION = "SwasthCare_seller.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME", "***REMOVED***"),
-        "USER": os.getenv("DB_USER", "***REMOVED***"),
-        "PASSWORD": os.getenv("DB_PASSWORD", "***REMOVED***"),
-        "HOST": os.getenv("DB_HOST", "***REMOVED***"),
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
         "PORT": os.getenv("DB_PORT", "5432"),
         "OPTIONS": {
             "sslmode": "require",
@@ -154,7 +154,7 @@ LOGOUT_REDIRECT_URL = '/'
 # AZURE_AI_API_KEY = os.getenv("AZURE_AI_API_KEY")
 
 # MongoDB Configuration for product data
-COSMOSDB_URI = os.getenv("COSMOS_CONN_STRING", "***REMOVED***")
+COSMOSDB_URI = os.getenv("COSMOS_CONN_STRING")
 
 # Azure Services Configuration
 AZURE_DI_ENDPOINT = os.getenv("AZURE_DI_ENDPOINT")
