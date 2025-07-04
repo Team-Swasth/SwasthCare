@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}SwasthCare - {{ product.prod_name }}{% endblock %}
+
+{% block content %}
+<a href="/consumer/scan/" class="btn btn-outline-secondary mb-3">
+    <i class="bi bi-arrow-left"></i> Back to Scanner
+</a>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="mb-0">{{ product.prod_name }}</h3>
+        <span class="badge bg-secondary">{{ product.prod_type }}</span>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Product Information</h5>
+                <p><strong>Barcode:</strong> {{ product.barcode }}</p>
+                <p><strong>Price:</strong> ₹{{ product.price }}</p>
+                
+                <div class="date-info">
+                    <div><strong>Manufacturing Date:</strong> {{ product.manufacturing_date }}</div>
+                    <div><strong>Expiry Date:</strong> {{ product.expiry.expiry_date }}</div>
+                    <div><strong>Shelf Life:</strong> {{ product.expiry.tenure }} months</div>
+                </div>
+
+                {% if product.special_diet %}
+                <div class="mt-3">
+                    <h6>Special Diet:</h6>
+                    {% for diet in product.special_diet %}
+                    <span class="badge badge-diet">{{ diet|title }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if product.allergen_info %}
+                <div class="mt-3">
+                    <h6>Allergen Information:</h6>
+                    <div class="badge badge-allergen">{{ product.allergen_info }}</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <h5>Ingredients</h5>
+                <p>{{ product.ingredients }}</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <h5>Nutritional Information (per serving)</h5>
+                <table class="nutrient-table">
+                    <tr>
+                        <td><strong>Energy</strong></td>
+                        <td>{{ product.nutritional_info.energy_kcal }} kcal</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Protein</strong></td>
+                        <td>{{ product.nutritional_info.protein_g }} g</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Fat</strong></td>
+                        <td>{{ product.nutritional_info.total_fat_g }} g</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Saturated Fat</strong></td>
+                        <td>{{ product.nutritional_info.saturated_fat_g }} g</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Trans Fat</strong></td>
+                        <td>{{ product.nutritional_info.trans_fat_g }} g</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cholesterol</strong></td>
+                        <td>{{ product.nutritional_info.cholesterol_mg }} mg</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Carbohydrates</strong></td>
+                        <td>{{ product.nutritional_info.carbohydrate_g }} g</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sugars</strong></td>
+                        <td>{{ product.nutritional_info.sugars_g }} g</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fiber</strong></td>
+                        <td>{{ product.nutritional_info.fiber_g }} g</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sodium</strong></td>
+                        <td>{{ product.nutritional_info.sodium_mg }} mg</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Calcium</strong></td>
+                        <td>{{ product.nutritional_info.calcium_mg }} mg</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Iron</strong></td>
+                        <td>{{ product.nutritional_info.iron_mg }} mg</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Potassium</strong></td>
+                        <td>{{ product.nutritional_info.potassium_mg }} mg</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vitamin C</strong></td>
+                        <td>{{ product.nutritional_info.vitamin_c_mg }} mg</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vitamin D</strong></td>
+                        <td>{{ product.nutritional_info.vitamin_d_mcg }} mcg</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

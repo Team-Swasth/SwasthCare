@@ -1,231 +1,766 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 
-<head>
-    <title>Edit Extracted Product Data</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f7f7f7;
-        }
+{% block title %}SwasthCare - Review Product Data{% endblock %}
 
-        .container {
+{% block content %}
+<div class="row">
+    <div class="col-md-5">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="mb-0">Product Images</h3>
+            </div>
+            <div class="card-body">
+                <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for url in image_urls %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img src="{{ url }}" class="d-block w-100" alt="Product Image">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if image_urls|length > 1 %}
+                    <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">Edit Product Information</h3>
+            </div>
+            <div class="card-body">
+                <p class="mb-3">Review and edit the extracted product information below.</p>
+
+                <form method="post" class="edit-form">
+                    {% csrf_token %}
+
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_prod_name" class="form-label">Product Name</label>
+                            {{ form.prod_name }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_prod_type" class="form-label">Product Type</label>
+                            {{ form.prod_type }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_barcode" class="form-label">Barcode</label>
+                            {{ form.barcode }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_price" class="form-label">Price (₹)</label>
+                            {{ form.price }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_manufacturing_date" class="form-label">Manufacturing Date</label>
+                            {{ form.manufacturing_date }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_expiry_date" class="form-label">Expiry Date</label>
+                            {{ form.expiry_date }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_expiry_tenure" class="form-label">Shelf Life (months)</label>
+                        {{ form.expiry_tenure }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_ingredients" class="form-label">Ingredients</label>
+                        {{ form.ingredients }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_allergen_info" class="form-label">Allergen Information</label>
+                        {{ form.allergen_info }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Special Diet</label>
+                        <div class="diet-options">
+                            {{ form.special_diet }}
+                        </div>
+                    </div>
+
+                    <h4 class="mt-4 mb-3">Nutritional Information</h4>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="id_energy_kcal" class="form-label">Energy (kcal)</label>
+                            {{ form.energy_kcal }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_protein_g" class="form-label">Protein (g)</label>
+                            {{ form.protein_g }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_total_fat_g" class="form-label">Total Fat (g)</label>
+                            {{ form.total_fat_g }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="id_saturated_fat_g" class="form-label">Saturated Fat (g)</label>
+                            {{ form.saturated_fat_g }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_trans_fat_g" class="form-label">Trans Fat (g)</label>
+                            {{ form.trans_fat_g }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_cholesterol_mg" class="form-label">Cholesterol (mg)</label>
+                            {{ form.cholesterol_mg }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="id_carbohydrate_g" class="form-label">Carbohydrates (g)</label>
+                            {{ form.carbohydrate_g }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_sugars_g" class="form-label">Sugars (g)</label>
+                            {{ form.sugars_g }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_fiber_g" class="form-label">Fiber (g)</label>
+                            {{ form.fiber_g }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="id_sodium_mg" class="form-label">Sodium (mg)</label>
+                            {{ form.sodium_mg }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_calcium_mg" class="form-label">Calcium (mg)</label>
+                            {{ form.calcium_mg }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_iron_mg" class="form-label">Iron (mg)</label>
+                            {{ form.iron_mg }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="id_potassium_mg" class="form-label">Potassium (mg)</label>
+                            {{ form.potassium_mg }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_vitamin_c_mg" class="form-label">Vitamin C (mg)</label>
+                            {{ form.vitamin_c_mg }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_vitamin_d_mcg" class="form-label">Vitamin D (mcg)</label>
+                            {{ form.vitamin_d_mcg }}
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Save Product Information</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-control, .form-select {
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.375rem;
+    }
+    
+    textarea.form-control {
+        min-height: 100px;
+    }
+    
+    .carousel-item img {
+        max-height: 400px;
+        object-fit: contain;
+        border-radius: 0.375rem;
+    }
+    
+    .diet-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .diet-options ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .diet-options li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .diet-options label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+    
+    .diet-options input {
+        margin-right: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+        .navbar {
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 1.5rem;
             display: flex;
-            max-width: 900px;
-            margin: 40px auto;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px #ccc;
-        }
-
-        .form-section {
-            flex: 2;
-            padding: 32px 40px;
-        }
-
-        .image-section {
-            flex: 1;
-            padding: 32px 20px;
-            border-left: 1px solid #eee;
-            display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
         }
 
-        h1 {
-            color: #2c3e50;
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        table {
+        .logo-icon {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            flex: 1;
             width: 100%;
         }
 
-        td {
-            padding: 8px 4px;
+        .page-header {
+            margin-bottom: 1.5rem;
         }
 
-        label {
-            font-weight: bold;
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
         }
 
-        button {
-            background: #0078d4;
-            color: #fff;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-            margin-top: 16px;
+        .page-subtitle {
+            color: var(--gray);
+            font-size: 1rem;
         }
 
-        button:hover {
-            background: #005fa3;
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+        }
+
+        .form-section {
+            padding: 1.5rem 2rem;
+        }
+
+        .image-section {
+            padding: 1.5rem;
+            background: var(--lighter-gray);
+            border-left: 1px solid var(--light-gray);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-size: 0.875rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(8, 156, 123, 0.15);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 1.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            background: var(--primary-light);
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .nutrition-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nutrition-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--primary-dark);
+            margin-bottom: 0.25rem;
         }
 
         .special-diet-group {
-            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem 1rem;
+            margin-top: 0.5rem;
         }
 
-        .special-diet-group label {
-            font-weight: normal;
-            margin-right: 12px;
+        .special-diet-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .special-diet-item label {
+            font-size: 0.875rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            font-size: 1rem;
+            text-align: center;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(8, 156, 123, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(8, 156, 123, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-light);
         }
 
         .image-preview {
-            max-width: 100%;
-            max-height: 320px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-
-        .helptext {
-            color: #888;
-            font-size: 0.95em;
-        }
-
-        .nutrition-section {
-            margin: 18px 0 8px 0;
-            font-weight: bold;
-            color: #0078d4;
-            font-size: 1.1em;
-        }
-
-        .nutrition-table {
             width: 100%;
-            background: #f5faff;
+            max-height: 200px;
+            object-fit: cover;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .image-caption {
+            font-size: 0.875rem;
+            color: var(--gray);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        .footer {
+            background: var(--white);
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--gray);
+            font-size: 0.875rem;
+            margin-top: auto;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            gap: 1rem;
+        }
+
+        /* Enhancements for form fields to match design */
+        input[type="text"], 
+        input[type="number"], 
+        input[type="date"], 
+        select, 
+        textarea {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Make Django form elements look nice */
+        form input,
+        form select,
+        form textarea {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        form input:focus,
+        form select:focus,
+        form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(8, 156, 123, 0.15);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .image-section {
+                border-left: none;
+                border-top: 1px solid var(--light-gray);
+            }
+            
+            .nutrition-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .special-diet-group {
+                grid-template-columns: 1fr 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="form-section">
-            <h1>Edit Extracted Product Data</h1>
-            <form method="post">
-                {% csrf_token %}
-                <table>
-                    <tr>
-                        <td>{{ form.prod_name.label_tag }}</td>
-                        <td>{{ form.prod_name }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.prod_type.label_tag }}</td>
-                        <td>{{ form.prod_type }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.price.label_tag }}</td>
-                        <td>{{ form.price }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.ingredients.label_tag }}</td>
-                        <td>{{ form.ingredients }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <div class="nutrition-section">
-                                Nutritional Information
-                            </div>
-                            <table class="nutrition-table">
-                                <tr>
-                                    <td>{{ form.energy_kcal.label_tag }}</td>
-                                    <td>{{ form.energy_kcal }}</td>
-                                    <td>{{ form.protein_g.label_tag }}</td>
-                                    <td>{{ form.protein_g }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ form.total_fat_g.label_tag }}</td>
-                                    <td>{{ form.total_fat_g }}</td>
-                                    <td>{{ form.saturated_fat_g.label_tag }}</td>
-                                    <td>{{ form.saturated_fat_g }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ form.trans_fat_g.label_tag }}</td>
-                                    <td>{{ form.trans_fat_g }}</td>
-                                    <td>{{ form.cholesterol_mg.label_tag }}</td>
-                                    <td>{{ form.cholesterol_mg }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ form.carbohydrate_g.label_tag }}</td>
-                                    <td>{{ form.carbohydrate_g }}</td>
-                                    <td>{{ form.sugars_g.label_tag }}</td>
-                                    <td>{{ form.sugars_g }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ form.fiber_g.label_tag }}</td>
-                                    <td>{{ form.fiber_g }}</td>
-                                    <td>{{ form.sodium_mg.label_tag }}</td>
-                                    <td>{{ form.sodium_mg }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ form.calcium_mg.label_tag }}</td>
-                                    <td>{{ form.calcium_mg }}</td>
-                                    <td>{{ form.iron_mg.label_tag }}</td>
-                                    <td>{{ form.iron_mg }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ form.potassium_mg.label_tag }}</td>
-                                    <td>{{ form.potassium_mg }}</td>
-                                    <td>{{ form.vitamin_c_mg.label_tag }}</td>
-                                    <td>{{ form.vitamin_c_mg }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ form.vitamin_d_mcg.label_tag }}</td>
-                                    <td>{{ form.vitamin_d_mcg }}</td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.allergen_info.label_tag }}</td>
-                        <td>{{ form.allergen_info }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.barcode.label_tag }}</td>
-                        <td>{{ form.barcode }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.manufacturing_date.label_tag }}</td>
-                        <td>{{ form.manufacturing_date }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.expiry_tenure.label_tag }}</td>
-                        <td>{{ form.expiry_tenure }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.expiry_date.label_tag }}</td>
-                        <td>{{ form.expiry_date }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.special_diet.label_tag }}</td>
-                        <td class="special-diet-group">
-                            {{ form.special_diet }}
-                        </td>
-                    </tr>
-                </table>
-                <button type="submit">Save to Database</button>
-            </form>
+    <nav class="navbar">
+        <div class="logo">
+            <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
+            </svg>
+            SwasthCare
         </div>
-        <div class="image-section">
-            {% if image_urls %}
-            {% for img in image_urls %}
-            <img src="{{ img }}" alt="Packet Image" class="image-preview" style="margin-bottom:10px;">
-            {% endfor %}
-            <div style="margin-top:10px; color:#555;">
-                Packet Image{% if image_urls|length > 1 %}s{% endif %}
+        <div class="nav-links">
+            <!-- Navigation links can be added here -->
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Review Extracted Product Data</h1>
+            <p class="page-subtitle">Our AI has analyzed your product images. Please review and edit the information before saving.</p>
+        </div>
+
+        <div class="card">
+            <div class="form-grid">
+                <div class="form-section">
+                    <form method="post" id="productForm">
+                        {% csrf_token %}
+                        
+                        <div class="section-title">Product Information</div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.prod_name.label }}</label>
+                            {{ form.prod_name }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.prod_type.label }}</label>
+                            {{ form.prod_type }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.price.label }}</label>
+                            {{ form.price }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.ingredients.label }}</label>
+                            {{ form.ingredients }}
+                        </div>
+                        
+                        <div class="section-title">Nutritional Information</div>
+                        
+                        <div class="nutrition-grid">
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.energy_kcal.label }}</label>
+                                {{ form.energy_kcal }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.protein_g.label }}</label>
+                                {{ form.protein_g }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.total_fat_g.label }}</label>
+                                {{ form.total_fat_g }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.saturated_fat_g.label }}</label>
+                                {{ form.saturated_fat_g }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.trans_fat_g.label }}</label>
+                                {{ form.trans_fat_g }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.cholesterol_mg.label }}</label>
+                                {{ form.cholesterol_mg }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.carbohydrate_g.label }}</label>
+                                {{ form.carbohydrate_g }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.sugars_g.label }}</label>
+                                {{ form.sugars_g }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.fiber_g.label }}</label>
+                                {{ form.fiber_g }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.sodium_mg.label }}</label>
+                                {{ form.sodium_mg }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.calcium_mg.label }}</label>
+                                {{ form.calcium_mg }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.iron_mg.label }}</label>
+                                {{ form.iron_mg }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.potassium_mg.label }}</label>
+                                {{ form.potassium_mg }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.vitamin_c_mg.label }}</label>
+                                {{ form.vitamin_c_mg }}
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <label class="nutrition-label">{{ form.vitamin_d_mcg.label }}</label>
+                                {{ form.vitamin_d_mcg }}
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">Additional Information</div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.allergen_info.label }}</label>
+                            {{ form.allergen_info }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.barcode.label }}</label>
+                            {{ form.barcode }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.manufacturing_date.label }}</label>
+                            {{ form.manufacturing_date }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.expiry_tenure.label }}</label>
+                            {{ form.expiry_tenure }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.expiry_date.label }}</label>
+                            {{ form.expiry_date }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.special_diet.label }}</label>
+                            <div class="special-diet-group">
+                                {% for checkbox in form.special_diet %}
+                                <div class="special-diet-item">
+                                    {{ checkbox.tag }}
+                                    <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="actions">
+                            <a href="{% url 'upload_document' %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary" id="saveBtn">Save Product Data</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="image-section">
+                    <h3 style="margin-bottom: 1rem; color: var(--dark);">Uploaded Images</h3>
+                    
+                    {% if image_urls %}
+                        <div class="image-grid">
+                        {% for img in image_urls %}
+                            {% with delay=forloop.counter0|stringformat:"i"|add:"00" %}
+                            <div class="fade-in" style="animation-delay: 10ms;">
+                                <img src="{{ img }}" alt="Product Image {{ forloop.counter }}" class="image-preview" loading="lazy">
+                            </div>
+                            {% endwith %}
+                        {% endfor %}
+                        </div>
+                        <p class="image-caption">Product Image{% if image_urls|length > 1 %}s{% endif %}</p>
+                    {% elif image_url %}
+                        <img src="{{ image_url }}" alt="Product Image" class="image-preview">
+                        <p class="image-caption">Product Image</p>
+                    {% else %}
+                        <div style="color: var(--gray); text-align: center; padding: 2rem 1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem; opacity: 0.5;">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                            <p>No images available</p>
+                        </div>
+                    {% endif %}
+                    
+                    <div style="margin-top: auto; width: 100%;">
+                        <div style="background: var(--primary-light); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 0.9rem;">AI Analysis</h4>
+                            <p style="font-size: 0.8rem; color: var(--dark);">Our AI system has analyzed the product images and extracted the data. Please verify all fields before saving.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            {% elif image_url %}
-            <img src="{{ image_url }}" alt="Packet Image" class="image-preview">
-            <div style="margin-top:10px; color:#555;">Packet Image</div>
-            {% else %}
-            <div style="color:#aaa;">No image available</div>
-            {% endif %}
         </div>
     </div>
+
+    <footer class="footer">
+        <p>© 2025 SwasthCare. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Add loading animation on form submit
+        document.getElementById('productForm').addEventListener('submit', function() {
+            const btn = document.getElementById('saveBtn');
+            btn.innerHTML = '<span>Saving...</span>';
+            btn.disabled = true;
+        });
+        
+        // Add styling to form inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            // Enhance Django form inputs
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.type !== 'checkbox' && input.type !== 'radio') {
+                    input.classList.add('form-control');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

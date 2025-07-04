@@ -2,10 +2,19 @@ import os
 import json
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .forms import DocumentUploadForm, EditExtractedDataForm
 from .azure_services import analyze_and_print_raw_text, extract_structured_data_from_label
-import pymongo
 from datetime import datetime
+
+# MongoDB import - conditional based on availability
+try:
+    import pymongo
+    MONGODB_AVAILABLE = True
+except ImportError:
+    MONGODB_AVAILABLE = False
+    print("Warning: pymongo not available. MongoDB features will be disabled.")
 
 def ddmmyyyy_to_date(date_str):
     try:
@@ -34,6 +43,7 @@ def date_to_ddmmyyyy(date_val):
         return date_val.strftime("%d-%m-%Y")
     return str(date_val)
 
+@login_required
 def upload_document(request):
     if request.method == "POST":
         form = DocumentUploadForm(request.POST, request.FILES)
@@ -122,6 +132,7 @@ def upload_document(request):
         form = DocumentUploadForm()
     return render(request, "seller/upload.html", {"form": form})
 
+@login_required
 def edit_extracted_data(request):
     initial_data = request.session.get("edit_form_data", {})
     image_urls = request.session.get("uploaded_image_urls", [])
@@ -158,11 +169,23 @@ def edit_extracted_data(request):
             }
             data["special_diet"] = data.get("special_diet", [])
             # price is already included in data
-            client = pymongo.MongoClient(settings.COSMOSDB_URI)
-            db = client['swasth']
-            collection = db['food']
-            collection.insert_one(data)
-            print("Inserted document into CosmosDB:", data)
+            
+            # Save to MongoDB if available
+            if MONGODB_AVAILABLE:
+                try:
+                    client = pymongo.MongoClient(settings.COSMOSDB_URI)
+                    db = client['swasth']
+                    collection = db['food']
+                    collection.insert_one(data)
+                    print("Inserted document into CosmosDB:", data)
+                    messages.success(request, "Product data saved successfully to database!")
+                except Exception as e:
+                    messages.error(request, f"Database error: {str(e)}")
+                    print(f"Error inserting into CosmosDB: {str(e)}")
+            else:
+                messages.warning(request, "Database not available. Product data not saved.")
+                print("MongoDB not available. Product data not saved.")
+            
             return render(request, "seller/success.html", {"data": data})
     else:
         # Convert DD-MM-YYYY string to date object for form initial

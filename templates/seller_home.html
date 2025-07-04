@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}SwasthCare - Seller Dashboard{% endblock %}
+
+{% block content %}
+<div class="header text-center mb-5">
+    <h1 class="display-4">Welcome, {{ user.get_full_name|default:user.username }}!</h1>
+    <p class="lead">
+        <i class="bi bi-shop text-success"></i> 
+        Your Seller Dashboard - Showcase your products with complete transparency
+    </p>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show auto-dismiss-alert" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="progress mt-2" style="height: 3px;">
+                <div class="progress-bar bg-{{ message.tags }}" role="progressbar" style="width: 100%"></div>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-upload"></i> Upload Product
+                </h5>
+            </div>
+            <div class="card-body">
+                <p>Share detailed product information and build consumer trust through complete transparency and accurate labeling.</p>
+                <a href="/seller/upload/" class="btn btn-primary w-100">
+                    <i class="bi bi-plus-circle"></i> Add Product
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-gear"></i> Account Settings
+                </h5>
+            </div>
+            <div class="card-body">
+                <p>Manage your seller profile, preferences, and account information.</p>
+                <a href="/profile/" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-person-gear"></i> Settings
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-info-circle"></i> Seller Guidelines
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Product Information Requirements</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success"></i> Clear product label images</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Accurate ingredient lists</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Nutritional information</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Allergen warnings</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Best Practices</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-lightbulb text-warning"></i> Upload high-quality images</li>
+                            <li><i class="bi bi-lightbulb text-warning"></i> Double-check all information</li>
+                            <li><i class="bi bi-lightbulb text-warning"></i> Keep product data updated</li>
+                            <li><i class="bi bi-lightbulb text-warning"></i> Respond to consumer feedback</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-5 text-secondary">
+    <p>© 2025 SwasthCare - Seller Portal. All rights reserved.</p>
+</div>
+{% endblock %}
