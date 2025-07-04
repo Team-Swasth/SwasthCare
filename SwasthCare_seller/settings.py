@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-#$ym-ur6m7-+9rfidgw^2r^uo-h*n5gie16q-%mvi)u!2eqlwe
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 
 # Application definition
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "pymongo",
+    "SwasthCare_seller",
     "seller",
     "consumer"
 ]
@@ -59,7 +59,9 @@ ROOT_URLCONF = "SwasthCare_seller.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            os.path.join(BASE_DIR, "templates"),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -80,8 +82,15 @@ WSGI_APPLICATION = "SwasthCare_seller.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME", "accounts"),
+        "USER": os.getenv("DB_USER", "citus"),
+        "PASSWORD": os.getenv("DB_PASSWORD", "Sparkathon@2025"),
+        "HOST": os.getenv("DB_HOST", "c-swasth.ot6z2q2lnelo7a.postgres.cosmos.azure.com"),
+        "PORT": os.getenv("DB_PORT", "5432"),
+        "OPTIONS": {
+            "sslmode": "require",
+        },
     }
 }
 
@@ -122,7 +131,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, "seller", "static"),
+    os.path.join(BASE_DIR, "consumer", "static"),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
@@ -131,15 +142,22 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Authentication settings
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
-# Environment Variables
+# Azure Services Configuration (if needed in future)
+# AZURE_DI_ENDPOINT = os.getenv("AZURE_DI_ENDPOINT")
+# AZURE_DI_API_KEY = os.getenv("AZURE_DI_API_KEY")
+# AZURE_AI_ENDPOINT = os.getenv("AZURE_AI_ENDPOINT")
+# AZURE_AI_API_KEY = os.getenv("AZURE_AI_API_KEY")
 
-COSMOSDB_URI = os.getenv("COSMOS_CONN_STRING")
-COSMOSDB_DBNAME = os.getenv("COSMOSDB_DBNAME")
-COSMOSDB_COLLECTION = os.getenv("COSMOS_COLLECTION")
+# MongoDB Configuration for product data
+COSMOSDB_URI = os.getenv("COSMOS_CONN_STRING", "mongodb://localhost:27017/")
 
+# Azure Services Configuration
 AZURE_DI_ENDPOINT = os.getenv("AZURE_DI_ENDPOINT")
 AZURE_DI_API_KEY = os.getenv("AZURE_DI_API_KEY")
-
 AZURE_AI_ENDPOINT = os.getenv("AZURE_AI_ENDPOINT")
 AZURE_AI_API_KEY = os.getenv("AZURE_AI_API_KEY")

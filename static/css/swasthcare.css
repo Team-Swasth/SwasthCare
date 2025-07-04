@@ -1,0 +1,579 @@
+/* Shared styles for SwasthCare portal */
+/* Common CSS for the whole application */
+:root {
+    /* Primary colors */
+    --primary-color: #4CAF50;
+    --primary-dark: #388E3C;
+    --primary-light: #A5D6A7;
+    --accent-color: #FF9800;
+    
+    /* Text colors */
+    --text-color: #212121;
+    --text-secondary: #757575;
+    
+    /* Background and element colors */
+    --background-color: #f8f9fa;
+    --card-bg: #ffffff;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-color: #e9ecef;
+    
+    /* Status colors */
+    --success-color: #4CAF50;
+    --warning-color: #FF9800;
+    --danger-color: #F44336;
+    --info-color: #2196F3;
+    
+    /* Legacy compatibility */
+    --white: #ffffff;
+    --gray: #6c757d;
+    --dark: #343a40;
+}
+
+[data-theme="dark"] {
+    /* Primary colors */
+    --primary-color: #388E3C;
+    --primary-dark: #1B5E20;
+    --primary-light: #81C784;
+    --accent-color: #FFB74D;
+    
+    /* Text colors */
+    --text-color: #f8f9fa;
+    --text-secondary: #BDBDBD;
+    
+    /* Background and element colors */
+    --background-color: #121212;
+    --card-bg: #1E1E1E;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --border-color: #333333;
+    
+    /* Status colors */
+    --success-color: #66BB6A;
+    --warning-color: #FFA726;
+    --danger-color: #EF5350;
+    --info-color: #42A5F5;
+    
+    /* Legacy compatibility */
+    --white: #1E1E1E;
+    --gray: #BDBDBD;
+    --dark: #f8f9fa;
+}
+
+/* Enhanced Dark Mode Support */
+[data-theme="dark"] {
+    /* Bootstrap component overrides for dark mode */
+    .navbar-dark .navbar-nav .nav-link {
+        color: rgba(255, 255, 255, 0.75);
+    }
+    
+    .navbar-dark .navbar-nav .nav-link:hover {
+        color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .navbar-dark .navbar-nav .nav-link.active {
+        color: white;
+    }
+    
+    .dropdown-menu {
+        background-color: var(--card-bg);
+        border-color: var(--border-color);
+    }
+    
+    .dropdown-item {
+        color: var(--text-color);
+    }
+    
+    .dropdown-item:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    
+    .dropdown-divider {
+        border-color: var(--border-color);
+    }
+    
+    /* Text elements */
+    .text-muted {
+        color: var(--text-secondary) !important;
+    }
+    
+    .text-secondary {
+        color: var(--text-secondary) !important;
+    }
+    
+    /* Form elements */
+    .form-control::placeholder {
+        color: var(--text-secondary);
+    }
+    
+    .form-label {
+        color: var(--text-color);
+    }
+    
+    /* Buttons */
+    .btn-outline-primary {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+    }
+    
+    .btn-outline-secondary {
+        color: var(--text-color);
+        border-color: var(--text-secondary);
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: var(--text-secondary);
+        border-color: var(--text-secondary);
+        color: var(--background-color);
+    }
+    
+    .btn-outline-success {
+        color: var(--success-color);
+        border-color: var(--success-color);
+    }
+    
+    .btn-outline-success:hover {
+        background-color: var(--success-color);
+        border-color: var(--success-color);
+        color: white;
+    }
+    
+    .btn-outline-danger {
+        color: var(--danger-color);
+        border-color: var(--danger-color);
+    }
+    
+    .btn-outline-danger:hover {
+        background-color: var(--danger-color);
+        border-color: var(--danger-color);
+        color: white;
+    }
+    
+    .btn-outline-warning {
+        color: var(--warning-color);
+        border-color: var(--warning-color);
+    }
+    
+    .btn-outline-warning:hover {
+        background-color: var(--warning-color);
+        border-color: var(--warning-color);
+        color: white;
+    }
+    
+    .btn-outline-info {
+        color: var(--info-color);
+        border-color: var(--info-color);
+    }
+    
+    .btn-outline-info:hover {
+        background-color: var(--info-color);
+        border-color: var(--info-color);
+        color: white;
+    }
+    
+    /* Badges */
+    .badge {
+        color: white;
+    }
+    
+    .badge.bg-primary {
+        background-color: var(--primary-color) !important;
+    }
+    
+    .badge.bg-success {
+        background-color: var(--success-color) !important;
+    }
+    
+    .badge.bg-secondary {
+        background-color: var(--text-secondary) !important;
+    }
+    
+    /* Icons */
+    .bi {
+        color: inherit;
+    }
+    
+    .text-success {
+        color: var(--success-color) !important;
+    }
+    
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+    
+    .text-warning {
+        color: var(--warning-color) !important;
+    }
+    
+    .text-danger {
+        color: var(--danger-color) !important;
+    }
+    
+    .text-info {
+        color: var(--info-color) !important;
+    }
+    
+    /* Alerts */
+    .alert {
+        border: 1px solid var(--border-color);
+    }
+    
+    .alert-success {
+        background-color: rgba(102, 187, 106, 0.1);
+        color: var(--success-color);
+        border-color: var(--success-color);
+    }
+    
+    .alert-danger {
+        background-color: rgba(239, 83, 80, 0.1);
+        color: var(--danger-color);
+        border-color: var(--danger-color);
+    }
+    
+    .alert-warning {
+        background-color: rgba(255, 167, 38, 0.1);
+        color: var(--warning-color);
+        border-color: var(--warning-color);
+    }
+    
+    .alert-info {
+        background-color: rgba(66, 165, 245, 0.1);
+        color: var(--info-color);
+        border-color: var(--info-color);
+    }
+    
+    /* Table styles */
+    .table {
+        --bs-table-bg: var(--card-bg);
+        --bs-table-border-color: var(--border-color);
+        color: var(--text-color);
+    }
+    
+    .table-bordered th,
+    .table-bordered td {
+        border-color: var(--border-color);
+    }
+    
+    /* List group */
+    .list-group-item {
+        background-color: var(--card-bg);
+        border-color: var(--border-color);
+        color: var(--text-color);
+    }
+    
+    /* Card enhancements */
+    .card-header {
+        background-color: var(--primary-color);
+        border-bottom: 1px solid var(--border-color);
+        color: white;
+    }
+    
+    .card-footer {
+        background-color: var(--card-bg);
+        border-top: 1px solid var(--border-color);
+    }
+    
+    /* Form control plaintext */
+    .form-control-plaintext {
+        color: var(--text-color);
+    }
+    
+    /* Hr element */
+    hr {
+        color: var(--border-color);
+        border-color: var(--border-color);
+    }
+    
+    /* Small text */
+    .small {
+        color: var(--text-secondary);
+    }
+    
+    /* Lead text */
+    .lead {
+        color: var(--text-color);
+    }
+    
+    /* Display headings */
+    .display-1, .display-2, .display-3, .display-4, .display-5, .display-6 {
+        color: var(--text-color);
+    }
+    
+    /* Headings */
+    h1, h2, h3, h4, h5, h6 {
+        color: var(--text-color);
+    }
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 20px;
+    background-color: var(--card-bg);
+    border: none;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 15px 15px 0 0 !important;
+    padding: 15px;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.btn-outline-secondary {
+    color: var(--text-color);
+    border-color: var(--text-secondary);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--text-secondary);
+    color: var(--background-color);
+}
+
+/* Navbar styles */
+.navbar {
+    background-color: var(--primary-color) !important;
+}
+
+.navbar-brand {
+    color: white !important;
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+    color: white !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary-light) !important;
+}
+
+.dropdown-menu {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+.dropdown-item {
+    color: var(--text-color);
+}
+
+.dropdown-item:hover {
+    background-color: var(--primary-light);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .dropdown-item:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.form-control, .form-select {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+}
+
+label {
+    color: var(--text-color);
+}
+
+.table {
+    color: var(--text-color);
+}
+
+.table-bordered {
+    border-color: var(--border-color);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.theme-toggle:focus {
+    outline: none;
+}
+
+/* Success & Error Messages */
+.alert-success {
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+}
+
+.alert-danger {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+}
+
+/* Special badges */
+.badge {
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.badge-allergen, .allergen-badge {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.badge-diet, .special-diet-badge {
+    background-color: var(--info-color);
+    color: white;
+}
+
+/* Result container for scanning */
+.result-container {
+    display: none;
+    margin-top: 20px;
+}
+
+.spinner-border {
+    margin-right: 10px;
+}
+
+/* Nutritional table */
+.nutrient-table {
+    width: 100%;
+}
+
+.nutrient-table td {
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nutrient-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Date info styles */
+.date-info {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 10px;
+}
+
+/* Error icon styles */
+.error-icon {
+    font-size: 4rem;
+    color: var(--danger-color);
+    margin-bottom: 20px;
+}
+
+/* Dark mode styles for specific elements */
+[data-theme="dark"] input[type="date"] {
+    color-scheme: dark;
+}
+
+[data-theme="dark"] ::placeholder {
+    color: var(--text-secondary);
+}
+
+/* QR/Barcode reader styles */
+#reader {
+    width: 100%;
+    border-radius: 0 0 15px 15px;
+    overflow: hidden;
+    background-color: var(--card-bg);
+}
+
+/* For dark mode, we need to adjust some QR reader elements */
+[data-theme="dark"] #reader {
+    filter: invert(0.85);
+}
+
+/* Fix contrast issues in dark mode */
+[data-theme="dark"] .btn-outline-secondary {
+    color: var(--text-color);
+    border-color: var(--text-secondary);
+}
+
+[data-theme="dark"] .result-container {
+    background-color: var(--card-bg);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* Force text color inheritance in dark mode */
+[data-theme="dark"] {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] * {
+    color: inherit !important;
+}
+
+/* Override Bootstrap's default text colors in dark mode */
+[data-theme="dark"] .text-dark {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .text-black {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] p,
+[data-theme="dark"] span,
+[data-theme="dark"] div,
+[data-theme="dark"] .card-text,
+[data-theme="dark"] .card-body p,
+[data-theme="dark"] .card-body,
+[data-theme="dark"] .lead {
+    color: var(--text-color) !important;
+}
+
+/* Ensure all text elements use theme colors */
+body {
+    color: var(--text-color);
+}
+
+body * {
+    color: inherit;
+}

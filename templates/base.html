@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SwasthCare{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/static/css/swasthcare.css" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">SwasthCare</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i> {{ user.get_full_name|default:user.username }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/profile/"><i class="bi bi-person"></i> Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout/"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login/">
+                                <i class="bi bi-box-arrow-in-right"></i> Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register/">
+                                <i class="bi bi-person-plus"></i> Register
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <i id="theme-icon" class="bi bi-moon-fill"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/theme.js"></script>
+    
+    <!-- Auto-dismiss alerts functionality -->
+    <style>
+    .auto-dismiss-alert {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auto-dismiss-alert .progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+        background-color: transparent;
+        border-radius: 0;
+    }
+
+    .auto-dismiss-alert .progress-bar {
+        transition: width 5s linear;
+    }
+
+    .auto-dismiss-alert:hover .progress-bar {
+        animation-play-state: paused;
+    }
+    </style>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-dismiss alerts with progress bar
+        const autoDismissAlerts = document.querySelectorAll('.auto-dismiss-alert');
+        
+        autoDismissAlerts.forEach(function(alert) {
+            const progressBar = alert.querySelector('.progress-bar');
+            const duration = 5000; // 5 seconds
+            let timeoutId;
+            
+            // Start the progress bar animation
+            setTimeout(() => {
+                progressBar.style.width = '0%';
+            }, 100);
+            
+            // Auto-dismiss after duration
+            timeoutId = setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, duration);
+            
+            // Pause timer on hover
+            alert.addEventListener('mouseenter', function() {
+                const computedStyle = getComputedStyle(progressBar);
+                const currentWidth = computedStyle.width;
+                const alertWidth = alert.offsetWidth;
+                const percentage = (parseFloat(currentWidth) / alertWidth) * 100;
+                
+                progressBar.style.transition = 'none';
+                progressBar.style.width = percentage + '%';
+                clearTimeout(timeoutId);
+            });
+            
+            // Resume timer on mouse leave
+            alert.addEventListener('mouseleave', function() {
+                const computedStyle = getComputedStyle(progressBar);
+                const currentWidth = parseFloat(computedStyle.width);
+                const alertWidth = alert.offsetWidth;
+                const percentage = (currentWidth / alertWidth) * 100;
+                const remainingTime = (percentage / 100) * duration;
+                
+                if (remainingTime > 0) {
+                    progressBar.style.transition = `width ${remainingTime}ms linear`;
+                    progressBar.style.width = '0%';
+                    
+                    timeoutId = setTimeout(() => {
+                        const bsAlert = new bootstrap.Alert(alert);
+                        bsAlert.close();
+                    }, remainingTime);
+                }
+            });
+        });
+    });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

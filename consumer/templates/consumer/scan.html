@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}SwasthCare - Scan Barcode{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="mb-0">Scan Product Barcode</h3>
+    </div>
+    <div class="card-body">
+        <p class="card-text">Position the barcode within the scanner area to get product details.</p>
+        <div id="reader"></div>
+        
+        <div class="mt-3">
+            <input type="text" id="barcode-input" class="form-control mb-2" placeholder="Or enter barcode manually">
+            <button class="btn btn-primary" id="manual-search">Search</button>
+        </div>
+    </div>
+</div>
+
+<div id="result-container" class="result-container card">
+    <div class="card-header">
+        <h4>Processing...</h4>
+    </div>
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <span>Fetching product information...</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    // HTML5 QR Code Scanner
+    const html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", 
+        { 
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            experimentalFeatures: {
+                useBarCodeDetectorIfSupported: true
+            }
+        }
+    );
+
+    function onScanSuccess(decodedText, decodedResult) {
+        // Stop scanning
+        html5QrcodeScanner.clear();
+        
+        // Show processing indicator
+        document.getElementById('result-container').style.display = 'block';
+        
+        // Navigate to the product detail page
+        window.location.href = `/consumer/product/${decodedText}/`;
+    }
+
+    html5QrcodeScanner.render(onScanSuccess);
+
+    // Manual barcode entry
+    document.getElementById('manual-search').addEventListener('click', function() {
+        const barcode = document.getElementById('barcode-input').value.trim();
+        if (barcode) {
+            // Show processing indicator
+            document.getElementById('result-container').style.display = 'block';
+            
+            // Navigate to the product detail page
+            window.location.href = `/consumer/product/${barcode}/`;
+        }
+    });
+
+    // Allow pressing Enter in the input field
+    document.getElementById('barcode-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            document.getElementById('manual-search').click();
+        }
+    });
+</script>
+{% endblock %}
