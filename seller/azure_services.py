@@ -7,6 +7,7 @@ import warnings
 from azure.ai.formrecognizer import DocumentAnalysisClient, AnalysisFeature # type: ignore
 from azure.ai.inference import ChatCompletionsClient #type: ignore
 from azure.ai.inference.models import SystemMessage, UserMessage #type: ignore
+import time
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 # warnings.filterwarnings("ignore", category=CryptographyDeprecationWarning)
@@ -34,6 +35,7 @@ def extract_raw_text(result):
 def analyze_and_print_raw_text(file_path):
     """
     Runs DI on the image and prints only the raw extracted text.
+    Logs timing for each step.
     """
     di_endpoint = settings.AZURE_DI_ENDPOINT
     di_api_key = settings.AZURE_DI_API_KEY
@@ -45,20 +47,27 @@ def analyze_and_print_raw_text(file_path):
     )
 
     try:
+        start_total = time.time()
         with open(file_path, "rb") as f:
+            start_analyze = time.time()
             poller = document_analysis_client.begin_analyze_document(
                 "prebuilt-document",
                 document=f,
                 features=[AnalysisFeature.BARCODES]
             )
-        result = poller.result()
+            print(f"Time to send request: {time.time() - start_analyze:.2f} seconds")
+            start_poll = time.time()
+            result = poller.result()
+            print(f"Time waiting for result: {time.time() - start_poll:.2f} seconds")
     except Exception as e:
         print(f"Error processing document: {e}")
         return
 
     # Extract and print only the text
+    start_extract = time.time()
     raw_text = extract_raw_text(result)
-    # print(raw_text)
+    print(f"Time to extract raw text: {time.time() - start_extract:.2f} seconds")
+    print(f"Total time for analyze_and_print_raw_text: {time.time() - start_total:.2f} seconds")
     return raw_text
 
 def extract_structured_data_from_label(raw_text):
@@ -128,6 +137,8 @@ def extract_structured_data_from_label(raw_text):
     \"\"\"
     """
 
+    start_total = time.time()
+    start_phi = time.time()
     response = client.complete(
         messages=[
             SystemMessage(content="You are a helpful assistant that extracts structured data from food product labels."),
@@ -140,8 +151,10 @@ def extract_structured_data_from_label(raw_text):
         frequency_penalty=0.0,
         model=model_name
     )
+    print(f"Time for Phi completion: {time.time() - start_phi:.2f} seconds")
 
     content = response.choices[0].message.content
+    start_parse = time.time()
     try:
         json_str = extract_json_from_codeblock(content)
         structured_data = json.loads(json_str)
@@ -149,6 +162,8 @@ def extract_structured_data_from_label(raw_text):
         print("Error parsing JSON:", e)
         print("RAW RESPONSE:\n", content)
         structured_data = {"error": str(e), "raw_response": content}
+    print(f"Time to parse Phi response: {time.time() - start_parse:.2f} seconds")
+    print(f"Total time for extract_structured_data_from_label: {time.time() - start_total:.2f} seconds")
 
     # Print each variable
     if "error" not in structured_data:

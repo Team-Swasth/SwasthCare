@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from SwasthCare_seller.models import SearchHistory
 import json
+from datetime import datetime
 
 # MongoDB import - conditional based on availability
 try:
@@ -56,15 +56,14 @@ def product_detail(request, barcode=None):
                 if '_id' in product:
                     product['_id'] = str(product['_id'])
                 
-                # Log search history for consumer users
+                # Log search history in MongoDB 'history' collection
                 if request.user.userprofile.is_consumer:
-                    SearchHistory.log_search(
-                        user=request.user,
-                        product_id=product['_id'],
-                        product_name=product.get('prod_name', ''),
-                        barcode=barcode,
-                        search_query=f"Barcode scan: {barcode}"
-                    )
+                    db['history'].insert_one({
+                        'barcode': barcode,
+                        'item_name': product.get('prod_name', ''),
+                        'username': request.user.username,
+                        'scanned_at': datetime.utcnow()
+                    })
                 
                 # Render the product detail page with the product data
                 return render(request, 'consumer/product_detail.html', {'product': product})
@@ -109,15 +108,14 @@ def get_product_json(request):
             if '_id' in product:
                 product['_id'] = str(product['_id'])
             
-            # Log search history for consumer users
+            # Log search history in MongoDB 'history' collection
             if request.user.userprofile.is_consumer:
-                SearchHistory.log_search(
-                    user=request.user,
-                    product_id=product['_id'],
-                    product_name=product.get('prod_name', ''),
-                    barcode=barcode,
-                    search_query=f"API search: {barcode}"
-                )
+                db['history'].insert_one({
+                    'barcode': barcode,
+                    'item_name': product.get('prod_name', ''),
+                    'username': request.user.username,
+                    'scanned_at': datetime.utcnow()
+                })
             
             return JsonResponse({'product': product})
         else:
@@ -202,15 +200,14 @@ def product_detail_by_id(request, product_id):
             # Convert MongoDB ObjectID to string for JSON serialization
             product['_id'] = str(product['_id'])
             
-            # Log search history for consumer users
+            # Log search history in MongoDB 'history' collection
             if request.user.userprofile.is_consumer:
-                SearchHistory.log_search(
-                    user=request.user,
-                    product_id=product['_id'],
-                    product_name=product.get('prod_name', ''),
-                    barcode=product.get('barcode', ''),
-                    search_query=f"Product view: {product.get('prod_name', product_id)}"
-                )
+                db['history'].insert_one({
+                    'barcode': product.get('barcode', ''),
+                    'item_name': product.get('prod_name', ''),
+                    'username': request.user.username,
+                    'scanned_at': datetime.utcnow()
+                })
             
             return render(request, 'consumer/product_detail.html', {'product': product})
         else:
@@ -221,3 +218,23 @@ def product_detail_by_id(request, product_id):
             'product_id': product_id,
             'error': f'Database error: {str(e)}'
         })
+
+@login_required
+def search_history(request):
+    """
+    Display the search history for the logged-in user.
+    """
+    if not MONGODB_AVAILABLE:
+        return render(request, 'consumer/history.html', {'history': [], 'error': 'Database connection not available'})
+    try:
+        client = pymongo.MongoClient(settings.COSMOSDB_URI)
+        db = client['swasth']
+        history_cursor = db['history'].find({'username': request.user.username}).sort('scanned_at', -1).limit(100)
+        history = []
+        for entry in history_cursor:
+            entry['_id'] = str(entry.get('_id', ''))
+            entry['scanned_at'] = entry.get('scanned_at')
+            history.append(entry)
+        return render(request, 'consumer/history.html', {'history': history})
+    except Exception as e:
+        return render(request, 'consumer/history.html', {'history': [], 'error': f'Database error: {str(e)}'})

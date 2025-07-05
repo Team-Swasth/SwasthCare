@@ -8,4 +8,5 @@ urlpatterns = [
     path('product-by-id/<str:product_id>/', views.product_detail_by_id, name='product_detail_by_id'),
     path('search/', views.search_products, name='search_products'),
     path('api/product/', views.get_product_json, name='get_product_json'),
+    path('history/', views.search_history, name='search_history'),
 ]

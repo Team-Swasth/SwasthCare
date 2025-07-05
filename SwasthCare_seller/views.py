@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileEditForm, CreateSellerForm
-from .models import UserProfile, SearchHistory
+from .models import UserProfile
 from .communication_services import communication_service
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes, force_str
@@ -17,6 +17,8 @@ import secrets
 import string
 import datetime
 from django.utils import timezone
+from pymongo import MongoClient
+from django.conf import settings
 
 def home(request):
     if request.user.is_authenticated:
@@ -166,13 +168,21 @@ def create_seller_view(request):
 
 @login_required
 def search_history_view(request):
-    """Display user's search history"""
+    """Display user's search history from MongoDB"""
     if not request.user.userprofile.is_consumer:
         messages.error(request, 'Only consumers can view search history.')
         return redirect('home')
-    
-    search_history = SearchHistory.objects.filter(user=request.user)[:50]  # Last 50 searches
-    
+
+    # Connect to MongoDB
+    client = MongoClient(settings.MONGODB_URI)
+    db = client.get_default_database()
+    history_collection = db['history']
+
+    # Query for documents with username == request.user.username
+    search_history = list(
+        history_collection.find({'username': request.user.username}).sort('scanned_at', -1)
+    )
+
     return render(request, 'auth/search_history.html', {'search_history': search_history})
 
 @login_required
@@ -252,4 +262,4 @@ def reset_password_view(request, uidb64, token):
     else:
         messages.error(request, 'The password reset link is invalid or has expired.')
         return render(request, 'auth/reset_password.html', {'valid_link': False})
-        
+
