@@ -7,3 +7,4 @@ azure-ai-inference
 azure-core
 azure-communication-email
 azure-identity
+openai

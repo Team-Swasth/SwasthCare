@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, StreamingHttpResponse
 import json
 from datetime import datetime
 
@@ -267,7 +267,13 @@ def product_chatbot(request):
         # Convert ObjectId to string
         if '_id' in product:
             product['_id'] = str(product['_id'])
-        # Call Phi-4 chatbot
+        # Streaming support
+        if request.GET.get("stream") == "1":
+            def stream_response():
+                for token in chat_about_product(product, question, stream=True):
+                    yield token
+            return StreamingHttpResponse(stream_response(), content_type="text/plain")
+        # Call Phi-4 chatbot (non-streaming)
         answer = chat_about_product(product, question)
         return JsonResponse({'answer': answer})
     except Exception as e:

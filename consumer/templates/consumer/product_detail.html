@@ -199,6 +199,24 @@
         width: 100%;
     }
 
+    .chatbot-answer-content {
+        margin-top: 2px;
+        margin-bottom: 8px;
+        font-size: 1rem;
+        line-height: 1.5;
+        word-break: break-word;
+    }
+
+    .chatbot-answer-content ul,
+    .chatbot-answer-content ol {
+        margin: 0 0 0 1.2em;
+        padding: 0;
+    }
+
+    .chatbot-answer-content p {
+        margin-bottom: 0.5em;
+    }
+
     /* Dark mode support */
     @media (prefers-color-scheme: dark) {
         #floating-chatbot-window {
@@ -244,10 +262,15 @@
         <div class="input-group">
             <input type="text" id="floating-chatbot-question" class="form-control" placeholder="Type your question..."
                 required>
+            <button type="button" id="floating-chatbot-mic" class="btn btn-outline-secondary"
+                title="Speak your question" style="padding:0 12px;">
+                <i class="bi bi-mic"></i>
+            </button>
             <button type="submit" class="btn btn-primary">Ask</button>
         </div>
     </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Elements
@@ -257,7 +280,51 @@
         const form = document.getElementById("floating-chatbot-form");
         const questionInput = document.getElementById("floating-chatbot-question");
         const historyDiv = document.getElementById("floating-chatbot-history");
+        const micBtn = document.getElementById("floating-chatbot-mic");
         let chatHistory = [];
+        let recognizing = false;
+        let recognition;
+        const converter = new showdown.Converter({ simpleLineBreaks: true });
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = "en-US";
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            micBtn.addEventListener("click", function () {
+                if (recognizing) {
+                    recognition.stop();
+                    return;
+                }
+                recognition.start();
+            });
+
+            recognition.onstart = function () {
+                recognizing = true;
+                micBtn.classList.add("active");
+                micBtn.innerHTML = '<i class="bi bi-mic-fill"></i>';
+            };
+            recognition.onend = function () {
+                recognizing = false;
+                micBtn.classList.remove("active");
+                micBtn.innerHTML = '<i class="bi bi-mic"></i>';
+            };
+            recognition.onerror = function (event) {
+                recognizing = false;
+                micBtn.classList.remove("active");
+                micBtn.innerHTML = '<i class="bi bi-mic"></i>';
+            };
+            recognition.onresult = function (event) {
+                if (event.results && event.results[0] && event.results[0][0]) {
+                    questionInput.value = event.results[0][0].transcript;
+                    questionInput.focus();
+                }
+            };
+        } else {
+            micBtn.style.display = "none";
+        }
 
         // Show/hide logic
         btn.addEventListener("click", function () {
@@ -279,7 +346,15 @@
 
                 const aDiv = document.createElement("div");
                 aDiv.className = "mb-2";
-                aDiv.innerHTML = `<span style="font-weight:600;color:#0a58ca;">Bot:</span> ${entry.answer}`;
+                let answerHtml;
+                if (entry.answer && !entry.answer.startsWith("<")) {
+                    // Render markdown for bot answer
+                    answerHtml = `<div class="chatbot-answer-content">${converter.makeHtml(entry.answer)}</div>`;
+                } else {
+                    // For HTML error/fallbacks
+                    answerHtml = `<div class="chatbot-answer-content">${entry.answer || ""}</div>`;
+                }
+                aDiv.innerHTML = `<span style="font-weight:600;color:#0a58ca;">Bot:</span> ${answerHtml}`;
                 historyDiv.appendChild(aDiv);
             });
             historyDiv.scrollTop = historyDiv.scrollHeight;
@@ -293,7 +368,9 @@
             chatHistory.push({ question: question, answer: "<em>Thinking...</em>" });
             renderHistory();
             questionInput.value = "";
-            fetch("{% url 'product_chatbot' %}", {
+
+            // Streaming fetch
+            fetch("{% url 'product_chatbot' %}?stream=1", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -304,18 +381,45 @@
                     question: question
                 })
             })
-                .then(res => res.json())
-                .then(data => {
-                    if (chatHistory.length > 0) {
-                        if (data.answer) {
-                            chatHistory[chatHistory.length - 1].answer = data.answer;
-                        } else if (data.error) {
-                            chatHistory[chatHistory.length - 1].answer = `<span class='text-danger'>${data.error}</span>`;
-                        } else {
-                            chatHistory[chatHistory.length - 1].answer = "<span class='text-danger'>No response.</span>";
-                        }
-                        renderHistory();
+                .then(res => {
+                    if (!res.body || !window.ReadableStream) {
+                        // Fallback to non-streaming if not supported
+                        return res.json().then(data => {
+                            if (chatHistory.length > 0) {
+                                if (data.answer) {
+                                    chatHistory[chatHistory.length - 1].answer = data.answer;
+                                } else if (data.error) {
+                                    chatHistory[chatHistory.length - 1].answer = `<span class='text-danger'>${data.error}</span>`;
+                                } else {
+                                    chatHistory[chatHistory.length - 1].answer = "<span class='text-danger'>No response.</span>";
+                                }
+                                renderHistory();
+                            }
+                        });
                     }
+                    // Streaming response
+                    const reader = res.body.getReader();
+                    let decoder = new TextDecoder();
+                    let answer = "";
+                    function readChunk() {
+                        return reader.read().then(({ done, value }) => {
+                            if (done) {
+                                if (chatHistory.length > 0) {
+                                    chatHistory[chatHistory.length - 1].answer = answer || "<span class='text-danger'>No response.</span>";
+                                    renderHistory();
+                                }
+                                return;
+                            }
+                            answer += decoder.decode(value, { stream: true });
+                            if (chatHistory.length > 0) {
+                                // Show partial markdown as plain text for streaming
+                                chatHistory[chatHistory.length - 1].answer = answer + "<span class='text-muted'>▌</span>";
+                                renderHistory();
+                            }
+                            return readChunk();
+                        });
+                    }
+                    return readChunk();
                 })
                 .catch(() => {
                     if (chatHistory.length > 0) {

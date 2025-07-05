@@ -1,26 +1,25 @@
 import os
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 from django.conf import settings
 import json
 import re
 import warnings
-from azure.ai.inference import ChatCompletionsClient #type: ignore
-from azure.ai.inference.models import SystemMessage, UserMessage #type: ignore
 import time
 
 
-def chat_about_product(product_json, user_question):
+def chat_about_product(product_json, user_question, stream=False):
     """
-    Use Phi-4 to answer user questions about a packaged food product, given its details as a JSON dict.
+    Use GPT-4.1-mini to answer user questions about a packaged food product, given its details as a JSON dict.
     """
     ai_endpoint = settings.AZURE_AI_ENDPOINT
-    model_name = "Phi-4"
+    model_name = "gpt-4.1-mini"
     ai_api_key = settings.AZURE_AI_API_KEY
 
     client = ChatCompletionsClient(
         endpoint=ai_endpoint,
         credential=AzureKeyCredential(ai_api_key),
-        api_version="2024-05-01-preview"
     )
 
     # Prepare the system prompt and user message
@@ -36,20 +35,40 @@ def chat_about_product(product_json, user_question):
         f"User question: {user_question}"
     )
 
-    start_total = time.time()
-    response = client.complete(
-        messages=[
-            SystemMessage(content=system_prompt),
-            UserMessage(content=user_prompt),
-        ],
-        max_tokens=512,
-        temperature=0.2,
-        top_p=0.9,
-        presence_penalty=0.0,
-        frequency_penalty=0.0,
-        model=model_name
-    )
-    print(f"Time for Phi completion: {time.time() - start_total:.2f} seconds")
-
-    content = response.choices[0].message.content
-    return content
+    # Call GPT-4.1-mini via Azure AI Inference
+    if stream:
+        response = client.complete(
+            stream=True,
+            messages=[
+                SystemMessage(content=system_prompt),
+                UserMessage(content=user_prompt),
+            ],
+            model=model_name,
+            max_tokens=512,
+            temperature=0.2,
+            top_p=0.9,
+            frequency_penalty=0.0,
+            presence_penalty=0.0,
+        )
+        try:
+            for update in response:
+                if update.choices and update.choices[0].delta.content:
+                    yield update.choices[0].delta.content
+        finally:
+            client.close()
+    else:
+        response = client.complete(
+            messages=[
+                SystemMessage(content=system_prompt),
+                UserMessage(content=user_prompt),
+            ],
+            model=model_name,
+            max_tokens=512,
+            temperature=0.2,
+            top_p=0.9,
+            frequency_penalty=0.0,
+            presence_penalty=0.0,
+        )
+        content = response.choices[0].message.content
+        client.close()
+        return content
