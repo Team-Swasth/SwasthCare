@@ -5,3 +5,5 @@ python-dotenv
 azure-ai-formrecognizer
 azure-ai-inference
 azure-core
+azure-communication-email
+azure-identity

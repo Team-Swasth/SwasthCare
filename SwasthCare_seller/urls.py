@@ -26,6 +26,12 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
     path("profile/", views.profile_view, name="profile"),
+    path("profile/edit/", views.edit_profile_view, name="edit_profile"),
+    path("create-seller/", views.create_seller_view, name="create_seller"),
+    path("search-history/", views.search_history_view, name="search_history"),
     path("seller/", include("seller.urls")),  # Include seller app URLs
     path("consumer/", include("consumer.urls")),  # Include consumer app URLs
+    path("change-password/", views.change_password_view, name="change_password"),
+    path("forgot-password/", views.forgot_password_view, name="forgot_password"),
+    path("reset-password/<str:uidb64>/<str:token>/", views.reset_password_view, name="reset_password"),
 ]

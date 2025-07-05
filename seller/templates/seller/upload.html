@@ -3,114 +3,890 @@
 {% block title %}SwasthCare - Upload Product Images{% endblock %}
 
 {% block content %}
-<div class="card">
-    <div class="card-header">
-        <h3 class="mb-0">Upload Product Images</h3>
+<div class="upload-container">
+    <div class="header-section">
+        <h2 class="page-title">
+            <i class="bi bi-cloud-upload"></i>
+            Upload Product Images
+        </h2>
+        <p class="page-subtitle">Capture or upload product images for AI-powered analysis</p>
     </div>
-    <div class="card-body">
-        <p class="mb-4">Upload images of product labels to extract nutrition information and other product details.</p>
-        
+
+    <div class="upload-card">
+        <div class="upload-instruction">
+            <i class="bi bi-lightbulb"></i>
+            <h4>Tips for Best Results</h4>
+            <ul>
+                <li>Ensure good lighting and clear images</li>
+                <li>Capture all sides of the product</li>
+                <li>Focus on nutrition labels and ingredients</li>
+                <li>Use camera or upload from device</li>
+            </ul>
+        </div>
+
         <form method="post" enctype="multipart/form-data" class="upload-form">
             {% csrf_token %}
             
-            <div class="mb-4">
-                <label for="id_document1" class="form-label">Product Front Image</label>
-                <div class="image-upload">
-                    <div class="input-group mb-3">
-                        <input type="file" class="form-control" id="id_document1" name="document1" accept="image/*">
+            <div class="upload-grid">
+                <div class="upload-item" data-type="front">
+                    <div class="upload-content">
+                        <i class="bi bi-image"></i>
+                        <h5>Product Front</h5>
+                        <p>Main product image</p>
+                        <div class="upload-actions">
+                            <button type="button" class="btn btn-outline-primary btn-sm camera-btn" data-target="id_document1">
+                                <i class="bi bi-camera"></i> Take Photo
+                            </button>
+                            <span class="or-text">or</span>
+                            <label for="id_document1" class="btn btn-primary btn-sm">
+                                <i class="bi bi-upload"></i> Upload
+                            </label>
+                            <input type="file" id="id_document1" name="document1" accept="image/*" hidden>
+                        </div>
                     </div>
-                    <div class="preview" id="preview1"></div>
+                    <div class="preview-container" id="preview1">
+                        <div class="preview-placeholder">
+                            <i class="bi bi-image"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="upload-item" data-type="nutrition">
+                    <div class="upload-content">
+                        <i class="bi bi-list-ul"></i>
+                        <h5>Nutrition Label</h5>
+                        <p>Nutritional information</p>
+                        <div class="upload-actions">
+                            <button type="button" class="btn btn-outline-primary btn-sm camera-btn" data-target="id_document2">
+                                <i class="bi bi-camera"></i> Take Photo
+                            </button>
+                            <span class="or-text">or</span>
+                            <label for="id_document2" class="btn btn-primary btn-sm">
+                                <i class="bi bi-upload"></i> Upload
+                            </label>
+                            <input type="file" id="id_document2" name="document2" accept="image/*" hidden>
+                        </div>
+                    </div>
+                    <div class="preview-container" id="preview2">
+                        <div class="preview-placeholder">
+                            <i class="bi bi-list-ul"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="upload-item" data-type="ingredients">
+                    <div class="upload-content">
+                        <i class="bi bi-text-paragraph"></i>
+                        <h5>Ingredients List</h5>
+                        <p>Complete ingredients</p>
+                        <div class="upload-actions">
+                            <button type="button" class="btn btn-outline-primary btn-sm camera-btn" data-target="id_document3">
+                                <i class="bi bi-camera"></i> Take Photo
+                            </button>
+                            <span class="or-text">or</span>
+                            <label for="id_document3" class="btn btn-primary btn-sm">
+                                <i class="bi bi-upload"></i> Upload
+                            </label>
+                            <input type="file" id="id_document3" name="document3" accept="image/*" hidden>
+                        </div>
+                    </div>
+                    <div class="preview-container" id="preview3">
+                        <div class="preview-placeholder">
+                            <i class="bi bi-text-paragraph"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="upload-item" data-type="barcode">
+                    <div class="upload-content">
+                        <i class="bi bi-upc-scan"></i>
+                        <h5>Barcode</h5>
+                        <p>Product barcode</p>
+                        <div class="upload-actions">
+                            <button type="button" class="btn btn-outline-primary btn-sm camera-btn" data-target="id_document4">
+                                <i class="bi bi-camera"></i> Take Photo
+                            </button>
+                            <span class="or-text">or</span>
+                            <label for="id_document4" class="btn btn-primary btn-sm">
+                                <i class="bi bi-upload"></i> Upload
+                            </label>
+                            <input type="file" id="id_document4" name="document4" accept="image/*" hidden>
+                        </div>
+                    </div>
+                    <div class="preview-container" id="preview4">
+                        <div class="preview-placeholder">
+                            <i class="bi bi-upc-scan"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="mb-4">
-                <label for="id_document2" class="form-label">Nutrition Label Image</label>
-                <div class="image-upload">
-                    <div class="input-group mb-3">
-                        <input type="file" class="form-control" id="id_document2" name="document2" accept="image/*">
-                    </div>
-                    <div class="preview" id="preview2"></div>
-                </div>
-            </div>
-            
-            <div class="mb-4">
-                <label for="id_document3" class="form-label">Ingredients List Image</label>
-                <div class="image-upload">
-                    <div class="input-group mb-3">
-                        <input type="file" class="form-control" id="id_document3" name="document3" accept="image/*">
-                    </div>
-                    <div class="preview" id="preview3"></div>
-                </div>
-            </div>
-            
-            <div class="mb-4">
-                <label for="id_document4" class="form-label">Barcode Image</label>
-                <div class="image-upload">
-                    <div class="input-group mb-3">
-                        <input type="file" class="form-control" id="id_document4" name="document4" accept="image/*">
-                    </div>
-                    <div class="preview" id="preview4"></div>
-                </div>
-            </div>
-            
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary btn-lg">Upload & Process</button>
+
+            <div class="submit-section">
+                <button type="submit" class="btn btn-success btn-lg submit-btn">
+                    <i class="bi bi-cpu"></i>
+                    <span>Process with AI</span>
+                    <div class="btn-shine"></div>
+                </button>
+                <p class="process-note">Our AI will analyze your images and extract product information automatically</p>
             </div>
         </form>
     </div>
 </div>
+
+<!-- Camera Modal -->
+<div class="modal fade" id="cameraModal" tabindex="-1" aria-labelledby="cameraModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cameraModalLabel">
+                    <i class="bi bi-camera"></i> Take Product Photo
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="cameraStatus" class="camera-status mb-3"></div>
+                <div class="camera-container">
+                    <video id="cameraVideo" autoplay playsinline muted></video>
+                    <canvas id="cameraCanvas" style="display: none;"></canvas>
+                    <div class="camera-overlay">
+                        <div class="camera-guide">
+                            <div class="guide-corner top-left"></div>
+                            <div class="guide-corner top-right"></div>
+                            <div class="guide-corner bottom-left"></div>
+                            <div class="guide-corner bottom-right"></div>
+                            <p class="guide-text">Position product within the frame</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="camera-controls">
+                    <button type="button" class="btn btn-primary btn-lg" id="captureBtn">
+                        <i class="bi bi-camera"></i> Capture Photo
+                    </button>
+                    <button type="button" class="btn btn-warning btn-lg" id="retakeBtn" style="display: none;">
+                        <i class="bi bi-arrow-counterclockwise"></i> Retake
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-success btn-lg" id="usePhotoBtn" style="display: none;">
+                    <i class="bi bi-check-circle"></i> Use This Photo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
+
 
 {% block extra_css %}
 <style>
-    .preview {
-        margin-top: 10px;
-        height: 200px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: 1px dashed var(--border-color);
-        border-radius: 8px;
-        overflow: hidden;
+.upload-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.header-section {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.page-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+.upload-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border-color);
+}
+
+.upload-instruction {
+    background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+    color: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.upload-instruction i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.upload-instruction h4 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.upload-instruction ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.upload-instruction li {
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.upload-instruction li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: bold;
+}
+
+.upload-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.upload-item {
+    background: var(--card-bg);
+    border: 2px dashed var(--border-color);
+    border-radius: 15px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-item:hover {
+    border-color: var(--primary-color);
+    background: rgba(76, 175, 80, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.upload-item.has-image {
+    border-color: var(--success-color);
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.upload-content {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.upload-content i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.upload-content h5 {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.upload-content p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.upload-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.or-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.camera-btn, .upload-btn {
+    min-width: 120px;
+}
+
+.preview-container {
+    border-radius: 10px;
+    overflow: hidden;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--background-color);
+    border: 1px solid var(--border-color);
+}
+
+.preview-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-secondary);
+}
+
+.preview-placeholder i {
+    font-size: 3rem;
+    opacity: 0.5;
+}
+
+.preview-container img {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.submit-section {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.submit-btn {
+    position: relative;
+    overflow: hidden;
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--success-color), var(--primary-color));
+    border: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
+}
+
+.submit-btn:active {
+    transform: translateY(-1px);
+}
+
+.btn-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.submit-btn:hover .btn-shine {
+    left: 100%;
+}
+
+.process-note {
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Camera Modal Styles */
+.camera-status {
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.camera-status.success {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.camera-status.error {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.camera-status.info {
+    background: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+    border: 1px solid rgba(13, 110, 253, 0.3);
+}
+
+.camera-container {
+    position: relative;
+    background: #000;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.camera-container video {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.camera-container canvas {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.camera-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.camera-controls .btn {
+    min-width: 150px;
+    border-radius: 50px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.camera-controls .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Loading states */
+.submit-btn.processing {
+    background: linear-gradient(135deg, #ffa726, #ff9800);
+    cursor: not-allowed;
+}
+
+.submit-btn.processing i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .upload-container {
+        padding: 1rem;
     }
-    .preview img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
+    
+    .page-title {
+        font-size: 2rem;
     }
-    .form-label {
-        font-weight: 500;
+    
+    .upload-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
     }
+    
+    .upload-item {
+        padding: 1rem;
+    }
+    
+    .submit-btn {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+/* Dark mode specific styles */
+[data-theme="dark"] .upload-item {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .upload-item:hover {
+    background: rgba(76, 175, 80, 0.1);
+}
+
+[data-theme="dark"] .preview-container {
+    background: var(--background-color);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .camera-container {
+    background: #000;
+}
 </style>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    // Image preview functionality
-    function setupImagePreview(inputId, previewId) {
-        const input = document.getElementById(inputId);
-        const preview = document.getElementById(previewId);
-        
-        input.addEventListener('change', function() {
-            preview.innerHTML = '';
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    preview.appendChild(img);
-                }
-                reader.readAsDataURL(this.files[0]);
-            }
+document.addEventListener('DOMContentLoaded', function() {
+    let currentTargetInput = null;
+    let stream = null;
+    let capturedImageData = null;
+    
+    // Camera functionality
+    const cameraModal = new bootstrap.Modal(document.getElementById('cameraModal'));
+    const video = document.getElementById('cameraVideo');
+    const canvas = document.getElementById('cameraCanvas');
+    const captureBtn = document.getElementById('captureBtn');
+    const retakeBtn = document.getElementById('retakeBtn');
+    const usePhotoBtn = document.getElementById('usePhotoBtn');
+    
+    // Camera button event listeners
+    document.querySelectorAll('.camera-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            currentTargetInput = document.getElementById(this.dataset.target);
+            startCamera();
+            cameraModal.show();
         });
+    });
+    
+    // File input change listeners
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+        input.addEventListener('change', function() {
+            previewImage(this);
+        });
+    });
+    
+    // Camera functions
+    async function startCamera() {
+        try {
+            // Request camera permission explicitly
+            await navigator.mediaDevices.getUserMedia({ video: true });
+            
+            // Now get the actual stream with better constraints
+            stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    facingMode: 'environment',
+                    width: { ideal: 1280, max: 1920 },
+                    height: { ideal: 720, max: 1080 }
+                } 
+            });
+            video.srcObject = stream;
+            video.style.display = 'block';
+            canvas.style.display = 'none';
+            captureBtn.style.display = 'block';
+            retakeBtn.style.display = 'none';
+            usePhotoBtn.style.display = 'none';
+            
+            // Show success message
+            document.getElementById('cameraStatus').innerHTML = 
+                '<div class="alert alert-success"><i class="bi bi-check-circle"></i> Camera ready! Position your product and click capture.</div>';
+        } catch (error) {
+            console.error('Error accessing camera:', error);
+            let errorMessage = 'Unable to access camera. ';
+            
+            if (error.name === 'NotAllowedError') {
+                errorMessage += 'Please allow camera permissions and try again.';
+            } else if (error.name === 'NotFoundError') {
+                errorMessage += 'No camera found on this device.';
+            } else if (error.name === 'NotSupportedError') {
+                errorMessage += 'Camera not supported on this browser.';
+            } else {
+                errorMessage += 'Please check camera permissions and try again.';
+            }
+            
+            document.getElementById('cameraStatus').innerHTML = 
+                `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> ${errorMessage}</div>`;
+        }
     }
     
-    document.addEventListener('DOMContentLoaded', function() {
-        setupImagePreview('id_document1', 'preview1');
-        setupImagePreview('id_document2', 'preview2');
-        setupImagePreview('id_document3', 'preview3');
-        setupImagePreview('id_document4', 'preview4');
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+    }
+    
+    captureBtn.addEventListener('click', function() {
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0);
+        
+        video.style.display = 'none';
+        canvas.style.display = 'block';
+        captureBtn.style.display = 'none';
+        retakeBtn.style.display = 'block';
+        usePhotoBtn.style.display = 'block';
+        
+        capturedImageData = canvas.toDataURL('image/jpeg', 0.8);
     });
+    
+    retakeBtn.addEventListener('click', function() {
+        video.style.display = 'block';
+        canvas.style.display = 'none';
+        captureBtn.style.display = 'block';
+        retakeBtn.style.display = 'none';
+        usePhotoBtn.style.display = 'none';
+        capturedImageData = null;
+    });
+    
+    usePhotoBtn.addEventListener('click', function() {
+        if (capturedImageData && currentTargetInput) {
+            // Convert dataURL to file
+            const blob = dataURLtoBlob(capturedImageData);
+            const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+            
+            // Create a new FileList
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            currentTargetInput.files = dt.files;
+            
+            // Preview the image
+            previewImage(currentTargetInput);
+            
+            // Close modal
+            cameraModal.hide();
+            stopCamera();
+        }
+    });
+    
+    // Modal event listeners
+    document.getElementById('cameraModal').addEventListener('hidden.bs.modal', function() {
+        stopCamera();
+        currentTargetInput = null;
+        capturedImageData = null;
+    });
+    
+    // Image preview function
+    function previewImage(input) {
+        const previewId = 'preview' + input.id.replace('id_document', '');
+        const previewContainer = document.getElementById(previewId);
+        const uploadItem = input.closest('.upload-item');
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewContainer.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                uploadItem.classList.add('has-image');
+                
+                // Add success animation
+                uploadItem.style.animation = 'none';
+                uploadItem.offsetHeight; // Trigger reflow
+                uploadItem.style.animation = 'successPulse 0.6s ease-out';
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            // Reset preview
+            const iconClass = getIconClass(previewId);
+            previewContainer.innerHTML = `<div class="preview-placeholder"><i class="${iconClass}"></i></div>`;
+            uploadItem.classList.remove('has-image');
+        }
+    }
+    
+    // Helper function to get appropriate icon
+    function getIconClass(previewId) {
+        const icons = {
+            'preview1': 'bi bi-image',
+            'preview2': 'bi bi-list-ul',
+            'preview3': 'bi bi-text-paragraph',
+            'preview4': 'bi bi-upc-scan'
+        };
+        return icons[previewId] || 'bi bi-image';
+    }
+    
+    // Helper function to convert dataURL to blob
+    function dataURLtoBlob(dataURL) {
+        const arr = dataURL.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+    }
+    
+    // Form submission handling
+    document.querySelector('.upload-form').addEventListener('submit', function(e) {
+        const submitBtn = document.querySelector('.submit-btn');
+        const hasImages = document.querySelectorAll('.upload-item.has-image').length > 0;
+        
+        if (!hasImages) {
+            e.preventDefault();
+            alert('Please upload at least one image before processing.');
+            return;
+        }
+        
+        // Add loading state
+        submitBtn.classList.add('processing');
+        submitBtn.innerHTML = '<i class="bi bi-cpu"></i><span>Processing...</span>';
+        submitBtn.disabled = true;
+    });
+    // Camera functionality
+    let currentStream = null;
+    
+    // Enhanced camera permission handling
+    document.querySelectorAll('.camera-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            currentTargetInput = this.dataset.target;
+            
+            // Show camera modal
+            const modal = new bootstrap.Modal(document.getElementById('cameraModal'));
+            modal.show();
+            
+            // Request camera permissions
+            await startCamera();
+        });
+    });
+
+    async function startCamera() {
+        const video = document.getElementById('cameraVideo');
+        const statusDiv = document.getElementById('cameraStatus');
+        
+        try {
+            // Show loading status
+            statusDiv.innerHTML = '<div class="camera-status info"><i class="bi bi-camera"></i> Requesting camera access...</div>';
+            
+            // Request user media with enhanced constraints
+            const constraints = {
+                video: {
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 },
+                    facingMode: 'environment' // Use back camera on mobile
+                },
+                audio: false
+            };
+            
+            currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+            video.srcObject = currentStream;
+            
+            // Show success status
+            statusDiv.innerHTML = '<div class="camera-status success"><i class="bi bi-check-circle"></i> Camera ready! Position your product in the frame.</div>';
+            
+            // Enable capture button
+            document.getElementById('captureBtn').disabled = false;
+            
+        } catch (error) {
+            console.error('Camera access error:', error);
+            let errorMessage = '';
+            
+            if (error.name === 'NotAllowedError') {
+                errorMessage = 'Camera access denied. Please allow camera permissions and try again.';
+            } else if (error.name === 'NotFoundError') {
+                errorMessage = 'No camera found on this device.';
+            } else if (error.name === 'NotReadableError') {
+                errorMessage = 'Camera is already in use by another application.';
+            } else {
+                errorMessage = 'Unable to access camera. Please check your device settings.';
+            }
+            
+            statusDiv.innerHTML = `<div class="camera-status error"><i class="bi bi-exclamation-triangle"></i> ${errorMessage}</div>`;
+            
+            // Disable capture button
+            document.getElementById('captureBtn').disabled = true;
+        }
+    }
+
+    // Capture photo
+    document.getElementById('captureBtn').addEventListener('click', function() {
+        const video = document.getElementById('cameraVideo');
+        const canvas = document.getElementById('cameraCanvas');
+        const context = canvas.getContext('2d');
+        
+        // Set canvas dimensions to match video
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        // Draw video frame to canvas
+        context.drawImage(video, 0, 0);
+        
+        // Convert to blob and create file
+        canvas.toBlob(function(blob) {
+            const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+            
+            // Create a FileList-like object
+            const fileList = new DataTransfer();
+            fileList.items.add(file);
+            
+            // Set the file to the target input
+            const targetInput = document.getElementById(currentTargetInput);
+            targetInput.files = fileList.files;
+            
+            // Trigger change event for preview
+            targetInput.dispatchEvent(new Event('change'));
+            
+            // Show success message
+            const statusDiv = document.getElementById('cameraStatus');
+            statusDiv.innerHTML = '<div class="camera-status success"><i class="bi bi-check-circle"></i> Photo captured successfully!</div>';
+            
+            // Show use photo button
+            document.getElementById('usePhotoBtn').style.display = 'inline-block';
+            document.getElementById('retakeBtn').style.display = 'inline-block';
+            document.getElementById('captureBtn').style.display = 'none';
+            
+        }, 'image/jpeg', 0.8);
+    });
+
+    // Retake photo
+    document.getElementById('retakeBtn').addEventListener('click', function() {
+        document.getElementById('captureBtn').style.display = 'inline-block';
+        document.getElementById('retakeBtn').style.display = 'none';
+        document.getElementById('usePhotoBtn').style.display = 'none';
+        
+        const statusDiv = document.getElementById('cameraStatus');
+        statusDiv.innerHTML = '<div class="camera-status info"><i class="bi bi-camera"></i> Position your product in the frame.</div>';
+    });
+
+    // Use photo
+    document.getElementById('usePhotoBtn').addEventListener('click', function() {
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('cameraModal'));
+        modal.hide();
+    });
+
+    // Clean up camera stream when modal is hidden
+    document.getElementById('cameraModal').addEventListener('hidden.bs.modal', function() {
+        if (currentStream) {
+            currentStream.getTracks().forEach(track => track.stop());
+            currentStream = null;
+        }
+        
+        // Reset buttons
+        document.getElementById('captureBtn').style.display = 'inline-block';
+        document.getElementById('retakeBtn').style.display = 'none';
+        document.getElementById('usePhotoBtn').style.display = 'none';
+        document.getElementById('captureBtn').disabled = false;
+        
+        // Clear status
+        document.getElementById('cameraStatus').innerHTML = '';
+    });
+    
+    // Add CSS animation for success pulse
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    `;
+    document.head.appendChild(style);
+});
 </script>
 {% endblock %}
 

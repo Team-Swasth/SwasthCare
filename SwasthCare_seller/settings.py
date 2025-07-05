@@ -89,7 +89,7 @@ DATABASES = {
         "HOST": os.getenv("DB_HOST"),
         "PORT": os.getenv("DB_PORT", "5432"),
         "OPTIONS": {
-            "sslmode": "require",
+            "sslmode": "prefer",  # Changed from "require" to "prefer"
         },
     }
 }
@@ -147,11 +147,15 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Azure Services Configuration (if needed in future)
-# AZURE_DI_ENDPOINT = os.getenv("AZURE_DI_ENDPOINT")
-# AZURE_DI_API_KEY = os.getenv("AZURE_DI_API_KEY")
-# AZURE_AI_ENDPOINT = os.getenv("AZURE_AI_ENDPOINT")
-# AZURE_AI_API_KEY = os.getenv("AZURE_AI_API_KEY")
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development - prints to console
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = 'SwasthCare <noreply@swasthcare.com>'
 
 # MongoDB Configuration for product data
 COSMOSDB_URI = os.getenv("COSMOS_CONN_STRING")
@@ -161,3 +165,8 @@ AZURE_DI_ENDPOINT = os.getenv("AZURE_DI_ENDPOINT")
 AZURE_DI_API_KEY = os.getenv("AZURE_DI_API_KEY")
 AZURE_AI_ENDPOINT = os.getenv("AZURE_AI_ENDPOINT")
 AZURE_AI_API_KEY = os.getenv("AZURE_AI_API_KEY")
+
+# Azure Communication Services Configuration
+AZURE_COMMUNICATION_CONNECTION_STRING = os.getenv("AZURE_COMMUNICATION_CONNECTION_STRING")
+AZURE_COMMUNICATION_ENDPOINT = os.getenv("AZURE_COMMUNICATION_ENDPOINT")
+AZURE_COMMUNICATION_FROM_EMAIL = os.getenv("AZURE_COMMUNICATION_FROM_EMAIL", "donotreply@swasthcare.com")

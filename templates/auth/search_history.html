@@ -1,0 +1,461 @@
+{% extends 'base.html' %}
+
+{% block title %}Search History - SwasthCare{% endblock %}
+
+{% block content %}
+<div class="header text-center mb-5 animated-header">
+    <h1 class="display-4 gradient-text">Your Search History</h1>
+    <p class="lead pulse-animation">
+        <i class="bi bi-clock-history text-primary"></i> 
+        Track your product discovery journey
+    </p>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show auto-dismiss-alert" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="progress mt-2" style="height: 3px;">
+                <div class="progress-bar bg-{{ message.tags }}" role="progressbar" style="width: 100%"></div>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card interactive-card history-card">
+            <div class="card-header animated-header-card">
+                <h5 class="mb-0 card-title-animated">
+                    <i class="bi bi-list-ul spinning-icon"></i> Recent Searches
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if search_history %}
+                    <div class="search-history-list">
+                        {% for search in search_history %}
+                        <div class="history-item slide-in delay-{{ forloop.counter0|floatformat:0 }}">
+                            <div class="history-content">
+                                <div class="history-main">
+                                    <div class="history-icon">
+                                        <i class="bi bi-search text-primary"></i>
+                                    </div>
+                                    <div class="history-details">
+                                        <h6 class="history-query">{{ search.query }}</h6>
+                                        <small class="history-date">{{ search.created_at|date:"M d, Y" }} at {{ search.created_at|time:"H:i" }}</small>
+                                    </div>
+                                </div>
+                                <div class="history-actions">
+                                    <a href="/consumer/search/?q={{ search.query|urlencode }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-arrow-clockwise"></i> Search Again
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    {% if search_history|length >= 50 %}
+                    <div class="text-center mt-4">
+                        <p class="text-muted">
+                            <i class="bi bi-info-circle"></i> 
+                            Showing your last 50 searches
+                        </p>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="empty-history text-center">
+                        <div class="empty-icon">
+                            <i class="bi bi-clock-history text-muted"></i>
+                        </div>
+                        <h5 class="mt-3">No search history yet</h5>
+                        <p class="text-muted">Start scanning products to build your search history.</p>
+                        <a href="/consumer/scan/" class="btn btn-primary animated-button">
+                            <i class="bi bi-camera"></i> Start Scanning
+                            <span class="button-shine"></span>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card interactive-card stats-card">
+            <div class="card-header animated-header-card">
+                <h5 class="mb-0 card-title-animated">
+                    <i class="bi bi-graph-up glow-icon"></i> Search Statistics
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3 col-6">
+                        <div class="stat-item hover-scale">
+                            <div class="stat-number">{{ search_history|length }}</div>
+                            <div class="stat-label">Total Searches</div>
+                            <i class="bi bi-search stat-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="stat-item hover-scale">
+                            <div class="stat-number">{{ search_history|length|floatformat:0 }}</div>
+                            <div class="stat-label">This Week</div>
+                            <i class="bi bi-calendar-week stat-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="stat-item hover-scale">
+                            <div class="stat-number">{{ search_history|length|floatformat:0 }}</div>
+                            <div class="stat-label">This Month</div>
+                            <i class="bi bi-calendar-month stat-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="stat-item hover-scale">
+                            <div class="stat-number">{{ search_history|length|floatformat:0 }}</div>
+                            <div class="stat-label">Unique Products</div>
+                            <i class="bi bi-box stat-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Dashboard
+    </a>
+</div>
+
+<div class="text-center mt-5 text-secondary">
+    <p>© 2025 SwasthCare - Search History. All rights reserved.</p>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Header Animations */
+.animated-header {
+    animation: fadeInDown 1s ease-out;
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, var(--primary-color), var(--success-color), var(--info-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.pulse-animation {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Card Animations */
+.interactive-card {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.interactive-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    border-color: var(--primary-color);
+}
+
+.history-card {
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.05) 0%, rgba(13, 110, 253, 0.02) 100%);
+}
+
+.stats-card {
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.05) 0%, rgba(40, 167, 69, 0.02) 100%);
+}
+
+/* Animated Headers */
+.animated-header-card {
+    background: linear-gradient(90deg, var(--primary-light), var(--primary-color));
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.animated-header-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.card-title-animated {
+    animation: titleBounce 0.6s ease-out;
+}
+
+@keyframes titleBounce {
+    0% { transform: translateY(-10px); opacity: 0; }
+    50% { transform: translateY(5px); }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Icon Animations */
+.spinning-icon {
+    animation: spin 4s linear infinite;
+}
+
+.glow-icon {
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 5px var(--warning-color); }
+    to { text-shadow: 0 0 20px var(--warning-color), 0 0 30px var(--warning-color); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* History List */
+.search-history-list {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.history-item {
+    margin-bottom: 1rem;
+    animation: slideIn 0.6s ease-out;
+}
+
+.delay-0 { animation-delay: 0.1s; }
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.3s; }
+.delay-3 { animation-delay: 0.4s; }
+.delay-4 { animation-delay: 0.5s; }
+
+@keyframes slideIn {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.history-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.history-content:hover {
+    background: var(--primary-light);
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.history-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.history-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.history-details h6 {
+    margin: 0;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.history-date {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.history-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Empty History */
+.empty-history {
+    padding: 4rem 2rem;
+    animation: fadeIn 1s ease-out;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Stats */
+.stat-item {
+    position: relative;
+    padding: 1.5rem 1rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.stat-item:hover {
+    background: rgba(var(--primary-rgb), 0.1);
+    transform: translateY(-3px);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.stat-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    opacity: 0.7;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Button Animations */
+.animated-button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.animated-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.button-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: all 0.3s ease;
+}
+
+.animated-button:hover .button-shine {
+    left: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .history-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .history-main {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .stat-item {
+        padding: 1rem 0.5rem;
+    }
+}
+
+/* Dark Mode */
+[data-theme="dark"] .history-content {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .history-content:hover {
+    background: rgba(var(--primary-rgb), 0.1);
+}
+
+[data-theme="dark"] .interactive-card {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .interactive-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary-color);
+}
+
+/* Animation for cards */
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+{% endblock %}
