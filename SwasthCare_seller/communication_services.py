@@ -148,8 +148,8 @@ class CommunicationService:
             poller = self.email_client.begin_send(message)
             result = poller.result()
             
-            logger.info(f"Email sent successfully to {recipient_email}. Message ID: {result.message_id}")
-            return True, result.message_id
+            logger.info(f"Email sent successfully to {recipient_email}. Message ID: {result['id']}")
+            return True, result['id']
             
         except Exception as e:
             logger.error(f"Failed to send welcome email to {recipient_email}: {str(e)}")
@@ -249,8 +249,8 @@ class CommunicationService:
             poller = self.email_client.begin_send(message)
             result = poller.result()
             
-            logger.info(f"Password reset email sent successfully to {recipient_email}. Message ID: {result.message_id}")
-            return True, result.message_id
+            logger.info(f"Password reset email sent successfully to {recipient_email}. Message ID: {result['id']}")
+            return True, result['id']
             
         except Exception as e:
             logger.error(f"Failed to send password reset email to {recipient_email}: {str(e)}")

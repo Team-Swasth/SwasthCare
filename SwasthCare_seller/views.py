@@ -34,22 +34,20 @@ def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            username = form.cleaned_data.get('username')
-            user_type = form.cleaned_data.get('user_type')
-            messages.success(request, f'Account created for {username} as {user_type}!')
-            
-            # Automatically log in the user after registration
-            login(request, user)
-            
-            # Redirect based on user type
-            if user_type == 'seller':
-                return redirect('home')  # This will redirect to seller dashboard
-            else:
-                return redirect('home')  # This will redirect to consumer dashboard
+            try:
+                user = form.save()
+                username = form.cleaned_data.get('username')
+                messages.success(request, f'Account created for {username}!')
+                login(request, user)
+                return redirect('home')
+            except Exception as e:
+                messages.error(request, f"Registration failed: {str(e)}")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
     else:
         form = CustomUserCreationForm()
-    
     return render(request, 'auth/register.html', {'form': form})
 
 def login_view(request):
@@ -254,3 +252,4 @@ def reset_password_view(request, uidb64, token):
     else:
         messages.error(request, 'The password reset link is invalid or has expired.')
         return render(request, 'auth/reset_password.html', {'valid_link': False})
+        

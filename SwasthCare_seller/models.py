@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from datetime import datetime
+from django.contrib import admin
 
 class UserProfile(models.Model):
     USER_TYPES = [
@@ -66,8 +67,18 @@ class SearchHistory(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user=instance)
+        user_type = 'seller' if instance.is_superuser else 'consumer'
+        UserProfile.objects.create(user=instance, user_type=user_type)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+
+# Admin registration for UserProfile
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'user_type', 'created_at', 'updated_at')
+    list_filter = ('user_type',)
+    search_fields = ('user__username',)
+    raw_id_fields = ('user',)
+    # user_type is editable by default

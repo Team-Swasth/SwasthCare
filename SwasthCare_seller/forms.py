@@ -7,22 +7,17 @@ class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     first_name = forms.CharField(max_length=30, required=True)
     last_name = forms.CharField(max_length=30, required=True)
-    user_type = forms.ChoiceField(
-        choices=[('seller', 'Seller'), ('consumer', 'Consumer')],
-        required=True,
-        widget=forms.RadioSelect
-    )
+    # user_type field removed
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'user_type', 'password1', 'password2')
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Add CSS classes for styling
         for field_name, field in self.fields.items():
-            if field_name != 'user_type':
-                field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['placeholder'] = field.label
 
     def save(self, commit=True):
@@ -32,9 +27,9 @@ class CustomUserCreationForm(UserCreationForm):
         user.last_name = self.cleaned_data['last_name']
         if commit:
             user.save()
-            # Create or update user profile with user type
+            # Always set user_type to 'consumer'
             profile, created = UserProfile.objects.get_or_create(user=user)
-            profile.user_type = self.cleaned_data['user_type']
+            profile.user_type = 'consumer'
             profile.save()
         return user
 
@@ -176,12 +171,17 @@ class ResetPasswordForm(forms.Form):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("The two password fields didn't match.")
         
-        if len(password1) < 8:
+        if password1 and len(password1) < 8:
             raise forms.ValidationError("Password must be at least 8 characters long.")
             
         return password2
     
     def save(self, user):
+        """Save the new password for the user"""
+        password = self.cleaned_data['new_password1']
+        user.set_password(password)
+        user.save()
+        return user
         """Save the new password for the user"""
         password = self.cleaned_data['new_password1']
         user.set_password(password)

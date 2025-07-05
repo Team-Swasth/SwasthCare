@@ -9,7 +9,8 @@
             <i class="bi bi-pencil-square"></i>
             Review & Edit Product Data
         </h1>
-        <p class="page-subtitle">Our AI has analyzed your product images. Please review and edit the information before saving.</p>
+        <p class="page-subtitle">Our AI has analyzed your product images. Please review and edit the information before
+            saving.</p>
     </div>
 
     <div class="edit-layout">
@@ -18,14 +19,14 @@
             <div class="form-card">
                 <form method="post" id="productForm">
                     {% csrf_token %}
-                    
+
                     <!-- Basic Information -->
                     <div class="section-group">
                         <h3 class="section-title">
                             <i class="bi bi-info-circle"></i>
                             Basic Information
                         </h3>
-                        
+
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="id_prod_name" class="form-label">Product Name</label>
@@ -36,7 +37,7 @@
                                 {{ form.prod_type }}
                             </div>
                         </div>
-                        
+
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="id_barcode" class="form-label">Barcode</label>
@@ -47,7 +48,7 @@
                                 {{ form.price }}
                             </div>
                         </div>
-                        
+
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="id_manufacturing_date" class="form-label">Manufacturing Date</label>
@@ -58,30 +59,30 @@
                                 {{ form.expiry_date }}
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="id_expiry_tenure" class="form-label">Shelf Life (months)</label>
                             {{ form.expiry_tenure }}
                         </div>
                     </div>
-                    
+
                     <!-- Ingredients & Allergens -->
                     <div class="section-group">
                         <h3 class="section-title">
                             <i class="bi bi-list-ul"></i>
                             Ingredients & Allergens
                         </h3>
-                        
+
                         <div class="form-group">
                             <label for="id_ingredients" class="form-label">Ingredients</label>
                             {{ form.ingredients }}
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="id_allergen_info" class="form-label">Allergen Information</label>
                             {{ form.allergen_info }}
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="form-label">Special Diet</label>
                             <div class="diet-options">
@@ -94,14 +95,14 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Nutrition Information -->
                     <div class="section-group">
                         <h3 class="section-title">
                             <i class="bi bi-graph-up"></i>
                             Nutritional Information
                         </h3>
-                        
+
                         <div class="nutrition-grid">
                             <div class="nutrition-item">
                                 <label for="id_energy_kcal" class="form-label">Energy (kcal)</label>
@@ -165,10 +166,10 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Action Buttons -->
                     <div class="form-actions">
-                        <a href="{% url 'seller:upload_document' %}" class="btn btn-outline-secondary">
+                        <a href="{% url 'upload_document' %}" class="btn btn-outline-secondary">
                             <i class="bi bi-arrow-left"></i>
                             Back to Upload
                         </a>
@@ -180,7 +181,7 @@
                 </form>
             </div>
         </div>
-        
+
         <!-- Right Column - Images -->
         <div class="image-section">
             <div class="image-card">
@@ -188,29 +189,30 @@
                     <i class="bi bi-images"></i>
                     Product Images
                 </h3>
-                
+
                 <div class="image-gallery">
                     {% if image_urls %}
-                        {% for url in image_urls %}
-                        <div class="image-item fade-in" style="animation-delay: {{ forloop.counter0|add:'1' }}00ms;">
-                            <img src="{{ url }}" alt="Product Image {{ forloop.counter }}" class="product-image">
-                            <div class="image-label">Image {{ forloop.counter }}</div>
-                        </div>
-                        {% endfor %}
+                    {% for url in image_urls %}
+                    <div class="image-item fade-in" style="animation-delay: {{ forloop.counter0|add:'1' }}00ms;">
+                        <img src="{{ url }}" alt="Product Image {{ forloop.counter }}" class="product-image">
+                        <div class="image-label">Image {{ forloop.counter }}</div>
+                    </div>
+                    {% endfor %}
                     {% else %}
-                        <div class="no-images">
-                            <i class="bi bi-image"></i>
-                            <p>No images available</p>
-                        </div>
+                    <div class="no-images">
+                        <i class="bi bi-image"></i>
+                        <p>No images available</p>
+                    </div>
                     {% endif %}
                 </div>
-                
+
                 <div class="ai-analysis">
                     <div class="analysis-header">
                         <i class="bi bi-robot"></i>
                         <h4>AI Analysis</h4>
                     </div>
-                    <p>Our AI system has analyzed the product images and extracted the data. Please verify all fields before saving.</p>
+                    <p>Our AI system has analyzed the product images and extracted the data. Please verify all fields
+                        before saving.</p>
                     <div class="analysis-stats">
                         <div class="stat-item">
                             <i class="bi bi-check-circle text-success"></i>
@@ -228,799 +230,808 @@
 </div>
 {% endblock %}
 
-                    <h4 class="mt-4 mb-3">Nutritional Information</h4>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="id_energy_kcal" class="form-label">Energy (kcal)</label>
-                            {{ form.energy_kcal }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="id_protein_g" class="form-label">Protein (g)</label>
-                            {{ form.protein_g }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="id_total_fat_g" class="form-label">Total Fat (g)</label>
-                            {{ form.total_fat_g }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="id_saturated_fat_g" class="form-label">Saturated Fat (g)</label>
-                            {{ form.saturated_fat_g }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="id_trans_fat_g" class="form-label">Trans Fat (g)</label>
-                            {{ form.trans_fat_g }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="id_cholesterol_mg" class="form-label">Cholesterol (mg)</label>
-                            {{ form.cholesterol_mg }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="id_carbohydrate_g" class="form-label">Carbohydrates (g)</label>
-                            {{ form.carbohydrate_g }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="id_sugars_g" class="form-label">Sugars (g)</label>
-                            {{ form.sugars_g }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="id_fiber_g" class="form-label">Fiber (g)</label>
-                            {{ form.fiber_g }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="id_sodium_mg" class="form-label">Sodium (mg)</label>
-                            {{ form.sodium_mg }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="id_calcium_mg" class="form-label">Calcium (mg)</label>
-                            {{ form.calcium_mg }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="id_iron_mg" class="form-label">Iron (mg)</label>
-                            {{ form.iron_mg }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="id_potassium_mg" class="form-label">Potassium (mg)</label>
-                            {{ form.potassium_mg }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="id_vitamin_c_mg" class="form-label">Vitamin C (mg)</label>
-                            {{ form.vitamin_c_mg }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="id_vitamin_d_mcg" class="form-label">Vitamin D (mcg)</label>
-                            {{ form.vitamin_d_mcg }}
-                        </div>
-                    </div>
-
-                    <div class="d-grid gap-2 mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">Save Product Information</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+{% block extra_content %}
+<h4 class="mt-4 mb-3">Nutritional Information</h4>
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label for="id_energy_kcal" class="form-label">Energy (kcal)</label>
+        {{ form.energy_kcal }}
     </div>
+    <div class="col-md-4 mb-3">
+        <label for="id_protein_g" class="form-label">Protein (g)</label>
+        {{ form.protein_g }}
+    </div>
+    <div class="col-md-4 mb-3">
+        <label for="id_total_fat_g" class="form-label">Total Fat (g)</label>
+        {{ form.total_fat_g }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label for="id_saturated_fat_g" class="form-label">Saturated Fat (g)</label>
+        {{ form.saturated_fat_g }}
+    </div>
+    <div class="col-md-4 mb-3">
+        <label for="id_trans_fat_g" class="form-label">Trans Fat (g)</label>
+        {{ form.trans_fat_g }}
+    </div>
+    <div class="col-md-4 mb-3">
+        <label for="id_cholesterol_mg" class="form-label">Cholesterol (mg)</label>
+        {{ form.cholesterol_mg }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label for="id_carbohydrate_g" class="form-label">Carbohydrates (g)</label>
+        {{ form.carbohydrate_g }}
+    </div>
+    <div class="col-md-4 mb-3">
+        <label for="id_sugars_g" class="form-label">Sugars (g)</label>
+        {{ form.sugars_g }}
+    </div>
+    <div class="col-md-4 mb-3">
+        <label for="id_fiber_g" class="form-label">Fiber (g)</label>
+        {{ form.fiber_g }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label for="id_sodium_mg" class="form-label">Sodium (mg)</label>
+        {{ form.sodium_mg }}
+    </div>
+    <div class="col-md-4 mb-3">
+        <label for="id_calcium_mg" class="form-label">Calcium (mg)</label>
+        {{ form.calcium_mg }}
+    </div>
+    <div class="col-md-4 mb-3">
+        <label for="id_iron_mg" class="form-label">Iron (mg)</label>
+        {{ form.iron_mg }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label for="id_potassium_mg" class="form-label">Potassium (mg)</label>
+        {{ form.potassium_mg }}
+    </div>
+    <div class="col-md-4 mb-3">
+        <label for="id_vitamin_c_mg" class="form-label">Vitamin C (mg)</label>
+        {{ form.vitamin_c_mg }}
+    </div>
+    <div class="col-md-4 mb-3">
+        <label for="id_vitamin_d_mcg" class="form-label">Vitamin D (mcg)</label>
+        {{ form.vitamin_d_mcg }}
+    </div>
+</div>
+
+<div class="d-grid gap-2 mt-4">
+    <button type="submit" class="btn btn-primary btn-lg">Save Product Information</button>
+</div>
+</form>
+</div>
+</div>
+</div>
 </div>
 {% endblock %}
 
 {% block extra_css %}
 <style>
-.edit-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.page-header {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.page-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.page-subtitle {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.edit-layout {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 2rem;
-    align-items: start;
-}
-
-.form-section {
-    min-height: 100vh;
-}
-
-.form-card {
-    background: var(--card-bg);
-    border-radius: 20px;
-    padding: 2rem;
-    box-shadow: var(--card-shadow);
-    border: 1px solid var(--border-color);
-}
-
-.section-group {
-    margin-bottom: 3rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.section-group:last-of-type {
-    border-bottom: none;
-    margin-bottom: 2rem;
-}
-
-.section-title {
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--primary-light);
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--text-color);
-    font-size: 0.9rem;
-}
-
-.form-control, input, select, textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    background: var(--card-bg);
-    color: var(--text-color);
-}
-
-.form-control:focus, input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
-    transform: translateY(-1px);
-}
-
-textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-.nutrition-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, var(--primary-light), rgba(76, 175, 80, 0.1));
-    border-radius: 15px;
-    margin-top: 1rem;
-}
-
-.nutrition-item {
-    background: var(--card-bg);
-    padding: 1rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-}
-
-.nutrition-item:hover {
-    transform: translateY(-2px);
-}
-
-.diet-options {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.diet-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem;
-    background: var(--background-color);
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-    transition: all 0.2s ease;
-}
-
-.diet-item:hover {
-    background: var(--primary-light);
-    border-color: var(--primary-color);
-}
-
-.diet-item input[type="checkbox"] {
-    width: auto;
-    margin: 0;
-    accent-color: var(--primary-color);
-}
-
-.diet-item label {
-    margin: 0;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.form-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-color);
-}
-
-.btn {
-    padding: 0.75rem 1.5rem;
-    border-radius: 50px;
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-}
-
-.btn-outline-secondary {
-    background: transparent;
-    color: var(--text-secondary);
-    border: 2px solid var(--border-color);
-}
-
-.btn-outline-secondary:hover {
-    background: var(--background-color);
-    color: var(--text-color);
-    transform: translateY(-2px);
-}
-
-.btn-success {
-    background: linear-gradient(135deg, var(--success-color), var(--primary-color));
-    color: white;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-}
-
-.btn-success:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
-}
-
-/* Right Column - Images */
-.image-section {
-    position: sticky;
-    top: 2rem;
-}
-
-.image-card {
-    background: var(--card-bg);
-    border-radius: 20px;
-    padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-    border: 1px solid var(--border-color);
-}
-
-.image-title {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.image-gallery {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.image-item {
-    position: relative;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.image-item:hover {
-    transform: scale(1.05);
-}
-
-.product-image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 15px;
-}
-
-.image-label {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-    color: white;
-    padding: 1rem 0.5rem 0.5rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-align: center;
-}
-
-.no-images {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--text-secondary);
-}
-
-.no-images i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    opacity: 0.5;
-}
-
-.ai-analysis {
-    background: linear-gradient(135deg, var(--info-color), #42A5F5);
-    color: white;
-    padding: 1.5rem;
-    border-radius: 15px;
-    margin-top: 1rem;
-}
-
-.analysis-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.analysis-header i {
-    font-size: 1.5rem;
-}
-
-.analysis-header h4 {
-    margin: 0;
-    font-weight: 600;
-}
-
-.analysis-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-
-.stat-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-}
-
-.fade-in {
-    animation: fadeInUp 0.6s ease-out forwards;
-    opacity: 0;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-    .edit-layout {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    
-    .image-section {
-        position: static;
-    }
-}
-
-@media (max-width: 768px) {
     .edit-container {
-        padding: 1rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
     }
-    
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
     .page-title {
-        font-size: 2rem;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .nutrition-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .diet-options {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-actions {
-        flex-direction: column;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         gap: 1rem;
     }
-    
-    .image-gallery {
-        grid-template-columns: 1fr;
+
+    .page-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto;
     }
-}
 
-/* Dark mode adjustments */
-[data-theme="dark"] .nutrition-item {
-    background: var(--card-bg);
-    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
-}
+    .edit-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+        align-items: start;
+    }
 
-[data-theme="dark"] .diet-item {
-    background: var(--background-color);
-    border-color: var(--border-color);
-}
+    .form-section {
+        min-height: 100vh;
+    }
 
-[data-theme="dark"] .diet-item:hover {
-    background: rgba(76, 175, 80, 0.2);
-}
-</style>
-{% endblock %}
+    .form-card {
+        background: var(--card-bg);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+    }
 
-        .navbar {
-            background-color: var(--white);
-            box-shadow: var(--shadow-sm);
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+    .section-group {
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-group:last-of-type {
+        border-bottom: none;
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary-light);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-color);
+        font-size: 0.9rem;
+    }
+
+    .form-control,
+    input,
+    select,
+    textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        background: var(--card-bg);
+        color: var(--text-color);
+    }
+
+    .form-control:focus,
+    input:focus,
+    select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        transform: translateY(-1px);
+    }
+
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .nutrition-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, var(--primary-light), rgba(76, 175, 80, 0.1));
+        border-radius: 15px;
+        margin-top: 1rem;
+    }
+
+    .nutrition-item {
+        background: var(--card-bg);
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+    }
+
+    .nutrition-item:hover {
+        transform: translateY(-2px);
+    }
+
+    .diet-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .diet-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        background: var(--background-color);
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        transition: all 0.2s ease;
+    }
+
+    .diet-item:hover {
+        background: var(--primary-light);
+        border-color: var(--primary-color);
+    }
+
+    .diet-item input[type="checkbox"] {
+        width: auto;
+        margin: 0;
+        accent-color: var(--primary-color);
+    }
+
+    .diet-item label {
+        margin: 0;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-outline-secondary {
+        background: transparent;
+        color: var(--text-secondary);
+        border: 2px solid var(--border-color);
+    }
+
+    .btn-outline-secondary:hover {
+        background: var(--background-color);
+        color: var(--text-color);
+        transform: translateY(-2px);
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, var(--success-color), var(--primary-color));
+        color: white;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .btn-success:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    /* Right Column - Images */
+    .image-section {
+        position: sticky;
+        top: 2rem;
+    }
+
+    .image-card {
+        background: var(--card-bg);
+        border-radius: 20px;
+        padding: 1.5rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+    }
+
+    .image-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .image-gallery {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .image-item {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .image-item:hover {
+        transform: scale(1.05);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 15px;
+    }
+
+    .image-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        color: white;
+        padding: 1rem 0.5rem 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .no-images {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--text-secondary);
+    }
+
+    .no-images i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .ai-analysis {
+        background: linear-gradient(135deg, var(--info-color), #42A5F5);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin-top: 1rem;
+    }
+
+    .analysis-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .analysis-header i {
+        font-size: 1.5rem;
+    }
+
+    .analysis-header h4 {
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .analysis-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .fade-in {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
 
-        .logo-icon {
-            color: var(--primary);
-            font-size: 1.8rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-            flex: 1;
-            width: 100%;
-        }
-
-        .page-header {
-            margin-bottom: 1.5rem;
-        }
-
-        .page-title {
-            font-size: 1.75rem;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .page-subtitle {
-            color: var(--gray);
-            font-size: 1rem;
-        }
-
-        .card {
-            background: var(--white);
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
-            margin-bottom: 2rem;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-        }
-
-        .form-section {
-            padding: 1.5rem 2rem;
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .edit-layout {
+            grid-template-columns: 1fr;
+            gap: 2rem;
         }
 
         .image-section {
-            padding: 1.5rem;
-            background: var(--lighter-gray);
-            border-left: 1px solid var(--light-gray);
-            display: flex;
+            position: static;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .edit-container {
+            padding: 1rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
             flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-            font-size: 0.875rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.625rem 0.875rem;
-            border: 1px solid var(--light-gray);
-            border-radius: 6px;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(8, 156, 123, 0.15);
-        }
-
-        textarea.form-control {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .section-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin: 1.5rem 0 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--primary-light);
-        }
-
-        .nutrition-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            background: var(--primary-light);
-            padding: 1.25rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-        }
-
-        .nutrition-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .nutrition-label {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--primary-dark);
-            margin-bottom: 0.25rem;
-        }
-
-        .special-diet-group {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem 1rem;
-            margin-top: 0.5rem;
-        }
-
-        .special-diet-item {
-            display: flex;
-            align-items: center;
             gap: 0.5rem;
         }
 
-        .special-diet-item label {
-            font-size: 0.875rem;
-            color: var(--dark);
-            cursor: pointer;
+        .form-row {
+            grid-template-columns: 1fr;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            font-weight: 500;
-            font-size: 1rem;
-            text-align: center;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        .nutrition-grid {
+            grid-template-columns: 1fr;
         }
 
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 2px 4px rgba(8, 156, 123, 0.2);
+        .diet-options {
+            grid-template-columns: 1fr;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(8, 156, 123, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary-light);
-        }
-
-        .image-preview {
-            width: 100%;
-            max-height: 200px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            box-shadow: var(--shadow);
-        }
-
-        .image-caption {
-            font-size: 0.875rem;
-            color: var(--gray);
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .image-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            width: 100%;
-        }
-
-        .footer {
-            background: var(--white);
-            text-align: center;
-            padding: 1.5rem;
-            color: var(--gray);
-            font-size: 0.875rem;
-            margin-top: auto;
-        }
-
-        .actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1.5rem;
+        .form-actions {
+            flex-direction: column;
             gap: 1rem;
         }
 
-        /* Enhancements for form fields to match design */
-        input[type="text"], 
-        input[type="number"], 
-        input[type="date"], 
-        select, 
-        textarea {
-            font-family: 'Inter', sans-serif;
+        .image-gallery {
+            grid-template-columns: 1fr;
         }
+    }
 
-        /* Make Django form elements look nice */
-        form input,
-        form select,
-        form textarea {
-            width: 100%;
-            padding: 0.625rem 0.875rem;
-            border: 1px solid var(--light-gray);
-            border-radius: 6px;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
+    /* Dark mode adjustments */
+    [data-theme="dark"] .nutrition-item {
+        background: var(--card-bg);
+        box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    }
 
-        form input:focus,
-        form select:focus,
-        form textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(8, 156, 123, 0.15);
-        }
+    [data-theme="dark"] .diet-item {
+        background: var(--background-color);
+        border-color: var(--border-color);
+    }
 
-        /* Animation */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    [data-theme="dark"] .diet-item:hover {
+        background: rgba(76, 175, 80, 0.2);
+    }
+</style>
+{% endblock %}
 
-        .fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
+.navbar {
+background-color: var(--white);
+box-shadow: var(--shadow-sm);
+padding: 1rem 1.5rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
 
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .image-section {
-                border-left: none;
-                border-top: 1px solid var(--light-gray);
-            }
-            
-            .nutrition-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .special-diet-group {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-    </style>
+.logo {
+font-size: 1.5rem;
+font-weight: 700;
+color: var(--primary);
+display: flex;
+align-items: center;
+gap: 0.5rem;
+}
+
+.logo-icon {
+color: var(--primary);
+font-size: 1.8rem;
+}
+
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 2rem 1.5rem;
+flex: 1;
+width: 100%;
+}
+
+.page-header {
+margin-bottom: 1.5rem;
+}
+
+.page-title {
+font-size: 1.75rem;
+font-weight: 600;
+color: var(--dark);
+margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+color: var(--gray);
+font-size: 1rem;
+}
+
+.card {
+background: var(--white);
+border-radius: 12px;
+box-shadow: var(--shadow-md);
+overflow: hidden;
+margin-bottom: 2rem;
+}
+
+.form-grid {
+display: grid;
+grid-template-columns: 2fr 1fr;
+}
+
+.form-section {
+padding: 1.5rem 2rem;
+}
+
+.image-section {
+padding: 1.5rem;
+background: var(--lighter-gray);
+border-left: 1px solid var(--light-gray);
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: flex-start;
+}
+
+.form-group {
+margin-bottom: 1.25rem;
+}
+
+.form-label {
+display: block;
+font-weight: 500;
+margin-bottom: 0.5rem;
+color: var(--dark);
+font-size: 0.875rem;
+}
+
+.form-control {
+width: 100%;
+padding: 0.625rem 0.875rem;
+border: 1px solid var(--light-gray);
+border-radius: 6px;
+font-size: 0.875rem;
+transition: all 0.2s ease;
+}
+
+.form-control:focus {
+outline: none;
+border-color: var(--primary);
+box-shadow: 0 0 0 3px rgba(8, 156, 123, 0.15);
+}
+
+textarea.form-control {
+min-height: 100px;
+resize: vertical;
+}
+
+.section-title {
+font-size: 1.125rem;
+font-weight: 600;
+color: var(--primary);
+margin: 1.5rem 0 1rem;
+padding-bottom: 0.5rem;
+border-bottom: 2px solid var(--primary-light);
+}
+
+.nutrition-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 1rem;
+background: var(--primary-light);
+padding: 1.25rem;
+border-radius: 8px;
+margin-bottom: 1.5rem;
+}
+
+.nutrition-item {
+display: flex;
+flex-direction: column;
+}
+
+.nutrition-label {
+font-size: 0.75rem;
+font-weight: 500;
+color: var(--primary-dark);
+margin-bottom: 0.25rem;
+}
+
+.special-diet-group {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 0.5rem 1rem;
+margin-top: 0.5rem;
+}
+
+.special-diet-item {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+}
+
+.special-diet-item label {
+font-size: 0.875rem;
+color: var(--dark);
+cursor: pointer;
+}
+
+.btn {
+display: inline-block;
+padding: 0.75rem 1.5rem;
+font-weight: 500;
+font-size: 1rem;
+text-align: center;
+border-radius: 8px;
+border: none;
+cursor: pointer;
+transition: all 0.2s ease;
+}
+
+.btn-primary {
+background: var(--primary);
+color: white;
+box-shadow: 0 2px 4px rgba(8, 156, 123, 0.2);
+}
+
+.btn-primary:hover {
+background: var(--primary-dark);
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(8, 156, 123, 0.3);
+}
+
+.btn-secondary {
+background: transparent;
+color: var(--primary);
+border: 1px solid var(--primary);
+}
+
+.btn-secondary:hover {
+background: var(--primary-light);
+}
+
+.image-preview {
+width: 100%;
+max-height: 200px;
+object-fit: cover;
+border-radius: 8px;
+margin-bottom: 1rem;
+box-shadow: var(--shadow);
+}
+
+.image-caption {
+font-size: 0.875rem;
+color: var(--gray);
+text-align: center;
+margin-bottom: 1rem;
+}
+
+.image-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 0.75rem;
+width: 100%;
+}
+
+.footer {
+background: var(--white);
+text-align: center;
+padding: 1.5rem;
+color: var(--gray);
+font-size: 0.875rem;
+margin-top: auto;
+}
+
+.actions {
+display: flex;
+justify-content: space-between;
+margin-top: 1.5rem;
+gap: 1rem;
+}
+
+/* Enhancements for form fields to match design */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+font-family: 'Inter', sans-serif;
+}
+
+/* Make Django form elements look nice */
+form input,
+form select,
+form textarea {
+width: 100%;
+padding: 0.625rem 0.875rem;
+border: 1px solid var(--light-gray);
+border-radius: 6px;
+font-size: 0.875rem;
+transition: all 0.2s ease;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+outline: none;
+border-color: var(--primary);
+box-shadow: 0 0 0 3px rgba(8, 156, 123, 0.15);
+}
+
+/* Animation */
+@keyframes fadeIn {
+from {
+opacity: 0;
+transform: translateY(10px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.fade-in {
+animation: fadeIn 0.5s ease-out forwards;
+}
+
+@media (max-width: 768px) {
+.form-grid {
+grid-template-columns: 1fr;
+}
+
+.image-section {
+border-left: none;
+border-top: 1px solid var(--light-gray);
+}
+
+.nutrition-grid {
+grid-template-columns: 1fr;
+}
+
+.special-diet-group {
+grid-template-columns: 1fr 1fr;
+}
+}
+</style>
 </head>
 
 <body>
     <nav class="navbar">
         <div class="logo">
-            <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
             </svg>
             SwasthCare
@@ -1033,7 +1044,8 @@ textarea {
     <div class="container">
         <div class="page-header">
             <h1 class="page-title">Review Extracted Product Data</h1>
-            <p class="page-subtitle">Our AI has analyzed your product images. Please review and edit the information before saving.</p>
+            <p class="page-subtitle">Our AI has analyzed your product images. Please review and edit the information
+                before saving.</p>
         </div>
 
         <div class="card">
@@ -1041,135 +1053,135 @@ textarea {
                 <div class="form-section">
                     <form method="post" id="productForm">
                         {% csrf_token %}
-                        
+
                         <div class="section-title">Product Information</div>
-                        
+
                         <div class="form-group">
                             <label class="form-label">{{ form.prod_name.label }}</label>
                             {{ form.prod_name }}
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="form-label">{{ form.prod_type.label }}</label>
                             {{ form.prod_type }}
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="form-label">{{ form.price.label }}</label>
                             {{ form.price }}
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="form-label">{{ form.ingredients.label }}</label>
                             {{ form.ingredients }}
                         </div>
-                        
+
                         <div class="section-title">Nutritional Information</div>
-                        
+
                         <div class="nutrition-grid">
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.energy_kcal.label }}</label>
                                 {{ form.energy_kcal }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.protein_g.label }}</label>
                                 {{ form.protein_g }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.total_fat_g.label }}</label>
                                 {{ form.total_fat_g }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.saturated_fat_g.label }}</label>
                                 {{ form.saturated_fat_g }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.trans_fat_g.label }}</label>
                                 {{ form.trans_fat_g }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.cholesterol_mg.label }}</label>
                                 {{ form.cholesterol_mg }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.carbohydrate_g.label }}</label>
                                 {{ form.carbohydrate_g }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.sugars_g.label }}</label>
                                 {{ form.sugars_g }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.fiber_g.label }}</label>
                                 {{ form.fiber_g }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.sodium_mg.label }}</label>
                                 {{ form.sodium_mg }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.calcium_mg.label }}</label>
                                 {{ form.calcium_mg }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.iron_mg.label }}</label>
                                 {{ form.iron_mg }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.potassium_mg.label }}</label>
                                 {{ form.potassium_mg }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.vitamin_c_mg.label }}</label>
                                 {{ form.vitamin_c_mg }}
                             </div>
-                            
+
                             <div class="nutrition-item">
                                 <label class="nutrition-label">{{ form.vitamin_d_mcg.label }}</label>
                                 {{ form.vitamin_d_mcg }}
                             </div>
                         </div>
-                        
+
                         <div class="section-title">Additional Information</div>
-                        
+
                         <div class="form-group">
                             <label class="form-label">{{ form.allergen_info.label }}</label>
                             {{ form.allergen_info }}
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="form-label">{{ form.barcode.label }}</label>
                             {{ form.barcode }}
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="form-label">{{ form.manufacturing_date.label }}</label>
                             {{ form.manufacturing_date }}
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="form-label">{{ form.expiry_tenure.label }}</label>
                             {{ form.expiry_tenure }}
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="form-label">{{ form.expiry_date.label }}</label>
                             {{ form.expiry_date }}
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="form-label">{{ form.special_diet.label }}</label>
                             <div class="special-diet-group">
@@ -1181,7 +1193,7 @@ textarea {
                                 {% endfor %}
                             </div>
                         </div>
-                        
+
                         <div class="actions">
                             <a href="{% url 'upload_document' %}" class="btn btn-secondary">Cancel</a>
                             <button type="submit" class="btn btn-primary" id="saveBtn">Save Product Data</button>
@@ -1191,36 +1203,42 @@ textarea {
 
                 <div class="image-section">
                     <h3 style="margin-bottom: 1rem; color: var(--dark);">Uploaded Images</h3>
-                    
+
                     {% if image_urls %}
-                        <div class="image-grid">
+                    <div class="image-grid">
                         {% for img in image_urls %}
-                            {% with delay=forloop.counter0|stringformat:"i"|add:"00" %}
-                            <div class="fade-in" style="animation-delay: 10ms;">
-                                <img src="{{ img }}" alt="Product Image {{ forloop.counter }}" class="image-preview" loading="lazy">
-                            </div>
-                            {% endwith %}
+                        {% with delay=forloop.counter0|stringformat:"i"|add:"00" %}
+                        <div class="fade-in" style="animation-delay: 10ms;">
+                            <img src="{{ img }}" alt="Product Image {{ forloop.counter }}" class="image-preview"
+                                loading="lazy">
+                        </div>
+                        {% endwith %}
                         {% endfor %}
-                        </div>
-                        <p class="image-caption">Product Image{% if image_urls|length > 1 %}s{% endif %}</p>
+                    </div>
+                    <p class="image-caption">Product Image{% if image_urls|length > 1 %}s{% endif %}</p>
                     {% elif image_url %}
-                        <img src="{{ image_url }}" alt="Product Image" class="image-preview">
-                        <p class="image-caption">Product Image</p>
+                    <img src="{{ image_url }}" alt="Product Image" class="image-preview">
+                    <p class="image-caption">Product Image</p>
                     {% else %}
-                        <div style="color: var(--gray); text-align: center; padding: 2rem 1rem;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem; opacity: 0.5;">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                            <p>No images available</p>
-                        </div>
+                    <div style="color: var(--gray); text-align: center; padding: 2rem 1rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                            style="margin-bottom: 1rem; opacity: 0.5;">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        <p>No images available</p>
+                    </div>
                     {% endif %}
-                    
+
                     <div style="margin-top: auto; width: 100%;">
-                        <div style="background: var(--primary-light); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
-                            <h4 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 0.9rem;">AI Analysis</h4>
-                            <p style="font-size: 0.8rem; color: var(--dark);">Our AI system has analyzed the product images and extracted the data. Please verify all fields before saving.</p>
+                        <div
+                            style="background: var(--primary-light); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 0.9rem;">AI Analysis
+                            </h4>
+                            <p style="font-size: 0.8rem; color: var(--dark);">Our AI system has analyzed the product
+                                images and extracted the data. Please verify all fields before saving.</p>
                         </div>
                     </div>
                 </div>
@@ -1233,44 +1251,44 @@ textarea {
     </footer>
 
     {% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Form submission handling
-    document.getElementById('productForm').addEventListener('submit', function() {
-        const saveBtn = document.getElementById('saveBtn');
-        saveBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Saving...';
-        saveBtn.disabled = true;
-    });
-    
-    // Add classes to Django form elements
-    const inputs = document.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
-        if (input.type !== 'checkbox' && input.type !== 'radio') {
-            input.classList.add('form-control');
-        }
-    });
-    
-    // Animate elements on scroll
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
-            }
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Form submission handling
+            document.getElementById('productForm').addEventListener('submit', function () {
+                const saveBtn = document.getElementById('saveBtn');
+                saveBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Saving...';
+                saveBtn.disabled = true;
+            });
+
+            // Add classes to Django form elements
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.type !== 'checkbox' && input.type !== 'radio') {
+                    input.classList.add('form-control');
+                }
+            });
+
+            // Animate elements on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe nutrition items
+            document.querySelectorAll('.nutrition-item').forEach(item => {
+                observer.observe(item);
+            });
         });
-    }, observerOptions);
-    
-    // Observe nutrition items
-    document.querySelectorAll('.nutrition-item').forEach(item => {
-        observer.observe(item);
-    });
-});
-</script>
-{% endblock %}
+    </script>
+    {% endblock %}
 </body>
 
 </html>
