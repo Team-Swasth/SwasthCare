@@ -158,47 +158,59 @@
 
     .scanner-frame {
         position: relative;
-        width: 300px;
-        height: 200px;
+        width: 60vw;
+        max-width: 350px;
+        height: 30vw;
+        max-height: 220px;
+        min-width: 180px;
+        min-height: 120px;
         border: 2px dashed rgba(255, 255, 255, 0.8);
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
+        box-sizing: border-box;
+        transition: width 0.2s, height 0.2s;
     }
 
     .corner {
         position: absolute;
-        width: 25px;
-        height: 25px;
-        border: 4px solid var(--primary-color);
+        width: 8vw;
+        max-width: 32px;
+        min-width: 18px;
+        height: 8vw;
+        max-height: 32px;
+        min-height: 18px;
+        border: 0.5vw solid var(--primary-color);
         border-radius: 3px;
+        box-sizing: border-box;
+        /* Remove fixed 4px border for scaling */
     }
 
     .corner.top-left {
-        top: -3px;
-        left: -3px;
+        top: 0;
+        left: 0;
         border-right: none;
         border-bottom: none;
     }
 
     .corner.top-right {
-        top: -3px;
-        right: -3px;
+        top: 0;
+        right: 0;
         border-left: none;
         border-bottom: none;
     }
 
     .corner.bottom-left {
-        bottom: -3px;
-        left: -3px;
+        bottom: 0;
+        left: 0;
         border-right: none;
         border-top: none;
     }
 
     .corner.bottom-right {
-        bottom: -3px;
-        right: -3px;
+        bottom: 0;
+        right: 0;
         border-left: none;
         border-top: none;
     }
@@ -406,8 +418,12 @@
         }
 
         .scanner-frame {
-            width: 250px;
-            height: 150px;
+            width: 80vw;
+            max-width: 260px;
+            height: 40vw;
+            max-height: 160px;
+            min-width: 120px;
+            min-height: 80px;
         }
 
         .input-wrapper {
@@ -423,6 +439,27 @@
         .scanner-instructions {
             bottom: -60px;
             padding: 0.75rem 1.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .scanner-frame {
+            width: 90vw;
+            max-width: 200px;
+            height: 50vw;
+            max-height: 110px;
+            min-width: 80px;
+            min-height: 50px;
+        }
+
+        .corner {
+            width: 16vw;
+            max-width: 16px;
+            min-width: 8px;
+            height: 16vw;
+            max-height: 16px;
+            min-height: 8px;
+            border-width: 2vw;
         }
     }
 
@@ -469,6 +506,25 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        /* Prevent video inversion in dark mode */
+        #reader video {
+            filter: none !important;
+        }
+
+        /* cancel any inversion on the scanner */
+        #reader,
+        .scanner-area,
+        #reader video {
+            filter: none !important;
+        }
+    }
+
+    /* also handle the JS theme-toggle */
+    html[data-theme="dark"] #reader,
+    html[data-theme="dark"] .scanner-area,
+    html[data-theme="dark"] #reader video {
+        filter: none !important;
     }
 </style>
 {% endblock %}
@@ -476,13 +532,17 @@
 {% block extra_js %}
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script>
-    let html5QrcodeScanner;
+    let html5QrCode; // make global
 
     function onScanSuccess(decodedText, decodedResult) {
+        // stop scanner to avoid duplicate scans
+        if (html5QrCode && html5QrCode._isScanning) {
+            html5QrCode.stop()
+                .then(() => console.log('Scanner stopped after scan'))
+                .catch(err => console.warn('Failed to stop scanner', err));
+        }
         // Handle successful scan
         console.log(`Code matched = ${decodedText}`, decodedResult);
-
-        // Show result container
         document.getElementById('result-container').style.display = 'block';
 
         // Redirect or process the barcode
@@ -498,18 +558,32 @@
 
     // Initialize scanner when page loads
     document.addEventListener('DOMContentLoaded', function () {
-        html5QrcodeScanner = new Html5QrcodeScanner(
-            "reader",
-            {
-                fps: 10,
-                qrbox: { width: 300, height: 200 },
-                aspectRatio: 1.7,
-                rememberLastUsedCamera: true,
-                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
-            },
-            false
-        );
-        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        html5QrCode = new Html5Qrcode("reader");
+
+        // enumerate and pick rear camera
+        Html5Qrcode.getCameras()
+            .then(cameras => {
+                if (!cameras || !cameras.length) {
+                    alert('No camera found.');
+                    return;
+                }
+                const backCam = cameras.find(cam => /back|rear|environment/i.test(cam.label));
+                const deviceId = backCam ? backCam.id : cameras[0].id;
+
+                html5QrCode.start(
+                    { deviceId: { exact: deviceId } },
+                    { fps: 10, qrbox: { width: 300, height: 200 } },
+                    onScanSuccess,
+                    onScanFailure
+                ).catch(err => {
+                    console.error("Start failed:", err);
+                    alert("Camera start error: " + err);
+                });
+            })
+            .catch(err => {
+                console.error("Camera enumeration error:", err);
+                alert("Could not list cameras: " + err);
+            });
 
         // Manual search functionality
         document.getElementById('manual-search').addEventListener('click', function () {

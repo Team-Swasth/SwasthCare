@@ -13,6 +13,9 @@ except ImportError:
     MONGODB_AVAILABLE = False
     print("Warning: pymongo not available. MongoDB features will be disabled.")
 
+from .azure_services import chat_about_product
+from django.views.decorators.csrf import csrf_exempt
+
 # Create your views here.
 
 @login_required
@@ -238,3 +241,34 @@ def search_history(request):
         return render(request, 'consumer/history.html', {'history': history})
     except Exception as e:
         return render(request, 'consumer/history.html', {'history': [], 'error': f'Database error: {str(e)}'})
+
+@login_required
+@csrf_exempt
+def product_chatbot(request):
+    """
+    API endpoint for product chatbot: takes barcode and user question, returns answer from Phi-4.
+    """
+    if request.method != "POST":
+        return JsonResponse({'error': 'POST request required'}, status=405)
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+        barcode = data.get("barcode")
+        question = data.get("question")
+        if not barcode or not question:
+            return JsonResponse({'error': 'barcode and question required'}, status=400)
+        if not MONGODB_AVAILABLE:
+            return JsonResponse({'error': 'Database connection not available'}, status=500)
+        client = pymongo.MongoClient(settings.COSMOSDB_URI)
+        db = client['swasth']
+        collection = db['food']
+        product = collection.find_one({'barcode': barcode})
+        if not product:
+            return JsonResponse({'error': 'Product not found'}, status=404)
+        # Convert ObjectId to string
+        if '_id' in product:
+            product['_id'] = str(product['_id'])
+        # Call Phi-4 chatbot
+        answer = chat_about_product(product, question)
+        return JsonResponse({'answer': answer})
+    except Exception as e:
+        return JsonResponse({'error': f'Error: {str(e)}'}, status=500)
