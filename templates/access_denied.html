@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Access Denied</title>
+</head>
+
+<body>
+    <div class="error-container">
+        <h1>Access Denied</h1>
+        <p>{{ message }}</p>
+        <div class="button-group">
+            {% if user.is_authenticated and user.userprofile.is_consumer %}
+            <a href="{% url 'consumer_home' %}" class="btn btn-primary">Go to Consumer Homepage</a>
+            {% elif user.is_authenticated and user.userprofile.is_seller %}
+            <a href="{% url 'seller_home' %}" class="btn btn-primary">Go to Seller Homepage</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>
+{% endblock %}

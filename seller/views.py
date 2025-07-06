@@ -7,6 +7,20 @@ from django.contrib import messages
 from .forms import DocumentUploadForm, EditExtractedDataForm
 from .azure_services import analyze_and_print_raw_text, extract_structured_data_from_label
 from datetime import datetime
+from django.http import HttpResponseForbidden
+
+def seller_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated and hasattr(request.user, 'userprofile') and request.user.userprofile.is_seller:
+            return view_func(request, *args, **kwargs)
+        return render(request, 'access_denied.html', {
+            'message': "Access denied: Seller role required.",
+            'redirect_buttons': [
+                {'url': 'seller_home', 'label': 'Go to Seller Homepage'},
+                {'url': 'consumer_home', 'label': 'Go to Consumer Homepage'}
+            ]
+        })
+    return wrapper
 
 # MongoDB import - conditional based on availability
 try:
@@ -44,6 +58,7 @@ def date_to_ddmmyyyy(date_val):
     return str(date_val)
 
 @login_required
+@seller_required
 def upload_document(request):
     if request.method == "POST":
         form = DocumentUploadForm(request.POST, request.FILES)
@@ -133,6 +148,7 @@ def upload_document(request):
     return render(request, "seller/upload.html", {"form": form})
 
 @login_required
+@seller_required
 def edit_extracted_data(request):
     initial_data = request.session.get("edit_form_data", {})
     image_urls = request.session.get("uploaded_image_urls", [])
@@ -198,3 +214,9 @@ def edit_extracted_data(request):
                     initial_data[date_field] = ""
         form = EditExtractedDataForm(initial=initial_data)
     return render(request, "seller/edit.html", {"form": form, "image_url": image_url, "image_urls": image_urls})
+
+@login_required
+@seller_required
+def seller_home(request):
+    """Render the seller homepage."""
+    return render(request, 'seller/seller_home.html')

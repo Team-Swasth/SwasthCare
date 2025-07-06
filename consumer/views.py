@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, StreamingHttpResponse
+from django.http import JsonResponse, StreamingHttpResponse, HttpResponseForbidden
 import json
 from datetime import datetime
 from django.contrib import messages
@@ -17,9 +17,23 @@ except ImportError:
 from .azure_services import chat_about_product
 from django.views.decorators.csrf import csrf_exempt
 
+def consumer_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated and hasattr(request.user, 'userprofile') and request.user.userprofile.is_consumer:
+            return view_func(request, *args, **kwargs)
+        return render(request, 'access_denied.html', {
+            'message': "Access denied: Consumer role required.",
+            'redirect_buttons': [
+                {'url': 'consumer_home', 'label': 'Go to Consumer Homepage'},
+                {'url': 'seller_home', 'label': 'Go to Seller Homepage'}
+            ]
+        })
+    return wrapper
+
 # Create your views here.
 
 @login_required
+@consumer_required
 def home(request):
     """
     Redirect consumer app home to main consumer dashboard
@@ -27,6 +41,7 @@ def home(request):
     return redirect('home')  # Redirect to main app home which will show consumer_home.html
 
 @login_required
+@consumer_required
 def scan_barcode(request):
     """
     Render the barcode scanning page
@@ -34,6 +49,7 @@ def scan_barcode(request):
     return render(request, 'consumer/scan.html')
 
 @login_required
+@consumer_required
 def product_detail(request, barcode=None):
     """
     Display product details for a specific barcode
@@ -86,6 +102,7 @@ def product_detail(request, barcode=None):
     return render(request, 'consumer/scan.html')
 
 @login_required
+@consumer_required
 def get_product_json(request):
     """
     API endpoint to get product data by barcode
@@ -129,6 +146,7 @@ def get_product_json(request):
         return JsonResponse({'error': f'Database error: {str(e)}'}, status=500)
 
 @login_required
+@consumer_required
 def search_products(request):
     """
     Search products by name or ingredients
@@ -180,6 +198,7 @@ def search_products(request):
         })
 
 @login_required
+@consumer_required
 def product_detail_by_id(request, product_id):
     """
     Display product details for a specific product ID
@@ -224,6 +243,7 @@ def product_detail_by_id(request, product_id):
         })
 
 @login_required
+@consumer_required
 def search_history(request):
     """
     Display the search history for the logged-in user.
@@ -244,6 +264,7 @@ def search_history(request):
         return render(request, 'consumer/history.html', {'history': [], 'error': f'Database error: {str(e)}'})
 
 @login_required
+@consumer_required
 @csrf_exempt
 def product_chatbot(request):
     """
@@ -281,6 +302,7 @@ def product_chatbot(request):
         return JsonResponse({'error': f'Error: {str(e)}'}, status=500)
 
 @login_required
+@consumer_required
 def compare_products(request):
     """
     Compare selected products side by side.
