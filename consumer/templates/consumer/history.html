@@ -4,6 +4,14 @@
 
 {% block content %}
 <div class="container mt-5">
+    <div class="d-flex gap-2 mb-3">
+        <a href="/consumer/scan/" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Scanner
+        </a>
+        <a href="/" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Home
+        </a>
+    </div>
     <h2 class="mb-4"><i class="bi bi-clock-history"></i> Your Search History</h2>
     {% if error %}
     <div class="alert alert-danger">{{ error }}</div>
@@ -12,6 +20,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>Select</th>
                 <th>Barcode</th>
                 <th>Item Name</th>
                 <th>Scanned At</th>
@@ -20,6 +29,7 @@
         <tbody>
             {% for entry in history %}
             <tr>
+                <td><input type="checkbox" class="compare-checkbox" value="{{ entry.barcode }}"></td>
                 <td>{{ entry.barcode }}</td>
                 <td>
                     <a href="{% url 'product_detail' entry.barcode %}">
@@ -37,8 +47,33 @@
             {% endfor %}
         </tbody>
     </table>
+    <button id="compare-btn" class="btn btn-primary" disabled>Compare</button>
     {% else %}
     <div class="alert alert-info">No search history found.</div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxes = document.querySelectorAll('.compare-checkbox');
+        const btn = document.getElementById('compare-btn');
+
+        function updateBtn() {
+            const sel = Array.from(checkboxes).filter(cb => cb.checked);
+            btn.disabled = !(sel.length >= 2 && sel.length <= 4);
+        }
+
+        checkboxes.forEach(cb => cb.addEventListener('change', updateBtn));
+
+        btn.addEventListener('click', function () {
+            const selected = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => 'barcode=' + encodeURIComponent(cb.value))
+                .join('&');
+            window.location.href = '{% url "compare_products" %}?' + selected;
+        });
+    });
+</script>
 {% endblock %}

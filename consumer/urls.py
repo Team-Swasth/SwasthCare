@@ -10,4 +10,5 @@ urlpatterns = [
     path('api/product/', views.get_product_json, name='get_product_json'),
     path('history/', views.search_history, name='search_history'),
     path('product_chatbot/', views.product_chatbot, name='product_chatbot'),
+    path('compare/', views.compare_products, name='compare_products'),
 ]

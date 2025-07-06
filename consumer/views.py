@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, StreamingHttpResponse
 import json
 from datetime import datetime
+from django.contrib import messages
 
 # MongoDB import - conditional based on availability
 try:
@@ -278,3 +279,35 @@ def product_chatbot(request):
         return JsonResponse({'answer': answer})
     except Exception as e:
         return JsonResponse({'error': f'Error: {str(e)}'}, status=500)
+
+@login_required
+def compare_products(request):
+    """
+    Compare selected products side by side.
+    Expects GET param 'barcode' 2–4 times.
+    """
+    barcodes = request.GET.getlist('barcode')
+    if len(barcodes) < 2 or len(barcodes) > 4:
+        messages.error(request, 'Select between 2 and 4 products to compare.')
+        return redirect('search_history')
+    if not MONGODB_AVAILABLE:
+        return render(request, 'consumer/compare.html', {
+            'products': [], 
+            'error': 'Database connection not available'
+        })
+    try:
+        client = pymongo.MongoClient(settings.COSMOSDB_URI)
+        db = client['swasth']
+        collection = db['food']
+        products = []
+        for bc in barcodes:
+            prod = collection.find_one({'barcode': bc})
+            if prod:
+                prod['_id'] = str(prod.get('_id'))
+                products.append(prod)
+        return render(request, 'consumer/compare.html', {'products': products})
+    except Exception as e:
+        return render(request, 'consumer/compare.html', {
+            'products': [], 
+            'error': f'Database error: {str(e)}'
+        })

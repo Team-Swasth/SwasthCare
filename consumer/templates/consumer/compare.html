@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block title %}Compare Products{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex gap-2 mb-3">
+        <a href="/consumer/history/" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to History
+        </a>
+        <a href="/" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Home
+        </a>
+    </div>
+    <h2 class="mb-4">Product Comparison</h2>
+
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    {% if products %}
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    {% for prod in products %}
+                    <th>{{ prod.prod_name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Barcode</td>{% for p in products %}<td>{{ p.barcode }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Price</td>{% for p in products %}<td>₹{{ p.price }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Manufacturing Date</td>{% for p in products %}<td>{{ p.manufacturing_date }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Expiry Date</td>{% for p in products %}<td>{{ p.expiry.expiry_date }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Shelf Life (months)</td>{% for p in products %}<td>{{ p.expiry.tenure }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Ingredients</td>{% for p in products %}<td>{{ p.ingredients }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Special Diet</td>
+                    {% for p in products %}
+                    <td>
+                        {% for diet in p.special_diet %}
+                        <span class="badge badge-diet">{{ diet|title }}</span>
+                        {% empty %}
+                        &mdash;
+                        {% endfor %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Allergen Info</td>{% for p in products %}<td>{{ p.allergen_info }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Energy (kcal)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.energy_kcal }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Protein (g)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.protein_g }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Total Fat (g)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.total_fat_g }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Saturated Fat (g)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.saturated_fat_g }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Trans Fat (g)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.trans_fat_g }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Cholesterol (mg)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.cholesterol_mg }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Carbohydrates (g)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.carbohydrate_g }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Sugars (g)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.sugars_g }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Fiber (g)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.fiber_g }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Sodium (mg)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.sodium_mg }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Calcium (mg)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.calcium_mg }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Iron (mg)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.iron_mg }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Potassium (mg)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.potassium_mg }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Vitamin C (mg)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.vitamin_c_mg }}</td>{% endfor %}
+                </tr>
+                <tr>
+                    <td>Vitamin D (mcg)</td>
+                    {% for p in products %}<td>{{ p.nutritional_info.vitamin_d_mcg }}</td>{% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">No products to compare.</div>
+    {% endif %}
+
+    <a href="{% url 'search_history' %}" class="btn btn-secondary mt-3">Back to History</a>
+</div>
+{% endblock %}
