@@ -86,7 +86,7 @@ def upload_document(request):
             if "expiry_date (DD-MM-YYYY)" in expiry:
                 expiry["expiry_date"] = expiry.pop("expiry_date (DD-MM-YYYY)")
             structured_data["expiry"] = expiry
-            print("Phi-4 Processing Complete")
+            print("GPT 4.1 Processing Complete")
             # Parse DD-MM-YYYY to date objects for the form
             manufacturing_date = ddmmyyyy_to_date(structured_data.get("manufacturing_date", ""))
             expiry_date = ddmmyyyy_to_date(structured_data.get("expiry", {}).get("expiry_date", ""))

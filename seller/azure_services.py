@@ -86,13 +86,13 @@ def extract_structured_data_from_label(raw_text):
         raise ValueError("No JSON object found in the text.")
 
     ai_endpoint = settings.AZURE_AI_ENDPOINT
-    model_name = "Phi-4"
+    model_name = "gpt-4.1-mini"
     ai_api_key = settings.AZURE_AI_API_KEY
 
     client = ChatCompletionsClient(
         endpoint=ai_endpoint,
         credential=AzureKeyCredential(ai_api_key),
-        api_version="2024-05-01-preview"
+        # api_version is not required for gpt-4.1-mini, remove if not needed
     )
 
     prompt = f"""
@@ -151,7 +151,7 @@ def extract_structured_data_from_label(raw_text):
         frequency_penalty=0.0,
         model=model_name
     )
-    print(f"Time for Phi completion: {time.time() - start_phi:.2f} seconds")
+    print(f"Time for GPT-4.1-mini completion: {time.time() - start_phi:.2f} seconds")
 
     content = response.choices[0].message.content
     start_parse = time.time()
@@ -162,7 +162,7 @@ def extract_structured_data_from_label(raw_text):
         print("Error parsing JSON:", e)
         print("RAW RESPONSE:\n", content)
         structured_data = {"error": str(e), "raw_response": content}
-    print(f"Time to parse Phi response: {time.time() - start_parse:.2f} seconds")
+    print(f"Time to parse model response: {time.time() - start_parse:.2f} seconds")
     print(f"Total time for extract_structured_data_from_label: {time.time() - start_total:.2f} seconds")
 
     # Print each variable
