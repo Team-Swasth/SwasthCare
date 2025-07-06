@@ -1,4 +1,4 @@
-# SwasthCare_Seller
+# SwasthCare
 
 ## .env Template
 

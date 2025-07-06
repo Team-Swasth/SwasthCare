@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("SwasthCare_seller", "0002_searchhistory"),
+        ("SwasthCare", "0002_searchhistory"),  # Update app name if renamed
     ]
 
     operations = [
