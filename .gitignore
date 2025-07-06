@@ -129,7 +129,11 @@ wheels/
 *.egg-info/
 .installed.cfg
 
-
 manage_users.py
 test_auth.py
 setup_azure_communication.py
+
+# Django migrations
+migrations/__init__.py
+migrations/*.py
+migrations/*.py
