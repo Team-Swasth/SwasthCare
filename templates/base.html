@@ -60,6 +60,22 @@
         {% block content %}{% endblock %}
     </div>
 
+    <!-- Global Loading Overlay -->
+    <div id="global-loading-overlay" class="global-loading-overlay" style="display: none;">
+        <div class="global-loading-container">
+            <div class="global-loading-spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+            </div>
+            <div class="global-loading-text">
+                <h4 id="loading-title">Loading...</h4>
+                <p id="loading-message">Please wait while we process your request</p>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/theme.js"></script>
 
@@ -86,6 +102,126 @@
 
         .auto-dismiss-alert:hover .progress-bar {
             animation-play-state: paused;
+        }
+
+        /* Global Loading Overlay Styles */
+        .global-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .global-loading-overlay.show {
+            opacity: 1;
+        }
+
+        [data-theme="dark"] .global-loading-overlay {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .global-loading-container {
+            text-align: center;
+            color: white;
+            max-width: 300px;
+            padding: 2rem;
+        }
+
+        .global-loading-spinner {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .spinner-ring {
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            border: 8px solid transparent;
+            border-radius: 50%;
+            animation: spin-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+
+        .spinner-ring:nth-child(1) {
+            border-top-color: var(--primary-color);
+            animation-delay: -0.45s;
+        }
+
+        .spinner-ring:nth-child(2) {
+            border-right-color: var(--primary-color);
+            animation-delay: -0.3s;
+        }
+
+        .spinner-ring:nth-child(3) {
+            border-bottom-color: var(--primary-color);
+            animation-delay: -0.15s;
+        }
+
+        .spinner-ring:nth-child(4) {
+            border-left-color: var(--primary-color);
+        }
+
+        @keyframes spin-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .global-loading-text h4 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .global-loading-text p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        /* Pulse animation for text */
+        .global-loading-text {
+            animation: loading-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes loading-pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* SwasthCare branded loading variant */
+        .swasthcare-loading .spinner-ring:nth-child(1) {
+            border-top-color: #4CAF50;
+        }
+
+        .swasthcare-loading .spinner-ring:nth-child(2) {
+            border-right-color: #388E3C;
+        }
+
+        .swasthcare-loading .spinner-ring:nth-child(3) {
+            border-bottom-color: #4CAF50;
+        }
+
+        .swasthcare-loading .spinner-ring:nth-child(4) {
+            border-left-color: #388E3C;
         }
     </style>
 
@@ -142,6 +278,108 @@
                 });
             });
         });
+
+        // Global Loading Functions
+        function showGlobalLoading(title = 'Loading...', message = 'Please wait while we process your request', branded = false) {
+            const overlay = document.getElementById('global-loading-overlay');
+            const titleEl = document.getElementById('loading-title');
+            const messageEl = document.getElementById('loading-message');
+            const container = document.querySelector('.global-loading-container');
+            
+            if (titleEl) titleEl.textContent = title;
+            if (messageEl) messageEl.textContent = message;
+            
+            // Add SwasthCare branding if requested
+            if (branded) {
+                container.classList.add('swasthcare-loading');
+            } else {
+                container.classList.remove('swasthcare-loading');
+            }
+            
+            overlay.style.display = 'flex';
+            // Force reflow
+            overlay.offsetHeight;
+            overlay.classList.add('show');
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideGlobalLoading() {
+            const overlay = document.getElementById('global-loading-overlay');
+            overlay.classList.remove('show');
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                // Restore body scroll
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        function updateGlobalLoading(title, message) {
+            const titleEl = document.getElementById('loading-title');
+            const messageEl = document.getElementById('loading-message');
+            
+            if (titleEl) titleEl.textContent = title;
+            if (messageEl) messageEl.textContent = message;
+        }
+
+        // Auto-show loading for AJAX requests
+        function setupAjaxLoading() {
+            // Monitor fetch requests
+            const originalFetch = window.fetch;
+            window.fetch = function(...args) {
+                const url = args[0];
+                
+                // Only show loading for specific endpoints
+                if (typeof url === 'string' && (
+                    url.includes('/ai/') || 
+                    url.includes('/product/') || 
+                    url.includes('/scan/') ||
+                    url.includes('/search/')
+                )) {
+                    let loadingTitle = 'Processing...';
+                    let loadingMessage = 'Please wait while we process your request';
+                    
+                    if (url.includes('/ai/chatbot/')) {
+                        loadingTitle = 'SwasthCare AI';
+                        loadingMessage = 'Analyzing your question...';
+                    } else if (url.includes('/ai/health-analysis/')) {
+                        loadingTitle = 'Health Analysis';
+                        loadingMessage = 'Analyzing product health benefits...';
+                    } else if (url.includes('/ai/alternatives/')) {
+                        loadingTitle = 'Finding Alternatives';
+                        loadingMessage = 'Searching for healthier options...';
+                    } else if (url.includes('/ai/meal-suggestions/')) {
+                        loadingTitle = 'Meal Suggestions';
+                        loadingMessage = 'Creating personalized meal ideas...';
+                    } else if (url.includes('/product/')) {
+                        loadingTitle = 'Product Search';
+                        loadingMessage = 'Searching product database...';
+                    }
+                    
+                    showGlobalLoading(loadingTitle, loadingMessage, true);
+                }
+                
+                return originalFetch.apply(this, args)
+                    .then(response => {
+                        hideGlobalLoading();
+                        return response;
+                    })
+                    .catch(error => {
+                        hideGlobalLoading();
+                        throw error;
+                    });
+            };
+        }
+
+        // Initialize AJAX loading on page load
+        document.addEventListener('DOMContentLoaded', setupAjaxLoading);
+
+        // Make functions globally available
+        window.showGlobalLoading = showGlobalLoading;
+        window.hideGlobalLoading = hideGlobalLoading;
+        window.updateGlobalLoading = updateGlobalLoading;
     </script>
 
     {% block extra_js %}{% endblock %}

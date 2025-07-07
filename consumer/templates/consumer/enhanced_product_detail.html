@@ -1,0 +1,1414 @@
+{% extends 'base.html' %}
+
+{% block title %}SwasthCare - {{ product.prod_name }}{% endblock %}
+
+{% block content %}
+<a href="/consumer/scan/" class="btn btn-outline-secondary mb-3">
+    <i class="bi bi-arrow-left"></i> Back to Scanner
+</a>
+<a href="/" class="btn btn-outline-secondary mb-3">
+    <i class="bi bi-arrow-left"></i> Back to Home
+</a>
+
+<div class="row">
+    <div class="col-md-8">
+        <!-- Product Information Card -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">{{ product.prod_name }}</h3>
+                <span class="badge bg-secondary">{{ product.prod_type }}</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5>Product Information</h5>
+                        <p><strong>Barcode:</strong> {{ product.barcode }}</p>
+                        <p><strong>Price:</strong> ₹{{ product.price }}</p>
+
+                        <div class="date-info">
+                            <div><strong>Manufacturing Date:</strong> {{ product.manufacturing_date }}</div>
+                            <div><strong>Expiry Date:</strong> {{ product.expiry.expiry_date }}</div>
+                            <div><strong>Shelf Life:</strong> {{ product.expiry.tenure }} months</div>
+                        </div>
+
+                        {% if product.special_diet %}
+                        <div class="mt-3">
+                            <h6>Special Diet:</h6>
+                            {% for diet in product.special_diet %}
+                            <span class="badge badge-diet">{{ diet|title }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        {% if product.allergen_info %}
+                        <div class="mt-3">
+                            <h6>Allergen Information:</h6>
+                            <div class="badge badge-allergen">{{ product.allergen_info }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5>Ingredients</h5>
+                        <p>{{ product.ingredients }}</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5>Nutritional Information (per serving)</h5>
+                        <table class="nutrient-table">
+                            <tr>
+                                <td><strong>Energy</strong></td>
+                                <td>{{ product.nutritional_info.energy_kcal }} kcal</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Protein</strong></td>
+                                <td>{{ product.nutritional_info.protein_g }} g</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total Fat</strong></td>
+                                <td>{{ product.nutritional_info.total_fat_g }} g</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Saturated Fat</strong></td>
+                                <td>{{ product.nutritional_info.saturated_fat_g }} g</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Trans Fat</strong></td>
+                                <td>{{ product.nutritional_info.trans_fat_g }} g</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cholesterol</strong></td>
+                                <td>{{ product.nutritional_info.cholesterol_mg }} mg</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Carbohydrates</strong></td>
+                                <td>{{ product.nutritional_info.carbohydrate_g }} g</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sugars</strong></td>
+                                <td>{{ product.nutritional_info.sugars_g }} g</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fiber</strong></td>
+                                <td>{{ product.nutritional_info.fiber_g }} g</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sodium</strong></td>
+                                <td>{{ product.nutritional_info.sodium_mg }} mg</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Calcium</strong></td>
+                                <td>{{ product.nutritional_info.calcium_mg }} mg</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Iron</strong></td>
+                                <td>{{ product.nutritional_info.iron_mg }} mg</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Potassium</strong></td>
+                                <td>{{ product.nutritional_info.potassium_mg }} mg</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Vitamin C</strong></td>
+                                <td>{{ product.nutritional_info.vitamin_c_mg }} mg</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Vitamin D</strong></td>
+                                <td>{{ product.nutritional_info.vitamin_d_mcg }} mcg</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <!-- AI Insights Panel -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-robot"></i> AI Insights
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="ai-insights-loading" style="display: none;">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Analyzing product...</p>
+                    </div>
+                </div>
+                
+                <div class="ai-insights-content">
+                    <!-- Health Analysis -->
+                    <div class="mb-3">
+                        <h6><i class="bi bi-heart-pulse"></i> Health Analysis</h6>
+                        <button class="btn btn-sm btn-outline-primary" onclick="loadHealthAnalysis()">
+                            Get Health Analysis
+                        </button>
+                        <div id="health-analysis" class="mt-2" style="display: none;"></div>
+                    </div>
+
+                    <!-- Alternatives -->
+                    <div class="mb-3">
+                        <h6><i class="bi bi-arrow-repeat"></i> Healthier Alternatives</h6>
+                        <button class="btn btn-sm btn-outline-success" onclick="loadAlternatives()">
+                            Find Alternatives
+                        </button>
+                        <div id="alternatives" class="mt-2" style="display: none;"></div>
+                    </div>
+
+                    <!-- Meal Suggestions -->
+                    <div class="mb-3">
+                        <h6><i class="bi bi-cup-hot"></i> Meal Ideas</h6>
+                        <div class="btn-group-vertical d-grid gap-2">
+                            <button class="btn btn-sm btn-outline-info" onclick="loadMealSuggestions('breakfast')">
+                                Breakfast Ideas
+                            </button>
+                            <button class="btn btn-sm btn-outline-info" onclick="loadMealSuggestions('lunch')">
+                                Lunch Ideas
+                            </button>
+                            <button class="btn btn-sm btn-outline-info" onclick="loadMealSuggestions('dinner')">
+                                Dinner Ideas
+                            </button>
+                            <button class="btn btn-sm btn-outline-info" onclick="loadMealSuggestions('snack')">
+                                Snack Ideas
+                            </button>
+                        </div>
+                        <div id="meal-suggestions" class="mt-2" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced Floating Chatbot with Speech -->
+<style>
+    /* SwasthCare AI Chatbot - Premium Design */
+    :root {
+        --swasthcare-primary: #4CAF50;
+        --swasthcare-primary-rgb: 76, 175, 80;
+        --swasthcare-secondary: #388E3C;
+        --swasthcare-gradient: linear-gradient(135deg, #4CAF50, #388E3C);
+        --swasthcare-accent: #66BB6A;
+        --chatbot-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        --chatbot-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Dark mode adjustments */
+    [data-theme="dark"] {
+        --swasthcare-primary: #66BB6A;
+        --swasthcare-primary-rgb: 102, 187, 106;
+        --swasthcare-secondary: #4CAF50;
+        --swasthcare-gradient: linear-gradient(135deg, #66BB6A, #4CAF50);
+        --swasthcare-accent: #81C784;
+        --chatbot-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        --chatbot-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Floating Assistant Button */
+    #floating-chatbot-btn {
+        position: fixed;
+        bottom: 32px;
+        right: 32px;
+        z-index: 1050;
+        background: var(--swasthcare-gradient);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 64px;
+        height: 64px;
+        box-shadow: var(--chatbot-shadow);
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: chatbot-float 3s ease-in-out infinite;
+    }
+
+    @keyframes chatbot-float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+    }
+
+    #floating-chatbot-btn:hover {
+        transform: scale(1.1) translateY(-2px);
+        box-shadow: var(--chatbot-shadow-hover);
+        animation-play-state: paused;
+    }
+
+    #floating-chatbot-btn:active {
+        transform: scale(0.95) translateY(0px);
+    }
+
+    /* Premium Chatbot Window */
+    #floating-chatbot-window {
+        position: fixed;
+        bottom: 110px;
+        right: 32px;
+        width: 450px;
+        height: 650px;
+        min-width: 320px;
+        min-height: 400px;
+        max-width: 90vw;
+        max-height: 85vh;
+        background: var(--card-bg);
+        border-radius: 24px;
+        box-shadow: var(--chatbot-shadow);
+        z-index: 1060;
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        resize: both;
+        backdrop-filter: blur(20px);
+    }
+
+    #floating-chatbot-window.show {
+        animation: chatbot-slide-in 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes chatbot-slide-in {
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* Header with Visual Drag Handle */
+    #floating-chatbot-header {
+        background: var(--swasthcare-gradient);
+        color: white;
+        padding: 20px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: move;
+        user-select: none;
+        border-radius: 24px 24px 0 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #floating-chatbot-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+        animation: chatbot-shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes chatbot-shimmer {
+        0%, 100% { transform: translateX(-100%); }
+        50% { transform: translateX(100%); }
+    }
+
+    .chatbot-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        z-index: 1;
+        position: relative;
+    }
+
+    .chatbot-brand i {
+        font-size: 1.5rem;
+        animation: chatbot-pulse-icon 2s ease-in-out infinite;
+    }
+
+    @keyframes chatbot-pulse-icon {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    .chatbot-drag-handle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 2px;
+        z-index: 0;
+    }
+
+    .chatbot-drag-handle::before,
+    .chatbot-drag-handle::after {
+        content: '';
+        position: absolute;
+        width: 40px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 2px;
+        left: 0;
+    }
+
+    .chatbot-drag-handle::before {
+        top: -8px;
+    }
+
+    .chatbot-drag-handle::after {
+        top: 8px;
+    }
+
+    #floating-chatbot-close {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        font-size: 1.4rem;
+        cursor: pointer;
+        padding: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        z-index: 1;
+        position: relative;
+    }
+
+    #floating-chatbot-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(90deg) scale(1.1);
+    }
+
+    /* Enhanced Controls */
+    .chatbot-controls {
+        display: flex;
+        gap: 12px;
+        margin: 16px 20px;
+        padding: 8px;
+        background: var(--background-color);
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+    }
+
+    .chatbot-controls button {
+        flex: 1;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 12px;
+        background: var(--card-bg);
+        color: var(--text-color);
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .chatbot-controls button:hover {
+        background: var(--swasthcare-primary);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(var(--swasthcare-primary-rgb), 0.3);
+    }
+
+    .chatbot-controls button.active {
+        background: var(--swasthcare-primary);
+        color: white;
+        box-shadow: 0 4px 12px rgba(var(--swasthcare-primary-rgb), 0.3);
+    }
+
+    .chatbot-controls button i {
+        font-size: 1rem;
+    }
+
+    /* Chat History */
+    #floating-chatbot-history {
+        padding: 20px;
+        background: var(--background-color);
+        flex: 1;
+        overflow-y: auto;
+        font-size: 0.95rem;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border-color) transparent;
+    }
+
+    #floating-chatbot-history::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #floating-chatbot-history::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #floating-chatbot-history::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 3px;
+    }
+
+    #floating-chatbot-history::-webkit-scrollbar-thumb:hover {
+        background: var(--swasthcare-primary);
+    }
+
+    /* Modern Chat Messages */
+    .chat-message-user {
+        background: var(--swasthcare-gradient);
+        color: white;
+        border-radius: 20px 20px 6px 20px;
+        padding: 16px 20px;
+        margin: 12px 0 12px 40px;
+        box-shadow: 0 2px 12px rgba(var(--swasthcare-primary-rgb), 0.2);
+        animation: message-slide-in-right 0.3s ease-out;
+    }
+
+    .chat-message-bot {
+        background: var(--card-bg);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        border-radius: 20px 20px 20px 6px;
+        padding: 16px 20px;
+        margin: 12px 40px 12px 0;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        animation: message-slide-in-left 0.3s ease-out;
+    }
+
+    @keyframes message-slide-in-right {
+        from {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes message-slide-in-left {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .chat-message-header {
+        font-weight: 700;
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        opacity: 0.9;
+    }
+
+    .chat-message-user .chat-message-header {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .chat-message-bot .chat-message-header {
+        color: var(--swasthcare-primary);
+    }
+
+    .chat-message-content {
+        line-height: 1.5;
+    }
+
+    /* Enhanced Input Form */
+    #floating-chatbot-form {
+        padding: 20px;
+        border-top: 1px solid var(--border-color);
+        background: var(--card-bg);
+        border-radius: 0 0 24px 24px;
+    }
+
+    #floating-chatbot-form .input-group {
+        background: var(--background-color);
+        border-radius: 25px;
+        padding: 4px;
+        border: 2px solid var(--border-color);
+        transition: border-color 0.3s ease;
+    }
+
+    #floating-chatbot-form .input-group:focus-within {
+        border-color: var(--swasthcare-primary);
+        box-shadow: 0 0 0 3px rgba(var(--swasthcare-primary-rgb), 0.1);
+    }
+
+    #floating-chatbot-question {
+        border: none;
+        background: transparent;
+        color: var(--text-color);
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        border-radius: 21px 0 0 21px;
+    }
+
+    #floating-chatbot-question:focus {
+        border: none;
+        box-shadow: none;
+        outline: none;
+        background: transparent;
+    }
+
+    #floating-chatbot-question::placeholder {
+        color: var(--text-muted);
+        opacity: 0.7;
+    }
+
+    #floating-chatbot-mic {
+        border: none;
+        background: transparent;
+        color: var(--text-color);
+        padding: 12px;
+        transition: all 0.3s ease;
+        border-radius: 12px;
+    }
+
+    #floating-chatbot-mic:hover {
+        background: var(--swasthcare-primary);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    #floating-chatbot-mic.active {
+        background: var(--swasthcare-primary);
+        color: white;
+        animation: mic-pulse 1s infinite;
+    }
+
+    @keyframes mic-pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    #floating-chatbot-form .btn-primary {
+        background: var(--swasthcare-gradient);
+        border: none;
+        border-radius: 0 21px 21px 0;
+        padding: 12px 20px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    #floating-chatbot-form .btn-primary:hover {
+        background: var(--swasthcare-secondary);
+        transform: scale(1.05);
+    }
+
+    /* Enhanced Speech Indicator */
+    .speech-indicator {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--swasthcare-gradient);
+        color: white;
+        padding: 40px;
+        border-radius: 50%;
+        font-size: 3rem;
+        animation: speech-pulse 1.5s ease-in-out infinite;
+        z-index: 2000;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 8px 32px rgba(var(--swasthcare-primary-rgb), 0.4);
+    }
+
+    @keyframes speech-pulse {
+        0%, 100% { 
+            transform: translate(-50%, -50%) scale(1);
+            box-shadow: 0 8px 32px rgba(var(--swasthcare-primary-rgb), 0.4);
+        }
+        50% { 
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 12px 40px rgba(var(--swasthcare-primary-rgb), 0.6);
+        }
+    }
+
+    /* Loading Animation */
+    .chatbot-thinking {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-style: italic;
+        color: var(--swasthcare-primary);
+        opacity: 0.8;
+    }
+
+    .chatbot-thinking-dots {
+        display: flex;
+        gap: 4px;
+    }
+
+    .chatbot-thinking-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--swasthcare-primary);
+        border-radius: 50%;
+        animation: chatbot-thinking-bounce 1.4s ease-in-out infinite both;
+    }
+
+    .chatbot-thinking-dot:nth-child(1) { animation-delay: -0.32s; }
+    .chatbot-thinking-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes chatbot-thinking-bounce {
+        0%, 80%, 100% { transform: scale(0); }
+        40% { transform: scale(1); }
+    }
+
+    /* Dragging States */
+    .chatbot-dragging {
+        opacity: 0.9;
+        transform: rotate(1deg);
+        box-shadow: var(--chatbot-shadow-hover);
+        z-index: 1070;
+    }
+
+    /* AI Insights Enhancements */
+    .ai-insights-content h6 {
+        color: var(--swasthcare-primary);
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .health-score {
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 25px;
+        display: inline-block;
+        margin-bottom: 12px;
+        border: 2px solid;
+    }
+
+    .health-score.excellent { 
+        background: linear-gradient(135deg, #d4edda, #c3e6cb); 
+        color: #155724; 
+        border-color: #28a745;
+    }
+    .health-score.good { 
+        background: linear-gradient(135deg, #d1ecf1, #bee5eb); 
+        color: #0c5460; 
+        border-color: #17a2b8;
+    }
+    .health-score.fair { 
+        background: linear-gradient(135deg, #fff3cd, #ffeaa7); 
+        color: #856404; 
+        border-color: #ffc107;
+    }
+    .health-score.poor { 
+        background: linear-gradient(135deg, #f8d7da, #f5c6cb); 
+        color: #721c24; 
+        border-color: #dc3545;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        #floating-chatbot-window {
+            width: 95vw;
+            height: 75vh;
+            right: 2.5vw;
+            bottom: 90px;
+            border-radius: 20px;
+        }
+        
+        #floating-chatbot-btn {
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            font-size: 1.4rem;
+        }
+
+        #floating-chatbot-header {
+            padding: 16px 20px;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .chatbot-brand {
+            font-size: 1.1rem;
+        }
+
+        .chatbot-controls {
+            flex-direction: column;
+            gap: 8px;
+            margin: 12px 16px;
+        }
+
+        .chat-message-user {
+            margin: 12px 0 12px 20px;
+        }
+
+        .chat-message-bot {
+            margin: 12px 20px 12px 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #floating-chatbot-window {
+            width: 100vw;
+            height: 100vh;
+            right: 0;
+            bottom: 0;
+            border-radius: 0;
+            max-height: 100vh;
+        }
+
+        #floating-chatbot-header {
+            border-radius: 0;
+        }
+
+        #floating-chatbot-form {
+            border-radius: 0;
+        }
+    }
+</style>
+
+<!-- SwasthCare AI Assistant -->
+<button id="floating-chatbot-btn" title="SwasthCare AI Assistant">
+    <i class="bi bi-robot"></i>
+</button>
+
+<div id="floating-chatbot-window">
+    <div id="floating-chatbot-header">
+        <div class="chatbot-brand">
+            <i class="bi bi-robot"></i>
+            <span>SwasthCare AI</span>
+        </div>
+        <div class="chatbot-drag-handle"></div>
+        <button id="floating-chatbot-close" title="Close">&times;</button>
+    </div>
+    
+    <div class="chatbot-controls">
+        <button id="speech-toggle" onclick="toggleSpeech()">
+            <i class="bi bi-mic"></i>
+            <span>Voice</span>
+        </button>
+        <button id="tts-toggle" onclick="toggleTTS()">
+            <i class="bi bi-volume-up"></i>
+            <span>Audio</span>
+        </button>
+    </div>
+    
+    <div id="floating-chatbot-history">
+        <div class="chat-message-bot">
+            <div class="chat-message-header">
+                <i class="bi bi-robot"></i>
+                <span>SwasthCare AI</span>
+            </div>
+            <div class="chat-message-content">
+                Hello! 👋 I'm your SwasthCare AI assistant. I can help you understand this product's nutrition, ingredients, allergens, and health benefits. What would you like to know?
+            </div>
+        </div>
+    </div>
+    
+    <form id="floating-chatbot-form" autocomplete="off">
+        <div class="input-group">
+            <input type="text" id="floating-chatbot-question" class="form-control" 
+                   placeholder="Ask about this product..." required>
+            <button type="button" id="floating-chatbot-mic" class="btn btn-outline-secondary"
+                    title="Speak your question">
+                <i class="bi bi-mic"></i>
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-send"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Enhanced SwasthCare AI Chatbot
+    const btn = document.getElementById("floating-chatbot-btn");
+    const win = document.getElementById("floating-chatbot-window");
+    const closeBtn = document.getElementById("floating-chatbot-close");
+    const header = document.getElementById("floating-chatbot-header");
+    const form = document.getElementById("floating-chatbot-form");
+    const questionInput = document.getElementById("floating-chatbot-question");
+    const historyDiv = document.getElementById("floating-chatbot-history");
+    const micBtn = document.getElementById("floating-chatbot-mic");
+    
+    let chatHistory = [];
+    let recognizing = false;
+    let recognition;
+    let speechEnabled = false;
+    let ttsEnabled = false;
+    let isDragging = false;
+    let dragStartX, dragStartY, windowStartX, windowStartY;
+    
+    const converter = new showdown.Converter({ 
+        simpleLineBreaks: true,
+        strikethrough: true,
+        tables: true
+    });
+
+    // Initialize speech recognition
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.lang = "en-US";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        recognition.continuous = false;
+
+        recognition.onstart = function () {
+            recognizing = true;
+            micBtn.classList.add("active");
+            micBtn.innerHTML = '<i class="bi bi-mic-fill"></i>';
+            showSpeechIndicator();
+        };
+
+        recognition.onend = function () {
+            recognizing = false;
+            micBtn.classList.remove("active");
+            micBtn.innerHTML = '<i class="bi bi-mic"></i>';
+            hideSpeechIndicator();
+        };
+
+        recognition.onerror = function (event) {
+            recognizing = false;
+            micBtn.classList.remove("active");
+            micBtn.innerHTML = '<i class="bi bi-mic"></i>';
+            hideSpeechIndicator();
+            console.error('Speech recognition error:', event.error);
+        };
+
+        recognition.onresult = function (event) {
+            if (event.results && event.results[0] && event.results[0][0]) {
+                questionInput.value = event.results[0][0].transcript;
+                questionInput.focus();
+            }
+        };
+
+        micBtn.addEventListener("click", function () {
+            if (recognizing) {
+                recognition.stop();
+                return;
+            }
+            recognition.start();
+        });
+    } else {
+        micBtn.style.display = "none";
+    }
+
+    // Draggable functionality
+    header.addEventListener("mousedown", function(e) {
+        if (e.target === closeBtn || e.target.closest('#floating-chatbot-close')) return;
+        
+        isDragging = true;
+        win.classList.add('chatbot-dragging');
+        
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        
+        const rect = win.getBoundingClientRect();
+        windowStartX = rect.left;
+        windowStartY = rect.top;
+        
+        document.addEventListener("mousemove", handleDrag);
+        document.addEventListener("mouseup", stopDrag);
+        e.preventDefault();
+    });
+
+    function handleDrag(e) {
+        if (!isDragging) return;
+        
+        const deltaX = e.clientX - dragStartX;
+        const deltaY = e.clientY - dragStartY;
+        
+        const newX = Math.max(0, Math.min(window.innerWidth - win.offsetWidth, windowStartX + deltaX));
+        const newY = Math.max(0, Math.min(window.innerHeight - win.offsetHeight, windowStartY + deltaY));
+        
+        win.style.left = newX + 'px';
+        win.style.top = newY + 'px';
+        win.style.right = 'auto';
+        win.style.bottom = 'auto';
+    }
+
+    function stopDrag() {
+        if (!isDragging) return;
+        
+        isDragging = false;
+        win.classList.remove('chatbot-dragging');
+        
+        document.removeEventListener("mousemove", handleDrag);
+        document.removeEventListener("mouseup", stopDrag);
+    }
+
+    // Show/hide chatbot with animation
+    btn.addEventListener("click", function () {
+        win.style.display = "flex";
+        win.classList.add('show');
+        setTimeout(() => questionInput.focus(), 200);
+    });
+
+    closeBtn.addEventListener("click", function () {
+        win.classList.remove('show');
+        setTimeout(() => {
+            win.style.display = "none";
+        }, 300);
+    });
+
+    // Toggle functions
+    function toggleSpeech() {
+        speechEnabled = !speechEnabled;
+        const speechToggle = document.getElementById("speech-toggle");
+        speechToggle.classList.toggle("active", speechEnabled);
+        
+        if (speechEnabled) {
+            speechToggle.innerHTML = '<i class="bi bi-mic-fill"></i><span>Voice ON</span>';
+        } else {
+            speechToggle.innerHTML = '<i class="bi bi-mic"></i><span>Voice</span>';
+        }
+    }
+
+    function toggleTTS() {
+        ttsEnabled = !ttsEnabled;
+        const ttsToggle = document.getElementById("tts-toggle");
+        ttsToggle.classList.toggle("active", ttsEnabled);
+        
+        if (ttsEnabled) {
+            ttsToggle.innerHTML = '<i class="bi bi-volume-up-fill"></i><span>Audio ON</span>';
+        } else {
+            ttsToggle.innerHTML = '<i class="bi bi-volume-up"></i><span>Audio</span>';
+        }
+    }
+
+    // Speech indicator functions
+    function showSpeechIndicator() {
+        const indicator = document.createElement('div');
+        indicator.className = 'speech-indicator';
+        indicator.innerHTML = '<i class="bi bi-mic-fill"></i>';
+        indicator.id = 'speech-indicator';
+        document.body.appendChild(indicator);
+    }
+
+    function hideSpeechIndicator() {
+        const indicator = document.getElementById('speech-indicator');
+        if (indicator) {
+            indicator.remove();
+        }
+    }
+
+    // Enhanced render history with better message formatting
+    function renderHistory() {
+        historyDiv.innerHTML = "";
+        
+        // Welcome message always first
+        if (chatHistory.length === 0) {
+            const welcomeDiv = document.createElement("div");
+            welcomeDiv.className = "chat-message-bot";
+            welcomeDiv.innerHTML = `
+                <div class="chat-message-header">
+                    <i class="bi bi-robot"></i>
+                    <span>SwasthCare AI</span>
+                </div>
+                <div class="chat-message-content">
+                    Hello! 👋 I'm your SwasthCare AI assistant. I can help you understand this product's nutrition, ingredients, allergens, and health benefits. What would you like to know?
+                </div>
+            `;
+            historyDiv.appendChild(welcomeDiv);
+        }
+        
+        chatHistory.forEach(entry => {
+            // User message
+            const qDiv = document.createElement("div");
+            qDiv.className = "chat-message-user";
+            qDiv.innerHTML = `
+                <div class="chat-message-header">
+                    <i class="bi bi-person-circle"></i>
+                    <span>You</span>
+                </div>
+                <div class="chat-message-content">${entry.question}</div>
+            `;
+            historyDiv.appendChild(qDiv);
+
+            // Bot response
+            const aDiv = document.createElement("div");
+            aDiv.className = "chat-message-bot";
+            
+            let answerHtml;
+            if (entry.answer && !entry.answer.startsWith("<")) {
+                answerHtml = converter.makeHtml(entry.answer);
+            } else {
+                answerHtml = entry.answer || "";
+            }
+            
+            // Check for thinking state
+            if (answerHtml.includes("Thinking...")) {
+                answerHtml = `
+                    <div class="chatbot-thinking">
+                        <i class="bi bi-robot"></i>
+                        <span>Thinking</span>
+                        <div class="chatbot-thinking-dots">
+                            <div class="chatbot-thinking-dot"></div>
+                            <div class="chatbot-thinking-dot"></div>
+                            <div class="chatbot-thinking-dot"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            aDiv.innerHTML = `
+                <div class="chat-message-header">
+                    <i class="bi bi-robot"></i>
+                    <span>SwasthCare AI</span>
+                </div>
+                <div class="chat-message-content">${answerHtml}</div>
+            `;
+            historyDiv.appendChild(aDiv);
+        });
+        
+        historyDiv.scrollTop = historyDiv.scrollHeight;
+    }
+
+    // Audio response functionality
+    function playAudioResponse(audioBase64) {
+        if (!ttsEnabled || !audioBase64) return;
+        
+        try {
+            const audioBlob = base64ToBlob(audioBase64, 'audio/wav');
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            audio.play().catch(e => console.log('Audio play failed:', e));
+        } catch (error) {
+            console.error('Error playing audio:', error);
+        }
+    }
+
+    function base64ToBlob(base64, mimeType) {
+        const byteCharacters = atob(base64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        return new Blob([byteArray], { type: mimeType });
+    }
+
+    // Enhanced form submission with better error handling
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const question = questionInput.value.trim();
+        if (!question) return;
+
+        chatHistory.push({ 
+            question: question, 
+            answer: "<em>🤖 Thinking...</em>" 
+        });
+        renderHistory();
+        questionInput.value = "";
+
+        // Show global loading
+        showGlobalLoading('AI Assistant', 'Processing your question...', true);
+
+        fetch("{% url 'enhanced_product_chatbot' %}?stream=1", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({
+                barcode: "{{ product.barcode }}",
+                question: question,
+                include_speech: ttsEnabled
+            })
+        })
+        .then(res => {
+            hideGlobalLoading();
+            
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            }
+            
+            if (!res.body || !window.ReadableStream) {
+                // Fallback to non-streaming
+                return res.json().then(data => {
+                    if (chatHistory.length > 0) {
+                        if (data.answer) {
+                            chatHistory[chatHistory.length - 1].answer = data.answer;
+                            if (data.audio) {
+                                playAudioResponse(data.audio);
+                            }
+                        } else if (data.error) {
+                            chatHistory[chatHistory.length - 1].answer = `<span class='text-danger'>❌ ${data.error}</span>`;
+                        } else {
+                            chatHistory[chatHistory.length - 1].answer = "<span class='text-danger'>❌ No response received</span>";
+                        }
+                        renderHistory();
+                    }
+                });
+            }
+
+            // Streaming response
+            const reader = res.body.getReader();
+            let decoder = new TextDecoder();
+            let answer = "";
+
+            function readChunk() {
+                return reader.read().then(({ done, value }) => {
+                    if (done) {
+                        if (chatHistory.length > 0) {
+                            chatHistory[chatHistory.length - 1].answer = answer || "<span class='text-danger'>❌ No response received</span>";
+                            renderHistory();
+                        }
+                        return;
+                    }
+
+                    answer += decoder.decode(value, { stream: true });
+                    if (chatHistory.length > 0) {
+                        chatHistory[chatHistory.length - 1].answer = answer + "<span class='text-muted'>▌</span>";
+                        renderHistory();
+                    }
+                    return readChunk();
+                });
+            }
+            return readChunk();
+        })
+        .catch(error => {
+            hideGlobalLoading();
+            console.error('Chatbot error:', error);
+            if (chatHistory.length > 0) {
+                chatHistory[chatHistory.length - 1].answer = "<span class='text-danger'>❌ Error connecting to AI assistant. Please try again.</span>";
+                renderHistory();
+            }
+        });
+    });
+
+    // Initialize with welcome message
+    renderHistory();
+
+    // Make functions globally accessible
+    window.toggleSpeech = toggleSpeech;
+    window.toggleTTS = toggleTTS;
+});
+
+// AI Insights Functions
+function loadHealthAnalysis() {
+    const container = document.getElementById('health-analysis');
+    const button = container.previousElementSibling;
+    
+    button.disabled = true;
+    button.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Analyzing...';
+    
+    // Show global loading
+    showGlobalLoading('Health Analysis', 'Analyzing product health benefits and concerns...', true);
+    
+    fetch(`/consumer/ai/health-analysis/{{ product.barcode }}/`)
+        .then(response => response.json())
+        .then(data => {
+            hideGlobalLoading();
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            const analysis = data.analysis;
+            let html = '';
+            
+            if (analysis.health_score) {
+                const score = typeof analysis.health_score === 'number' ? analysis.health_score : 'N/A';
+                let scoreClass = 'fair';
+                if (score >= 8) scoreClass = 'excellent';
+                else if (score >= 6) scoreClass = 'good';
+                else if (score < 5) scoreClass = 'poor';
+                
+                html += `<div class="health-score ${scoreClass}">Health Score: ${score}/10</div>`;
+            }
+            
+            if (analysis.benefits && analysis.benefits.length > 0) {
+                html += `<h6 class="text-success">Benefits:</h6><ul>`;
+                analysis.benefits.forEach(benefit => {
+                    html += `<li>${benefit}</li>`;
+                });
+                html += `</ul>`;
+            }
+            
+            if (analysis.concerns && analysis.concerns.length > 0) {
+                html += `<h6 class="text-warning">Concerns:</h6><ul>`;
+                analysis.concerns.forEach(concern => {
+                    html += `<li>${concern}</li>`;
+                });
+                html += `</ul>`;
+            }
+            
+            if (analysis.recommendations && analysis.recommendations.length > 0) {
+                html += `<h6 class="text-info">Recommendations:</h6><ul>`;
+                analysis.recommendations.forEach(rec => {
+                    html += `<li>${rec}</li>`;
+                });
+                html += `</ul>`;
+            }
+            
+            container.innerHTML = html;
+            container.style.display = 'block';
+            button.style.display = 'none';
+        })
+        .catch(error => {
+            hideGlobalLoading();
+            console.error('Health analysis error:', error);
+            container.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+            container.style.display = 'block';
+            button.disabled = false;
+            button.innerHTML = 'Retry Health Analysis';
+        });
+}
+
+function loadAlternatives() {
+    const container = document.getElementById('alternatives');
+    const button = container.previousElementSibling;
+    
+    button.disabled = true;
+    button.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Finding...';
+    
+    // Show global loading
+    showGlobalLoading('Finding Alternatives', 'Searching for healthier product options...', true);
+    
+    fetch(`/consumer/ai/alternatives/{{ product.barcode }}/`)
+        .then(response => response.json())
+        .then(data => {
+            hideGlobalLoading();
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            let html = '<div class="alternatives-list"><ul class="list-unstyled">';
+            data.alternatives.forEach(alternative => {
+                html += `<li><i class="bi bi-check-circle text-success"></i> ${alternative}</li>`;
+            });
+            html += '</ul></div>';
+            
+            container.innerHTML = html;
+            container.style.display = 'block';
+            button.style.display = 'none';
+        })
+        .catch(error => {
+            hideGlobalLoading();
+            console.error('Alternatives error:', error);
+            container.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+            container.style.display = 'block';
+            button.disabled = false;
+            button.innerHTML = 'Retry Alternatives';
+        });
+}
+
+function loadMealSuggestions(mealType) {
+    const container = document.getElementById('meal-suggestions');
+    const buttons = container.previousElementSibling.querySelectorAll('button');
+    
+    buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.onclick.toString().includes(mealType)) {
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Loading...';
+        }
+    });
+    
+    // Show global loading
+    showGlobalLoading('Meal Suggestions', `Creating ${mealType} ideas with this product...`, true);
+    
+    fetch(`/consumer/ai/meal-suggestions/{{ product.barcode }}/?meal_type=${mealType}`)
+        .then(response => response.json())
+        .then(data => {
+            hideGlobalLoading();
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            let html = `<h6 class="text-primary">${data.meal_type.toUpperCase()} Ideas:</h6>`;
+            html += '<div class="meal-suggestions-list"><ul class="list-unstyled">';
+            data.suggestions.forEach(suggestion => {
+                html += `<li><i class="bi bi-cup-hot text-warning"></i> ${suggestion}</li>`;
+            });
+            html += '</ul></div>';
+            
+            container.innerHTML = html;
+            container.style.display = 'block';
+            buttons.forEach(btn => btn.style.display = 'none');
+        })
+        .catch(error => {
+            hideGlobalLoading();
+            console.error('Meal suggestions error:', error);
+            container.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+            container.style.display = 'block';
+            buttons.forEach(btn => {
+                btn.disabled = false;
+                if (btn.onclick.toString().includes(mealType)) {
+                    btn.innerHTML = `${mealType.charAt(0).toUpperCase() + mealType.slice(1)} Ideas`;
+                }
+            });
+        });
+}
+</script>
+
+<!-- Include original styles -->
+<style>
+    .nutrient-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .nutrient-table td {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .nutrient-table tr:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .date-info {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+    }
+    
+    .date-info div {
+        margin: 5px 0;
+    }
+    
+    .badge-diet {
+        background: #e3f2fd;
+        color: #1976d2;
+        padding: 5px 10px;
+        border-radius: 15px;
+        margin: 2px;
+        font-size: 0.8em;
+    }
+    
+    .badge-allergen {
+        background: #ffebee;
+        color: #c62828;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.9em;
+    }
+</style>
+{% endblock %}

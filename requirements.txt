@@ -7,3 +7,6 @@ azure-ai-inference
 azure-core
 azure-communication-email
 azure-identity
+azure-cognitiveservices-speech
+numpy
+scipy
