@@ -13,7 +13,7 @@ from django.core.cache import cache
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
-import azure.cognitiveservices.speech as speechsdk
+# import azure.cognitiveservices.speech as speechsdk
 from azure.core.exceptions import AzureError
 
 # Configure logging
@@ -27,7 +27,7 @@ class SwasthCareAIService:
     
     def __init__(self):
         self.ai_client = None
-        self.speech_config = None
+        # self.speech_config = None
         self.initialize_services()
     
     def initialize_services(self):
@@ -39,15 +39,15 @@ class SwasthCareAIService:
                 credential=AzureKeyCredential(settings.AZURE_AI_API_KEY)
             )
             
-            # Initialize Speech services
-            self.speech_config = speechsdk.SpeechConfig(
-                subscription=settings.AZURE_SPEECH_KEY,
-                region=settings.AZURE_SPEECH_REGION
-            )
+            # # Initialize Speech services
+            # self.speech_config = speechsdk.SpeechConfig(
+            #     subscription=settings.AZURE_SPEECH_KEY,
+            #     region=settings.AZURE_SPEECH_REGION
+            # )
             
             # Configure speech settings
-            self.speech_config.speech_synthesis_voice_name = "en-US-AriaNeural"
-            self.speech_config.speech_recognition_language = "en-US"
+            # self.speech_config.speech_synthesis_voice_name = "en-US-AriaNeural"
+            # self.speech_config.speech_recognition_language = "en-US"
             
             logger.info("Azure AI and Speech services initialized successfully")
         except Exception as e:

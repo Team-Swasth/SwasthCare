@@ -1,5 +1,48 @@
 /* Shared styles for SwasthCare portal */
 /* Common CSS for the whole application */
+.background-container {
+    position: relative;
+    background-image: url('/static/images/image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 50px 20px;
+    min-height: 100vh;
+    color: white;
+    z-index: 1;
+}
+
+/* Overlay to darken the background */
+.background-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust the 0.5 for more/less darkness */
+    z-index: -1;
+}
+
+/* Ensure all content stays above overlay */
+.background-container > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Cards and alerts */
+.background-container .card,
+.background-container .alert {
+    background-color: rgba(0, 0, 0, 0.6); /* semi-transparent for readability */
+    color: white;
+}
+
+/* Bold text in header */
+.background-container .header h1,
+.background-container .header p {
+    font-weight: bold;
+}
+
 :root {
     /* Primary colors */
     --primary-color: #4CAF50;
