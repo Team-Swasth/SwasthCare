@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="header text-center mb-5 animated-header">
-    <h1 class="display-4 gradient-text">Welcome, {{ user.get_full_name|default:user.username }}!</h1>
+    <h1 class="display-4 gradient-text" style="padding-bottom: 10px;">Welcome, {{ user.get_full_name|default:user.username }}!</h1>
     <p class="lead">
         <i class="bi bi-person text-success"></i>
         Your Consumer Dashboard - Discover what's really in your products 

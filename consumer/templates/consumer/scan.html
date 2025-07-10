@@ -8,7 +8,7 @@
         <a href="/" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left"></i> Back to Home
         </a>
-        <a href="/consumer/scan/history/" class="btn btn-outline-secondary">
+        <a href="{% url 'search_history' %}" class="btn btn-outline-secondary">
             <i class="bi bi-clock-history"></i> Scan History
         </a>
     </div>
@@ -35,15 +35,16 @@
                                 <div id="reader" class="scanner-area mx-auto"></div>
                                 <div class="scanner-overlay">
                                     <div class="scanner-frame">
-                                        <div class="corner top-left"></div>
-                                        <div class="corner top-right"></div>
-                                        <div class="corner bottom-left"></div>
-                                        <div class="corner bottom-right"></div>
-                                        <div class="scan-line"></div>
+                                        <div class="corner-container">
+                                            <div class="corner-marker"></div>
+                                            <div class="corner-marker"></div>
+                                            <div class="corner-marker"></div>
+                                            <div class="corner-marker"></div>
+                                        </div>
                                     </div>
                                     <div class="scanner-instructions">
                                         <div class="instruction-icon">
-                                            <i class="bi bi-qr-code-scan"></i>
+                                            <i class="bi bi-upc-scan"></i>
                                         </div>
                                         <h5>Position Barcode Here</h5>
                                         <p>Align the barcode within the scanning frame</p>
@@ -185,72 +186,83 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background: rgba(0, 0, 0, 0.3);
+        background: rgba(0, 0, 0, 0.2);
         border-radius: 15px;
         z-index: 10;
         transition: all 0.3s ease;
-    }
-
-    .scanner-overlay:hover {
-        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(2px);
     }
 
     .scanner-frame {
         position: relative;
-        width: 300px;
-        height: 200px;
-        border: 2px solid var(--scan-primary);
-        border-radius: 10px;
-        overflow: hidden;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
+        width: 280px;
+        height: 180px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    .corner {
+    .corner-container {
         position: absolute;
-        width: 30px;
-        height: 30px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .corner-marker {
+        position: absolute;
+        width: 20px;
+        height: 20px;
         border: 3px solid var(--scan-primary);
-        border-radius: 5px;
-        background: rgba(var(--scan-primary-rgb), 0.2);
+        opacity: 0.8;
     }
 
-    .corner.top-left {
-        top: -2px;
-        left: -2px;
-        border-right: none;
-        border-bottom: none;
-    }
-
-    .corner.top-right {
-        top: -2px;
-        right: -2px;
-        border-left: none;
-        border-bottom: none;
-    }
-
-    .corner.bottom-left {
-        bottom: -2px;
-        left: -2px;
-        border-right: none;
-        border-top: none;
-    }
-
-    .corner.bottom-right {
-        bottom: -2px;
-        right: -2px;
-        border-left: none;
-        border-top: none;
-    }
-
-    .scan-line {
-        position: absolute;
+    /* Position corner markers */
+    .corner-marker:nth-child(1) {
         top: 0;
         left: 0;
+        border-right: none;
+        border-bottom: none;
+        border-radius: 6px 0 0 0;
+    }
+
+    .corner-marker:nth-child(2) {
+        top: 0;
         right: 0;
-        height: 2px;
-        background: var(--scan-gradient);
-        animation: scan-animation 2s infinite;
+        border-left: none;
+        border-bottom: none;
+        border-radius: 0 6px 0 0;
+    }
+
+    .corner-marker:nth-child(3) {
+        bottom: 0;
+        left: 0;
+        border-right: none;
+        border-top: none;
+        border-radius: 0 0 0 6px;
+    }
+
+    .corner-marker:nth-child(4) {
+        bottom: 0;
+        right: 0;
+        border-left: none;
+        border-top: none;
+        border-radius: 0 0 6px 0;
+    }
+
+    /* Add subtle animation to corners */
+    .corner-marker {
+        animation: corner-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes corner-pulse {
+        0%, 100% {
+            opacity: 0.8;
+            box-shadow: 0 0 10px rgba(var(--scan-primary-rgb), 0.3);
+        }
+        50% {
+            opacity: 1;
+            box-shadow: 0 0 20px rgba(var(--scan-primary-rgb), 0.5);
+        }
     }
 
     @keyframes scan-animation {
@@ -546,7 +558,24 @@
 {% block extra_js %}
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script>
-    let html5QrCode; // make global
+    let html5QrCode;
+    let isScanning = false;
+
+    // Improved scanner configuration
+    const config = {
+        fps: 10,
+        qrbox: {
+            width: 250,
+            height: 150
+        },
+        aspectRatio: 16/9,
+        formatsToSupport: [
+            Html5QrcodeSupportedFormats.EAN_13,
+            Html5QrcodeSupportedFormats.EAN_8,
+            Html5QrcodeSupportedFormats.UPC_A,
+            Html5QrcodeSupportedFormats.UPC_E
+        ]
+    };
 
     function onScanSuccess(decodedText, decodedResult) {
         // stop scanner to avoid duplicate scans
