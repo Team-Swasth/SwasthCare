@@ -3,95 +3,144 @@
 {% block title %}SwasthCare - Seller Dashboard{% endblock %}
 
 {% block content %}
-<div class="header text-center mb-5">
-    <h1 class="display-4">Welcome, {{ user.get_full_name|default:user.username }}!</h1>
-    <p class="lead">
-        <i class="bi bi-shop text-success"></i> 
-        Your Seller Dashboard - Showcase your products with complete transparency
-    </p>
-</div>
+<div class="seller-home-container">
+    <!-- Welcome Header -->
+    <div class="welcome-section text-center mb-5">
+        <div class="welcome-badge mb-3">
+            <i class="bi bi-shield-check text-success"></i>
+            <span>Verified Seller</span>
+        </div>
+        <h1 class="display-4 mb-3">Welcome back, {{ user.get_full_name|default:user.username }}!</h1>
+        <p class="lead text-muted">
+            <i class="bi bi-shop text-success me-2"></i>
+            Your Seller Dashboard - Showcase your products with complete transparency
+        </p>
+    </div>
 
 {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show auto-dismiss-alert" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            <div class="progress mt-2" style="height: 3px;">
-                <div class="progress-bar bg-{{ message.tags }}" role="progressbar" style="width: 100%"></div>
-            </div>
-        </div>
-    {% endfor %}
-{% endif %}
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-upload"></i> Upload Product
-                </h5>
-            </div>
-            <div class="card-body">
-                <p>Share detailed product information and build consumer trust through complete transparency and accurate labeling.</p>
-                <a href="/seller/upload/" class="btn btn-primary w-100">
-                    <i class="bi bi-plus-circle"></i> Add Product
-                </a>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-gear"></i> Account Settings
-                </h5>
-            </div>
-            <div class="card-body">
-                <p>Manage your seller profile, preferences, and account information.</p>
-                <br><a href="/profile/" class="btn btn-outline-secondary w-100">
-                    <i class="bi bi-person-gear"></i> Settings
-                </a>
-            </div>
-        </div>
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible fade show auto-dismiss-alert" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <div class="progress mt-2" style="height: 3px;">
+        <div class="progress-bar bg-{{ message.tags }}" role="progressbar" style="width: 100%"></div>
     </div>
 </div>
-
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-info-circle"></i> Seller Guidelines
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6>Product Information Requirements</h6>
-                        <ul class="list-unstyled">
-                            <li><i class="bi bi-check-circle text-success"></i> Clear product label images</li>
-                            <li><i class="bi bi-check-circle text-success"></i> Accurate ingredient lists</li>
-                            <li><i class="bi bi-check-circle text-success"></i> Nutritional information</li>
-                            <li><i class="bi bi-check-circle text-success"></i> Allergen warnings</li>
-                        </ul>
+{% endfor %}
+{% endif %}    <!-- Action Cards -->
+    <div class="action-cards-section mb-5">
+        <h3 class="section-title mb-4">
+            <i class="bi bi-lightning text-warning"></i>
+            Quick Actions
+        </h3>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="action-card upload-card">
+                    <div class="card-icon-wrapper">
+                        <i class="bi bi-cloud-upload-fill"></i>
                     </div>
-                    <div class="col-md-6">
-                        <h6>Best Practices</h6>
-                        <ul class="list-unstyled">
-                            <li><i class="bi bi-lightbulb text-warning"></i> Upload high-quality images</li>
-                            <li><i class="bi bi-lightbulb text-warning"></i> Double-check all information</li>
-                            <li><i class="bi bi-lightbulb text-warning"></i> Keep product data updated</li>
-                            <li><i class="bi bi-lightbulb text-warning"></i> Respond to consumer feedback</li>
-                        </ul>
+                    <div class="card-content">
+                        <h5 class="card-title">
+                            <i class="bi bi-upload me-2"></i>Upload Product
+                        </h5>
+                        <p class="card-description">
+                            Share detailed product information and build consumer trust through complete transparency and accurate labeling. 
+                            Our AI will help extract product details automatically.
+                        </p>
+                        <div class="card-features mb-3">
+                            <span class="feature-tag">
+                                <i class="bi bi-robot"></i> AI-Powered
+                            </span>
+                            <span class="feature-tag">
+                                <i class="bi bi-camera"></i> Photo Capture
+                            </span>
+                        </div>
+                        <a href="{% url 'seller_upload' %}" class="btn btn-primary btn-action">
+                            <i class="bi bi-plus-circle me-2"></i>Add New Product
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="action-card settings-card">
+                    <div class="card-icon-wrapper">
+                        <i class="bi bi-gear-fill"></i>
+                    </div>
+                    <div class="card-content">
+                        <h5 class="card-title">
+                            <i class="bi bi-gear me-2"></i>Account Settings
+                        </h5>
+                        <p class="card-description">
+                            Manage your seller profile, update your information, and configure your account settings for a personalized experience.
+                            Keep your business details up to date.
+                        </p>
+                        <div class="card-features mb-3">
+                            <span class="feature-tag">
+                                <i class="bi bi-person-check"></i> Profile
+                            </span>
+                            <span class="feature-tag">
+                                <i class="bi bi-shield-check"></i> Security
+                            </span>
+                        </div>
+                        <a href="{% url 'edit_profile' %}" class="btn btn-outline-success btn-action">
+                            <i class="bi bi-person-gear me-2"></i>Edit Profile
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="text-center mt-5 text-secondary">
-    <p>© 2025 SwasthCare - Seller Portal. All rights reserved.</p>
+    <!-- Additional Features -->
+    <div class="features-section">
+        <h3 class="section-title mb-4">
+            <i class="bi bi-grid text-primary"></i>
+            Available Features
+        </h3>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-person-circle text-primary"></i>
+                    </div>
+                    <h6>Profile Management</h6>
+                    <p class="text-muted small">View and update your profile information</p>
+                    <a href="{% url 'profile' %}" class="btn btn-sm btn-outline-primary">View Profile</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-house-door text-info"></i>
+                    </div>
+                    <h6>Consumer Portal</h6>
+                    <p class="text-muted small">Explore the consumer side of SwasthCare</p>
+                    <a href="{% url 'consumer_home' %}" class="btn btn-sm btn-outline-info">Visit Portal</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-lock text-success"></i>
+                    </div>
+                    <h6>Change Password</h6>
+                    <p class="text-muted small">Update your account security settings</p>
+                    <a href="{% url 'change_password' %}" class="btn btn-sm btn-outline-success">Change Password</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="dashboard-footer text-center mt-5 pt-4 border-top">
+        <div class="footer-brand mb-3">
+            <i class="bi bi-heart-fill text-success me-2"></i>
+            <strong>SwasthCare</strong> - Building Trust Through Transparency
+        </div>
+        <p class="text-muted small mb-0">© 2025 SwasthCare - Seller Portal. All rights reserved.</p>
+    </div>
 </div>
 {% endblock %}
