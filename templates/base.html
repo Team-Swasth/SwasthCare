@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 
@@ -14,7 +15,10 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="/">SwasthCare</a>
+            <a class="navbar-brand d-flex align-items-center gap-3" href="/">
+                <img src="{% static 'images/Untitled_design__10_-removebg-preview.png' %}" alt="SwasthCare Logo" class="navbar-logo">
+                <span class="fs-4 align-self-center">SwasthCare</span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -81,6 +85,12 @@
 
     <!-- Auto-dismiss alerts functionality -->
     <style>
+        .navbar-logo {
+            height: 48px;
+            max-height: 48px;
+            object-fit: contain;
+        }
+
         .auto-dismiss-alert {
             position: relative;
             overflow: hidden;
