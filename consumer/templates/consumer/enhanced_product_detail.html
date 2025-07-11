@@ -6,7 +6,7 @@
 <a href="/consumer/scan/" class="btn btn-outline-secondary mb-3">
     <i class="bi bi-arrow-left"></i> Back to Scanner
 </a>
-<a href="/" class="btn btn-outline-secondary mb-3">
+<a href="/consumer/" class="btn btn-outline-secondary mb-3">
     <i class="bi bi-arrow-left"></i> Back to Home
 </a>
 
@@ -148,7 +148,7 @@
                         <p class="mt-2">Analyzing product...</p>
                     </div>
                 </div>
-                
+
                 <div class="ai-insights-content">
                     <!-- Health Analysis -->
                     <div class="mb-3">
@@ -240,8 +240,15 @@
     }
 
     @keyframes chatbot-float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-6px); }
+
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-6px);
+        }
     }
 
     #floating-chatbot-btn:hover {
@@ -287,6 +294,7 @@
             opacity: 0;
             transform: translateY(20px) scale(0.95);
         }
+
         to {
             opacity: 1;
             transform: translateY(0) scale(1);
@@ -315,13 +323,20 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+        background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
         animation: chatbot-shimmer 3s ease-in-out infinite;
     }
 
     @keyframes chatbot-shimmer {
-        0%, 100% { transform: translateX(-100%); }
-        50% { transform: translateX(100%); }
+
+        0%,
+        100% {
+            transform: translateX(-100%);
+        }
+
+        50% {
+            transform: translateX(100%);
+        }
     }
 
     .chatbot-brand {
@@ -340,8 +355,15 @@
     }
 
     @keyframes chatbot-pulse-icon {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
+
+        0%,
+        100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
     }
 
     .chatbot-drag-handle {
@@ -499,6 +521,7 @@
             opacity: 0;
             transform: translateX(20px);
         }
+
         to {
             opacity: 1;
             transform: translateX(0);
@@ -510,6 +533,7 @@
             opacity: 0;
             transform: translateX(-20px);
         }
+
         to {
             opacity: 1;
             transform: translateX(0);
@@ -602,8 +626,15 @@
     }
 
     @keyframes mic-pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
+
+        0%,
+        100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
     }
 
     #floating-chatbot-form .btn-primary {
@@ -638,11 +669,14 @@
     }
 
     @keyframes speech-pulse {
-        0%, 100% { 
+
+        0%,
+        100% {
             transform: translate(-50%, -50%) scale(1);
             box-shadow: 0 8px 32px rgba(var(--swasthcare-primary-rgb), 0.4);
         }
-        50% { 
+
+        50% {
             transform: translate(-50%, -50%) scale(1.1);
             box-shadow: 0 12px 40px rgba(var(--swasthcare-primary-rgb), 0.6);
         }
@@ -671,12 +705,25 @@
         animation: chatbot-thinking-bounce 1.4s ease-in-out infinite both;
     }
 
-    .chatbot-thinking-dot:nth-child(1) { animation-delay: -0.32s; }
-    .chatbot-thinking-dot:nth-child(2) { animation-delay: -0.16s; }
+    .chatbot-thinking-dot:nth-child(1) {
+        animation-delay: -0.32s;
+    }
+
+    .chatbot-thinking-dot:nth-child(2) {
+        animation-delay: -0.16s;
+    }
 
     @keyframes chatbot-thinking-bounce {
-        0%, 80%, 100% { transform: scale(0); }
-        40% { transform: scale(1); }
+
+        0%,
+        80%,
+        100% {
+            transform: scale(0);
+        }
+
+        40% {
+            transform: scale(1);
+        }
     }
 
     /* Dragging States */
@@ -704,24 +751,27 @@
         border: 2px solid;
     }
 
-    .health-score.excellent { 
-        background: linear-gradient(135deg, #d4edda, #c3e6cb); 
-        color: #155724; 
+    .health-score.excellent {
+        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        color: #155724;
         border-color: #28a745;
     }
-    .health-score.good { 
-        background: linear-gradient(135deg, #d1ecf1, #bee5eb); 
-        color: #0c5460; 
+
+    .health-score.good {
+        background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+        color: #0c5460;
         border-color: #17a2b8;
     }
-    .health-score.fair { 
-        background: linear-gradient(135deg, #fff3cd, #ffeaa7); 
-        color: #856404; 
+
+    .health-score.fair {
+        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+        color: #856404;
         border-color: #ffc107;
     }
-    .health-score.poor { 
-        background: linear-gradient(135deg, #f8d7da, #f5c6cb); 
-        color: #721c24; 
+
+    .health-score.poor {
+        background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+        color: #721c24;
         border-color: #dc3545;
     }
 
@@ -734,7 +784,7 @@
             bottom: 90px;
             border-radius: 20px;
         }
-        
+
         #floating-chatbot-btn {
             bottom: 20px;
             right: 20px;
@@ -801,7 +851,7 @@
         <div class="chatbot-drag-handle"></div>
         <button id="floating-chatbot-close" title="Close">&times;</button>
     </div>
-    
+
     <div class="chatbot-controls">
         <button id="speech-toggle" onclick="toggleSpeech()">
             <i class="bi bi-mic"></i>
@@ -812,7 +862,7 @@
             <span>Audio</span>
         </button>
     </div>
-    
+
     <div id="floating-chatbot-history">
         <div class="chat-message-bot">
             <div class="chat-message-header">
@@ -820,17 +870,18 @@
                 <span>SwasthCare AI</span>
             </div>
             <div class="chat-message-content">
-                Hello! 👋 I'm your SwasthCare AI assistant. I can help you understand this product's nutrition, ingredients, allergens, and health benefits. What would you like to know?
+                Hello! 👋 I'm your SwasthCare AI assistant. I can help you understand this product's nutrition,
+                ingredients, allergens, and health benefits. What would you like to know?
             </div>
         </div>
     </div>
-    
+
     <form id="floating-chatbot-form" autocomplete="off">
         <div class="input-group">
-            <input type="text" id="floating-chatbot-question" class="form-control" 
-                   placeholder="Ask about this product..." required>
+            <input type="text" id="floating-chatbot-question" class="form-control"
+                placeholder="Ask about this product..." required>
             <button type="button" id="floating-chatbot-mic" class="btn btn-outline-secondary"
-                    title="Speak your question">
+                title="Speak your question">
                 <i class="bi bi-mic"></i>
             </button>
             <button type="submit" class="btn btn-primary">
@@ -842,188 +893,188 @@
 
 <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    // Enhanced SwasthCare AI Chatbot
-    const btn = document.getElementById("floating-chatbot-btn");
-    const win = document.getElementById("floating-chatbot-window");
-    const closeBtn = document.getElementById("floating-chatbot-close");
-    const header = document.getElementById("floating-chatbot-header");
-    const form = document.getElementById("floating-chatbot-form");
-    const questionInput = document.getElementById("floating-chatbot-question");
-    const historyDiv = document.getElementById("floating-chatbot-history");
-    const micBtn = document.getElementById("floating-chatbot-mic");
-    
-    let chatHistory = [];
-    let recognizing = false;
-    let recognition;
-    let speechEnabled = false;
-    let ttsEnabled = false;
-    let isDragging = false;
-    let dragStartX, dragStartY, windowStartX, windowStartY;
-    
-    const converter = new showdown.Converter({ 
-        simpleLineBreaks: true,
-        strikethrough: true,
-        tables: true
-    });
+    document.addEventListener("DOMContentLoaded", function () {
+        // Enhanced SwasthCare AI Chatbot
+        const btn = document.getElementById("floating-chatbot-btn");
+        const win = document.getElementById("floating-chatbot-window");
+        const closeBtn = document.getElementById("floating-chatbot-close");
+        const header = document.getElementById("floating-chatbot-header");
+        const form = document.getElementById("floating-chatbot-form");
+        const questionInput = document.getElementById("floating-chatbot-question");
+        const historyDiv = document.getElementById("floating-chatbot-history");
+        const micBtn = document.getElementById("floating-chatbot-mic");
 
-    // Initialize speech recognition
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        recognition = new SpeechRecognition();
-        recognition.lang = "en-US";
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
-        recognition.continuous = false;
+        let chatHistory = [];
+        let recognizing = false;
+        let recognition;
+        let speechEnabled = false;
+        let ttsEnabled = false;
+        let isDragging = false;
+        let dragStartX, dragStartY, windowStartX, windowStartY;
 
-        recognition.onstart = function () {
-            recognizing = true;
-            micBtn.classList.add("active");
-            micBtn.innerHTML = '<i class="bi bi-mic-fill"></i>';
-            showSpeechIndicator();
-        };
-
-        recognition.onend = function () {
-            recognizing = false;
-            micBtn.classList.remove("active");
-            micBtn.innerHTML = '<i class="bi bi-mic"></i>';
-            hideSpeechIndicator();
-        };
-
-        recognition.onerror = function (event) {
-            recognizing = false;
-            micBtn.classList.remove("active");
-            micBtn.innerHTML = '<i class="bi bi-mic"></i>';
-            hideSpeechIndicator();
-            console.error('Speech recognition error:', event.error);
-        };
-
-        recognition.onresult = function (event) {
-            if (event.results && event.results[0] && event.results[0][0]) {
-                questionInput.value = event.results[0][0].transcript;
-                questionInput.focus();
-            }
-        };
-
-        micBtn.addEventListener("click", function () {
-            if (recognizing) {
-                recognition.stop();
-                return;
-            }
-            recognition.start();
+        const converter = new showdown.Converter({
+            simpleLineBreaks: true,
+            strikethrough: true,
+            tables: true
         });
-    } else {
-        micBtn.style.display = "none";
-    }
 
-    // Draggable functionality
-    header.addEventListener("mousedown", function(e) {
-        if (e.target === closeBtn || e.target.closest('#floating-chatbot-close')) return;
-        
-        isDragging = true;
-        win.classList.add('chatbot-dragging');
-        
-        dragStartX = e.clientX;
-        dragStartY = e.clientY;
-        
-        const rect = win.getBoundingClientRect();
-        windowStartX = rect.left;
-        windowStartY = rect.top;
-        
-        document.addEventListener("mousemove", handleDrag);
-        document.addEventListener("mouseup", stopDrag);
-        e.preventDefault();
-    });
+        // Initialize speech recognition
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = "en-US";
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+            recognition.continuous = false;
 
-    function handleDrag(e) {
-        if (!isDragging) return;
-        
-        const deltaX = e.clientX - dragStartX;
-        const deltaY = e.clientY - dragStartY;
-        
-        const newX = Math.max(0, Math.min(window.innerWidth - win.offsetWidth, windowStartX + deltaX));
-        const newY = Math.max(0, Math.min(window.innerHeight - win.offsetHeight, windowStartY + deltaY));
-        
-        win.style.left = newX + 'px';
-        win.style.top = newY + 'px';
-        win.style.right = 'auto';
-        win.style.bottom = 'auto';
-    }
+            recognition.onstart = function () {
+                recognizing = true;
+                micBtn.classList.add("active");
+                micBtn.innerHTML = '<i class="bi bi-mic-fill"></i>';
+                showSpeechIndicator();
+            };
 
-    function stopDrag() {
-        if (!isDragging) return;
-        
-        isDragging = false;
-        win.classList.remove('chatbot-dragging');
-        
-        document.removeEventListener("mousemove", handleDrag);
-        document.removeEventListener("mouseup", stopDrag);
-    }
+            recognition.onend = function () {
+                recognizing = false;
+                micBtn.classList.remove("active");
+                micBtn.innerHTML = '<i class="bi bi-mic"></i>';
+                hideSpeechIndicator();
+            };
 
-    // Show/hide chatbot with animation
-    btn.addEventListener("click", function () {
-        win.style.display = "flex";
-        win.classList.add('show');
-        setTimeout(() => questionInput.focus(), 200);
-    });
+            recognition.onerror = function (event) {
+                recognizing = false;
+                micBtn.classList.remove("active");
+                micBtn.innerHTML = '<i class="bi bi-mic"></i>';
+                hideSpeechIndicator();
+                console.error('Speech recognition error:', event.error);
+            };
 
-    closeBtn.addEventListener("click", function () {
-        win.classList.remove('show');
-        setTimeout(() => {
-            win.style.display = "none";
-        }, 300);
-    });
+            recognition.onresult = function (event) {
+                if (event.results && event.results[0] && event.results[0][0]) {
+                    questionInput.value = event.results[0][0].transcript;
+                    questionInput.focus();
+                }
+            };
 
-    // Toggle functions
-    function toggleSpeech() {
-        speechEnabled = !speechEnabled;
-        const speechToggle = document.getElementById("speech-toggle");
-        speechToggle.classList.toggle("active", speechEnabled);
-        
-        if (speechEnabled) {
-            speechToggle.innerHTML = '<i class="bi bi-mic-fill"></i><span>Voice ON</span>';
+            micBtn.addEventListener("click", function () {
+                if (recognizing) {
+                    recognition.stop();
+                    return;
+                }
+                recognition.start();
+            });
         } else {
-            speechToggle.innerHTML = '<i class="bi bi-mic"></i><span>Voice</span>';
+            micBtn.style.display = "none";
         }
-    }
 
-    function toggleTTS() {
-        ttsEnabled = !ttsEnabled;
-        const ttsToggle = document.getElementById("tts-toggle");
-        ttsToggle.classList.toggle("active", ttsEnabled);
-        
-        if (ttsEnabled) {
-            ttsToggle.innerHTML = '<i class="bi bi-volume-up-fill"></i><span>Audio ON</span>';
-        } else {
-            ttsToggle.innerHTML = '<i class="bi bi-volume-up"></i><span>Audio</span>';
+        // Draggable functionality
+        header.addEventListener("mousedown", function (e) {
+            if (e.target === closeBtn || e.target.closest('#floating-chatbot-close')) return;
+
+            isDragging = true;
+            win.classList.add('chatbot-dragging');
+
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+
+            const rect = win.getBoundingClientRect();
+            windowStartX = rect.left;
+            windowStartY = rect.top;
+
+            document.addEventListener("mousemove", handleDrag);
+            document.addEventListener("mouseup", stopDrag);
+            e.preventDefault();
+        });
+
+        function handleDrag(e) {
+            if (!isDragging) return;
+
+            const deltaX = e.clientX - dragStartX;
+            const deltaY = e.clientY - dragStartY;
+
+            const newX = Math.max(0, Math.min(window.innerWidth - win.offsetWidth, windowStartX + deltaX));
+            const newY = Math.max(0, Math.min(window.innerHeight - win.offsetHeight, windowStartY + deltaY));
+
+            win.style.left = newX + 'px';
+            win.style.top = newY + 'px';
+            win.style.right = 'auto';
+            win.style.bottom = 'auto';
         }
-    }
 
-    // Speech indicator functions
-    function showSpeechIndicator() {
-        const indicator = document.createElement('div');
-        indicator.className = 'speech-indicator';
-        indicator.innerHTML = '<i class="bi bi-mic-fill"></i>';
-        indicator.id = 'speech-indicator';
-        document.body.appendChild(indicator);
-    }
+        function stopDrag() {
+            if (!isDragging) return;
 
-    function hideSpeechIndicator() {
-        const indicator = document.getElementById('speech-indicator');
-        if (indicator) {
-            indicator.remove();
+            isDragging = false;
+            win.classList.remove('chatbot-dragging');
+
+            document.removeEventListener("mousemove", handleDrag);
+            document.removeEventListener("mouseup", stopDrag);
         }
-    }
 
-    // Enhanced render history with better message formatting
-    function renderHistory() {
-        historyDiv.innerHTML = "";
-        
-        // Welcome message always first
-        if (chatHistory.length === 0) {
-            const welcomeDiv = document.createElement("div");
-            welcomeDiv.className = "chat-message-bot";
-            welcomeDiv.innerHTML = `
+        // Show/hide chatbot with animation
+        btn.addEventListener("click", function () {
+            win.style.display = "flex";
+            win.classList.add('show');
+            setTimeout(() => questionInput.focus(), 200);
+        });
+
+        closeBtn.addEventListener("click", function () {
+            win.classList.remove('show');
+            setTimeout(() => {
+                win.style.display = "none";
+            }, 300);
+        });
+
+        // Toggle functions
+        function toggleSpeech() {
+            speechEnabled = !speechEnabled;
+            const speechToggle = document.getElementById("speech-toggle");
+            speechToggle.classList.toggle("active", speechEnabled);
+
+            if (speechEnabled) {
+                speechToggle.innerHTML = '<i class="bi bi-mic-fill"></i><span>Voice ON</span>';
+            } else {
+                speechToggle.innerHTML = '<i class="bi bi-mic"></i><span>Voice</span>';
+            }
+        }
+
+        function toggleTTS() {
+            ttsEnabled = !ttsEnabled;
+            const ttsToggle = document.getElementById("tts-toggle");
+            ttsToggle.classList.toggle("active", ttsEnabled);
+
+            if (ttsEnabled) {
+                ttsToggle.innerHTML = '<i class="bi bi-volume-up-fill"></i><span>Audio ON</span>';
+            } else {
+                ttsToggle.innerHTML = '<i class="bi bi-volume-up"></i><span>Audio</span>';
+            }
+        }
+
+        // Speech indicator functions
+        function showSpeechIndicator() {
+            const indicator = document.createElement('div');
+            indicator.className = 'speech-indicator';
+            indicator.innerHTML = '<i class="bi bi-mic-fill"></i>';
+            indicator.id = 'speech-indicator';
+            document.body.appendChild(indicator);
+        }
+
+        function hideSpeechIndicator() {
+            const indicator = document.getElementById('speech-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        // Enhanced render history with better message formatting
+        function renderHistory() {
+            historyDiv.innerHTML = "";
+
+            // Welcome message always first
+            if (chatHistory.length === 0) {
+                const welcomeDiv = document.createElement("div");
+                welcomeDiv.className = "chat-message-bot";
+                welcomeDiv.innerHTML = `
                 <div class="chat-message-header">
                     <i class="bi bi-robot"></i>
                     <span>SwasthCare AI</span>
@@ -1032,36 +1083,36 @@ document.addEventListener("DOMContentLoaded", function () {
                     Hello! 👋 I'm your SwasthCare AI assistant. I can help you understand this product's nutrition, ingredients, allergens, and health benefits. What would you like to know?
                 </div>
             `;
-            historyDiv.appendChild(welcomeDiv);
-        }
-        
-        chatHistory.forEach(entry => {
-            // User message
-            const qDiv = document.createElement("div");
-            qDiv.className = "chat-message-user";
-            qDiv.innerHTML = `
+                historyDiv.appendChild(welcomeDiv);
+            }
+
+            chatHistory.forEach(entry => {
+                // User message
+                const qDiv = document.createElement("div");
+                qDiv.className = "chat-message-user";
+                qDiv.innerHTML = `
                 <div class="chat-message-header">
                     <i class="bi bi-person-circle"></i>
                     <span>You</span>
                 </div>
                 <div class="chat-message-content">${entry.question}</div>
             `;
-            historyDiv.appendChild(qDiv);
+                historyDiv.appendChild(qDiv);
 
-            // Bot response
-            const aDiv = document.createElement("div");
-            aDiv.className = "chat-message-bot";
-            
-            let answerHtml;
-            if (entry.answer && !entry.answer.startsWith("<")) {
-                answerHtml = converter.makeHtml(entry.answer);
-            } else {
-                answerHtml = entry.answer || "";
-            }
-            
-            // Check for thinking state
-            if (answerHtml.includes("Thinking...")) {
-                answerHtml = `
+                // Bot response
+                const aDiv = document.createElement("div");
+                aDiv.className = "chat-message-bot";
+
+                let answerHtml;
+                if (entry.answer && !entry.answer.startsWith("<")) {
+                    answerHtml = converter.makeHtml(entry.answer);
+                } else {
+                    answerHtml = entry.answer || "";
+                }
+
+                // Check for thinking state
+                if (answerHtml.includes("Thinking...")) {
+                    answerHtml = `
                     <div class="chatbot-thinking">
                         <i class="bi bi-robot"></i>
                         <span>Thinking</span>
@@ -1072,299 +1123,299 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>
                     </div>
                 `;
-            }
-            
-            aDiv.innerHTML = `
+                }
+
+                aDiv.innerHTML = `
                 <div class="chat-message-header">
                     <i class="bi bi-robot"></i>
                     <span>SwasthCare AI</span>
                 </div>
                 <div class="chat-message-content">${answerHtml}</div>
             `;
-            historyDiv.appendChild(aDiv);
-        });
-        
-        historyDiv.scrollTop = historyDiv.scrollHeight;
-    }
+                historyDiv.appendChild(aDiv);
+            });
 
-    // Audio response functionality
-    function playAudioResponse(audioBase64) {
-        if (!ttsEnabled || !audioBase64) return;
-        
-        try {
-            const audioBlob = base64ToBlob(audioBase64, 'audio/wav');
-            const audioUrl = URL.createObjectURL(audioBlob);
-            const audio = new Audio(audioUrl);
-            audio.play().catch(e => console.log('Audio play failed:', e));
-        } catch (error) {
-            console.error('Error playing audio:', error);
+            historyDiv.scrollTop = historyDiv.scrollHeight;
         }
-    }
 
-    function base64ToBlob(base64, mimeType) {
-        const byteCharacters = atob(base64);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        // Audio response functionality
+        function playAudioResponse(audioBase64) {
+            if (!ttsEnabled || !audioBase64) return;
+
+            try {
+                const audioBlob = base64ToBlob(audioBase64, 'audio/wav');
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                audio.play().catch(e => console.log('Audio play failed:', e));
+            } catch (error) {
+                console.error('Error playing audio:', error);
+            }
         }
-        const byteArray = new Uint8Array(byteNumbers);
-        return new Blob([byteArray], { type: mimeType });
-    }
 
-    // Enhanced form submission with better error handling
-    form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const question = questionInput.value.trim();
-        if (!question) return;
+        function base64ToBlob(base64, mimeType) {
+            const byteCharacters = atob(base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            return new Blob([byteArray], { type: mimeType });
+        }
 
-        chatHistory.push({ 
-            question: question, 
-            answer: "<em>🤖 Thinking...</em>" 
-        });
-        renderHistory();
-        questionInput.value = "";
+        // Enhanced form submission with better error handling
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const question = questionInput.value.trim();
+            if (!question) return;
 
-        // Show global loading
-        showGlobalLoading('AI Assistant', 'Processing your question...', true);
-
-        fetch("{% url 'enhanced_product_chatbot' %}?stream=1", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": "{{ csrf_token }}"
-            },
-            body: JSON.stringify({
-                barcode: "{{ product.barcode }}",
+            chatHistory.push({
                 question: question,
-                include_speech: ttsEnabled
+                answer: "<em>🤖 Thinking...</em>"
+            });
+            renderHistory();
+            questionInput.value = "";
+
+            // Show global loading
+            showGlobalLoading('AI Assistant', 'Processing your question...', true);
+
+            fetch("{% url 'enhanced_product_chatbot' %}?stream=1", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({
+                    barcode: "{{ product.barcode }}",
+                    question: question,
+                    include_speech: ttsEnabled
+                })
             })
-        })
-        .then(res => {
-            hideGlobalLoading();
-            
-            if (!res.ok) {
-                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-            }
-            
-            if (!res.body || !window.ReadableStream) {
-                // Fallback to non-streaming
-                return res.json().then(data => {
-                    if (chatHistory.length > 0) {
-                        if (data.answer) {
-                            chatHistory[chatHistory.length - 1].answer = data.answer;
-                            if (data.audio) {
-                                playAudioResponse(data.audio);
+                .then(res => {
+                    hideGlobalLoading();
+
+                    if (!res.ok) {
+                        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                    }
+
+                    if (!res.body || !window.ReadableStream) {
+                        // Fallback to non-streaming
+                        return res.json().then(data => {
+                            if (chatHistory.length > 0) {
+                                if (data.answer) {
+                                    chatHistory[chatHistory.length - 1].answer = data.answer;
+                                    if (data.audio) {
+                                        playAudioResponse(data.audio);
+                                    }
+                                } else if (data.error) {
+                                    chatHistory[chatHistory.length - 1].answer = `<span class='text-danger'>❌ ${data.error}</span>`;
+                                } else {
+                                    chatHistory[chatHistory.length - 1].answer = "<span class='text-danger'>❌ No response received</span>";
+                                }
+                                renderHistory();
                             }
-                        } else if (data.error) {
-                            chatHistory[chatHistory.length - 1].answer = `<span class='text-danger'>❌ ${data.error}</span>`;
-                        } else {
-                            chatHistory[chatHistory.length - 1].answer = "<span class='text-danger'>❌ No response received</span>";
-                        }
-                        renderHistory();
-                    }
-                });
-            }
-
-            // Streaming response
-            const reader = res.body.getReader();
-            let decoder = new TextDecoder();
-            let answer = "";
-
-            function readChunk() {
-                return reader.read().then(({ done, value }) => {
-                    if (done) {
-                        if (chatHistory.length > 0) {
-                            chatHistory[chatHistory.length - 1].answer = answer || "<span class='text-danger'>❌ No response received</span>";
-                            renderHistory();
-                        }
-                        return;
+                        });
                     }
 
-                    answer += decoder.decode(value, { stream: true });
-                    if (chatHistory.length > 0) {
-                        chatHistory[chatHistory.length - 1].answer = answer + "<span class='text-muted'>▌</span>";
-                        renderHistory();
+                    // Streaming response
+                    const reader = res.body.getReader();
+                    let decoder = new TextDecoder();
+                    let answer = "";
+
+                    function readChunk() {
+                        return reader.read().then(({ done, value }) => {
+                            if (done) {
+                                if (chatHistory.length > 0) {
+                                    chatHistory[chatHistory.length - 1].answer = answer || "<span class='text-danger'>❌ No response received</span>";
+                                    renderHistory();
+                                }
+                                return;
+                            }
+
+                            answer += decoder.decode(value, { stream: true });
+                            if (chatHistory.length > 0) {
+                                chatHistory[chatHistory.length - 1].answer = answer + "<span class='text-muted'>▌</span>";
+                                renderHistory();
+                            }
+                            return readChunk();
+                        });
                     }
                     return readChunk();
+                })
+                .catch(error => {
+                    hideGlobalLoading();
+                    console.error('Chatbot error:', error);
+                    if (chatHistory.length > 0) {
+                        chatHistory[chatHistory.length - 1].answer = "<span class='text-danger'>❌ Error connecting to AI assistant. Please try again.</span>";
+                        renderHistory();
+                    }
                 });
-            }
-            return readChunk();
-        })
-        .catch(error => {
-            hideGlobalLoading();
-            console.error('Chatbot error:', error);
-            if (chatHistory.length > 0) {
-                chatHistory[chatHistory.length - 1].answer = "<span class='text-danger'>❌ Error connecting to AI assistant. Please try again.</span>";
-                renderHistory();
-            }
         });
+
+        // Initialize with welcome message
+        renderHistory();
+
+        // Make functions globally accessible
+        window.toggleSpeech = toggleSpeech;
+        window.toggleTTS = toggleTTS;
     });
 
-    // Initialize with welcome message
-    renderHistory();
+    // AI Insights Functions
+    function loadHealthAnalysis() {
+        const container = document.getElementById('health-analysis');
+        const button = container.previousElementSibling;
 
-    // Make functions globally accessible
-    window.toggleSpeech = toggleSpeech;
-    window.toggleTTS = toggleTTS;
-});
+        button.disabled = true;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Analyzing...';
 
-// AI Insights Functions
-function loadHealthAnalysis() {
-    const container = document.getElementById('health-analysis');
-    const button = container.previousElementSibling;
-    
-    button.disabled = true;
-    button.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Analyzing...';
-    
-    // Show global loading
-    showGlobalLoading('Health Analysis', 'Analyzing product health benefits and concerns...', true);
-    
-    fetch(`/consumer/ai/health-analysis/{{ product.barcode }}/`)
-        .then(response => response.json())
-        .then(data => {
-            hideGlobalLoading();
-            
-            if (data.error) {
-                throw new Error(data.error);
-            }
-            
-            const analysis = data.analysis;
-            let html = '';
-            
-            if (analysis.health_score) {
-                const score = typeof analysis.health_score === 'number' ? analysis.health_score : 'N/A';
-                let scoreClass = 'fair';
-                if (score >= 8) scoreClass = 'excellent';
-                else if (score >= 6) scoreClass = 'good';
-                else if (score < 5) scoreClass = 'poor';
-                
-                html += `<div class="health-score ${scoreClass}">Health Score: ${score}/10</div>`;
-            }
-            
-            if (analysis.benefits && analysis.benefits.length > 0) {
-                html += `<h6 class="text-success">Benefits:</h6><ul>`;
-                analysis.benefits.forEach(benefit => {
-                    html += `<li>${benefit}</li>`;
-                });
-                html += `</ul>`;
-            }
-            
-            if (analysis.concerns && analysis.concerns.length > 0) {
-                html += `<h6 class="text-warning">Concerns:</h6><ul>`;
-                analysis.concerns.forEach(concern => {
-                    html += `<li>${concern}</li>`;
-                });
-                html += `</ul>`;
-            }
-            
-            if (analysis.recommendations && analysis.recommendations.length > 0) {
-                html += `<h6 class="text-info">Recommendations:</h6><ul>`;
-                analysis.recommendations.forEach(rec => {
-                    html += `<li>${rec}</li>`;
-                });
-                html += `</ul>`;
-            }
-            
-            container.innerHTML = html;
-            container.style.display = 'block';
-            button.style.display = 'none';
-        })
-        .catch(error => {
-            hideGlobalLoading();
-            console.error('Health analysis error:', error);
-            container.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
-            container.style.display = 'block';
-            button.disabled = false;
-            button.innerHTML = 'Retry Health Analysis';
-        });
-}
+        // Show global loading
+        showGlobalLoading('Health Analysis', 'Analyzing product health benefits and concerns...', true);
 
-function loadAlternatives() {
-    const container = document.getElementById('alternatives');
-    const button = container.previousElementSibling;
-    
-    button.disabled = true;
-    button.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Finding...';
-    
-    // Show global loading
-    showGlobalLoading('Finding Alternatives', 'Searching for healthier product options...', true);
-    
-    fetch(`/consumer/ai/alternatives/{{ product.barcode }}/`)
-        .then(response => response.json())
-        .then(data => {
-            hideGlobalLoading();
-            
-            if (data.error) {
-                throw new Error(data.error);
-            }
-            
-            let html = '<div class="alternatives-list"><ul class="list-unstyled">';
-            data.alternatives.forEach(alternative => {
-                html += `<li><i class="bi bi-check-circle text-success"></i> ${alternative}</li>`;
-            });
-            html += '</ul></div>';
-            
-            container.innerHTML = html;
-            container.style.display = 'block';
-            button.style.display = 'none';
-        })
-        .catch(error => {
-            hideGlobalLoading();
-            console.error('Alternatives error:', error);
-            container.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
-            container.style.display = 'block';
-            button.disabled = false;
-            button.innerHTML = 'Retry Alternatives';
-        });
-}
+        fetch(`/consumer/ai/health-analysis/{{ product.barcode }}/`)
+            .then(response => response.json())
+            .then(data => {
+                hideGlobalLoading();
 
-function loadMealSuggestions(mealType) {
-    const container = document.getElementById('meal-suggestions');
-    const buttons = container.previousElementSibling.querySelectorAll('button');
-    
-    buttons.forEach(btn => {
-        btn.disabled = true;
-        if (btn.onclick.toString().includes(mealType)) {
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Loading...';
-        }
-    });
-    
-    // Show global loading
-    showGlobalLoading('Meal Suggestions', `Creating ${mealType} ideas with this product...`, true);
-    
-    fetch(`/consumer/ai/meal-suggestions/{{ product.barcode }}/?meal_type=${mealType}`)
-        .then(response => response.json())
-        .then(data => {
-            hideGlobalLoading();
-            
-            if (data.error) {
-                throw new Error(data.error);
-            }
-            
-            let html = `<h6 class="text-primary">${data.meal_type.toUpperCase()} Ideas:</h6>`;
-            html += '<div class="meal-suggestions-list"><ul class="list-unstyled">';
-            data.suggestions.forEach(suggestion => {
-                html += `<li><i class="bi bi-cup-hot text-warning"></i> ${suggestion}</li>`;
-            });
-            html += '</ul></div>';
-            
-            container.innerHTML = html;
-            container.style.display = 'block';
-            buttons.forEach(btn => btn.style.display = 'none');
-        })
-        .catch(error => {
-            hideGlobalLoading();
-            console.error('Meal suggestions error:', error);
-            container.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
-            container.style.display = 'block';
-            buttons.forEach(btn => {
-                btn.disabled = false;
-                if (btn.onclick.toString().includes(mealType)) {
-                    btn.innerHTML = `${mealType.charAt(0).toUpperCase() + mealType.slice(1)} Ideas`;
+                if (data.error) {
+                    throw new Error(data.error);
                 }
+
+                const analysis = data.analysis;
+                let html = '';
+
+                if (analysis.health_score) {
+                    const score = typeof analysis.health_score === 'number' ? analysis.health_score : 'N/A';
+                    let scoreClass = 'fair';
+                    if (score >= 8) scoreClass = 'excellent';
+                    else if (score >= 6) scoreClass = 'good';
+                    else if (score < 5) scoreClass = 'poor';
+
+                    html += `<div class="health-score ${scoreClass}">Health Score: ${score}/10</div>`;
+                }
+
+                if (analysis.benefits && analysis.benefits.length > 0) {
+                    html += `<h6 class="text-success">Benefits:</h6><ul>`;
+                    analysis.benefits.forEach(benefit => {
+                        html += `<li>${benefit}</li>`;
+                    });
+                    html += `</ul>`;
+                }
+
+                if (analysis.concerns && analysis.concerns.length > 0) {
+                    html += `<h6 class="text-warning">Concerns:</h6><ul>`;
+                    analysis.concerns.forEach(concern => {
+                        html += `<li>${concern}</li>`;
+                    });
+                    html += `</ul>`;
+                }
+
+                if (analysis.recommendations && analysis.recommendations.length > 0) {
+                    html += `<h6 class="text-info">Recommendations:</h6><ul>`;
+                    analysis.recommendations.forEach(rec => {
+                        html += `<li>${rec}</li>`;
+                    });
+                    html += `</ul>`;
+                }
+
+                container.innerHTML = html;
+                container.style.display = 'block';
+                button.style.display = 'none';
+            })
+            .catch(error => {
+                hideGlobalLoading();
+                console.error('Health analysis error:', error);
+                container.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+                container.style.display = 'block';
+                button.disabled = false;
+                button.innerHTML = 'Retry Health Analysis';
             });
+    }
+
+    function loadAlternatives() {
+        const container = document.getElementById('alternatives');
+        const button = container.previousElementSibling;
+
+        button.disabled = true;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Finding...';
+
+        // Show global loading
+        showGlobalLoading('Finding Alternatives', 'Searching for healthier product options...', true);
+
+        fetch(`/consumer/ai/alternatives/{{ product.barcode }}/`)
+            .then(response => response.json())
+            .then(data => {
+                hideGlobalLoading();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                let html = '<div class="alternatives-list"><ul class="list-unstyled">';
+                data.alternatives.forEach(alternative => {
+                    html += `<li><i class="bi bi-check-circle text-success"></i> ${alternative}</li>`;
+                });
+                html += '</ul></div>';
+
+                container.innerHTML = html;
+                container.style.display = 'block';
+                button.style.display = 'none';
+            })
+            .catch(error => {
+                hideGlobalLoading();
+                console.error('Alternatives error:', error);
+                container.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+                container.style.display = 'block';
+                button.disabled = false;
+                button.innerHTML = 'Retry Alternatives';
+            });
+    }
+
+    function loadMealSuggestions(mealType) {
+        const container = document.getElementById('meal-suggestions');
+        const buttons = container.previousElementSibling.querySelectorAll('button');
+
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            if (btn.onclick.toString().includes(mealType)) {
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Loading...';
+            }
         });
-}
+
+        // Show global loading
+        showGlobalLoading('Meal Suggestions', `Creating ${mealType} ideas with this product...`, true);
+
+        fetch(`/consumer/ai/meal-suggestions/{{ product.barcode }}/?meal_type=${mealType}`)
+            .then(response => response.json())
+            .then(data => {
+                hideGlobalLoading();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                let html = `<h6 class="text-primary">${data.meal_type.toUpperCase()} Ideas:</h6>`;
+                html += '<div class="meal-suggestions-list"><ul class="list-unstyled">';
+                data.suggestions.forEach(suggestion => {
+                    html += `<li><i class="bi bi-cup-hot text-warning"></i> ${suggestion}</li>`;
+                });
+                html += '</ul></div>';
+
+                container.innerHTML = html;
+                container.style.display = 'block';
+                buttons.forEach(btn => btn.style.display = 'none');
+            })
+            .catch(error => {
+                hideGlobalLoading();
+                console.error('Meal suggestions error:', error);
+                container.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+                container.style.display = 'block';
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    if (btn.onclick.toString().includes(mealType)) {
+                        btn.innerHTML = `${mealType.charAt(0).toUpperCase() + mealType.slice(1)} Ideas`;
+                    }
+                });
+            });
+    }
 </script>
 
 <!-- Include original styles -->
@@ -1373,27 +1424,27 @@ function loadMealSuggestions(mealType) {
         width: 100%;
         border-collapse: collapse;
     }
-    
+
     .nutrient-table td {
         padding: 8px;
         border-bottom: 1px solid #eee;
     }
-    
+
     .nutrient-table tr:hover {
         background-color: #f8f9fa;
     }
-    
+
     .date-info {
         background: #f8f9fa;
         padding: 15px;
         border-radius: 8px;
         margin: 10px 0;
     }
-    
+
     .date-info div {
         margin: 5px 0;
     }
-    
+
     .badge-diet {
         background: #e3f2fd;
         color: #1976d2;
@@ -1402,7 +1453,7 @@ function loadMealSuggestions(mealType) {
         margin: 2px;
         font-size: 0.8em;
     }
-    
+
     .badge-allergen {
         background: #ffebee;
         color: #c62828;

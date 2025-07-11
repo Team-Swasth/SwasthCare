@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container mt-4">
     <div class="d-flex gap-2 mb-3">
-        <a href="/" class="btn btn-outline-secondary">
+        <a href="/consumer/" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left"></i> Back to Home
         </a>
         <a href="{% url 'search_history' %}" class="btn btn-outline-secondary">
@@ -255,10 +255,13 @@
     }
 
     @keyframes corner-pulse {
-        0%, 100% {
+
+        0%,
+        100% {
             opacity: 0.8;
             box-shadow: 0 0 10px rgba(var(--scan-primary-rgb), 0.3);
         }
+
         50% {
             opacity: 1;
             box-shadow: 0 0 20px rgba(var(--scan-primary-rgb), 0.5);
@@ -270,10 +273,12 @@
             top: 0;
             opacity: 1;
         }
+
         50% {
             top: 50%;
             opacity: 0.7;
         }
+
         100% {
             top: 100%;
             opacity: 1;
@@ -295,9 +300,12 @@
     }
 
     @keyframes pulse {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: scale(1);
         }
+
         50% {
             transform: scale(1.1);
         }
@@ -327,16 +335,16 @@
         .scanner-area {
             aspect-ratio: 4/3;
         }
-        
+
         .scanner-frame {
             width: 250px;
             height: 160px;
         }
-        
+
         .instruction-icon {
             font-size: 2.5rem;
         }
-        
+
         .scanner-instructions h5 {
             font-size: 1.2rem;
         }
@@ -512,9 +520,11 @@
         0% {
             background-color: rgba(var(--scan-primary-rgb), 0.1);
         }
+
         50% {
             background-color: rgba(var(--scan-primary-rgb), 0.3);
         }
+
         100% {
             background-color: rgba(var(--scan-primary-rgb), 0.1);
         }
@@ -546,6 +556,7 @@
     }
 
     @media (prefers-color-scheme: dark) {
+
         #reader,
         .scanner-area,
         #reader video {
@@ -568,7 +579,7 @@
             width: 250,
             height: 150
         },
-        aspectRatio: 16/9,
+        aspectRatio: 16 / 9,
         formatsToSupport: [
             Html5QrcodeSupportedFormats.EAN_13,
             Html5QrcodeSupportedFormats.EAN_8,
@@ -584,13 +595,13 @@
                 .then(() => console.log('Scanner stopped after scan'))
                 .catch(err => console.warn('Failed to stop scanner', err));
         }
-        
+
         // Add success animation
         document.querySelector('.scanner-card').classList.add('scan-success');
-        
+
         // Show global loading
         showGlobalLoading('Product Found!', 'Redirecting to product details...', true);
-        
+
         // Handle successful scan
         console.log(`Code matched = ${decodedText}`, decodedResult);
 
@@ -609,7 +620,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         // Show loading while initializing camera
         showGlobalLoading('Initializing Camera', 'Please allow camera access when prompted...', true);
-        
+
         const config = {
             fps: 10,
             qrbox: { width: 250, height: 150 },
@@ -653,7 +664,7 @@
             if (barcode) {
                 // Show global loading
                 showGlobalLoading('Searching Product', 'Looking up barcode in database...', true);
-                
+
                 setTimeout(() => {
                     window.location.href = `/consumer/product/${barcode}/`;
                 }, 1500);
