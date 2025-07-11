@@ -55,9 +55,9 @@ def consumer_required(view_func):
 @consumer_required
 def home(request):
     """
-    Redirect consumer app home to main consumer dashboard
+    Previously redirected to 'home'. Now render the consumer dashboard directly.
     """
-    return redirect('home')  # Redirect to main app home which will show consumer_home.html
+    return render(request, "consumer/consumer_home.html")
 
 @login_required
 @consumer_required
@@ -395,7 +395,7 @@ def product_alternatives(request):
             return JsonResponse({'error': 'AI services not available'}, status=500)
         
         # Call the AI service for product alternatives
-        alternatives = get_product_alternatives(barcode)
+        alternatives = get_ai_alternatives(barcode)
         
         return JsonResponse({'alternatives': alternatives})
     except Exception as e:
@@ -419,7 +419,7 @@ def meal_suggestions(request):
             return JsonResponse({'error': 'AI services not available'}, status=500)
         
         # Call the AI service for meal suggestions
-        suggestions = generate_meal_suggestions(ingredients)
+        suggestions = generate_meal_suggestions(ingredients) # type: ignore
         
         return JsonResponse({'suggestions': suggestions})
     except Exception as e:

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}SwasthCare - Manage Food Entries{% endblock %}
+
+{% block content %}
+<div class="manage-food-entries-container">
+    <h1 class="text-center mb-4">Manage Food Entries</h1>
+    {% if food_entries %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Product Type</th>
+                <th>Price</th>
+                <th>Barcode</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in food_entries %}
+            <tr>
+                <td>{{ entry.prod_name }}</td>
+                <td>{{ entry.prod_type }}</td>
+                <td>₹{{ entry.price }}</td>
+                <td>{{ entry.barcode }}</td>
+                <td>
+                    <a href="#" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-center text-muted">No food entries found in the database.</p>
+    {% endif %}
+</div>
+{% endblock %}

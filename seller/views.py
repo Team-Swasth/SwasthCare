@@ -8,6 +8,7 @@ from .forms import DocumentUploadForm, EditExtractedDataForm
 from .azure_services import analyze_and_print_raw_text, extract_structured_data_from_label
 from datetime import datetime
 from django.http import HttpResponseForbidden
+from bson import ObjectId  # newly added import
 
 def seller_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -157,7 +158,6 @@ def edit_extracted_data(request):
         form = EditExtractedDataForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data.copy()
-            # Convert date fields to DD-MM-YYYY string for MongoDB compatibility
             for date_field in ["manufacturing_date", "expiry_date"]:
                 val = data.get(date_field)
                 data[date_field] = date_to_ddmmyyyy(val)
@@ -184,27 +184,32 @@ def edit_extracted_data(request):
                 "expiry_date": data.pop("expiry_date", ""),
             }
             data["special_diet"] = data.get("special_diet", [])
-            # price is already included in data
-            
-            # Save to MongoDB if available
+            # Database operation
             if MONGODB_AVAILABLE:
-                try:
-                    client = pymongo.MongoClient(settings.COSMOSDB_URI)
-                    db = client['swasth']
-                    collection = db['food']
-                    collection.insert_one(data)
-                    print("Inserted document into CosmosDB:", data)
-                    messages.success(request, "Product data saved successfully to database!")
-                except Exception as e:
-                    messages.error(request, f"Database error: {str(e)}")
-                    print(f"Error inserting into CosmosDB: {str(e)}")
+                client = pymongo.MongoClient(settings.COSMOSDB_URI)
+                db = client['swasth']
+                collection = db['food']
+                editing_item_id = request.session.get("editing_item_id")
+                if editing_item_id:
+                    collection.update_one({'_id': ObjectId(editing_item_id)}, {'$set': data})
+                    messages.success(request, "Product data updated successfully!")
+                    del request.session["editing_item_id"]
+                else:
+                    # Check duplicate barcode and update if exists
+                    existing = collection.find_one({'barcode': data.get("barcode", "")})
+                    if existing:
+                        collection.update_one({'_id': existing['_id']}, {'$set': data})
+                        messages.warning(request, "Existing item updated based on duplicate barcode.")
+                    else:
+                        data["date_uploaded"] = datetime.now()
+                        collection.insert_one(data)
+                        messages.success(request, "Product data saved successfully to database!")
             else:
                 messages.warning(request, "Database not available. Product data not saved.")
                 print("MongoDB not available. Product data not saved.")
             
             return render(request, "seller/success.html", {"data": data})
     else:
-        # Convert DD-MM-YYYY string to date object for form initial
         for date_field in ["manufacturing_date", "expiry_date"]:
             val = initial_data.get(date_field)
             if isinstance(val, str) and val:
@@ -214,6 +219,53 @@ def edit_extracted_data(request):
                     initial_data[date_field] = ""
         form = EditExtractedDataForm(initial=initial_data)
     return render(request, "seller/edit.html", {"form": form, "image_url": image_url, "image_urls": image_urls})
+
+@login_required
+@seller_required
+def list_food_items(request):
+    food_items = []
+    if MONGODB_AVAILABLE:
+        try:
+            client = pymongo.MongoClient(settings.COSMOSDB_URI)
+            db = client['swasth']
+            collection = db['food']
+            food_items = list(collection.find({}))
+            for item in food_items:
+                item["id"] = str(item["_id"])  # expose id for template use
+        except Exception as e:
+            messages.error(request, f"Error fetching food items: {str(e)}")
+    return render(request, "seller/food_items.html", {"food_items": food_items})
+
+@login_required
+@seller_required
+def edit_food_item(request, item_id):
+    if MONGODB_AVAILABLE:
+        try:
+            client = pymongo.MongoClient(settings.COSMOSDB_URI)
+            db = client['swasth']
+            collection = db['food']
+            item = collection.find_one({'_id': ObjectId(item_id)})
+            if item:
+                # Convert ObjectId to string for JSON serializability
+                item["id"] = str(item["_id"])
+                del item["_id"]
+                # Flatten nutritional_info and expiry for form initial
+                nutritional_info = item.get("nutritional_info", {})
+                expiry = item.get("expiry", {})
+                for k, v in nutritional_info.items():
+                    item[k] = v
+                item["expiry_tenure"] = expiry.get("tenure", "")
+                item["expiry_date"] = expiry.get("expiry_date", "")
+                # ...handle other non-serializable fields if any...
+                request.session["edit_form_data"] = item
+                request.session["uploaded_image_urls"] = []  # optional: set if images are handled
+                request.session["editing_item_id"] = item_id
+                return redirect("edit_extracted_data")
+            else:
+                messages.error(request, "Food item not found.")
+        except Exception as e:
+            messages.error(request, f"Error: {str(e)}")
+    return redirect("list_food_items")
 
 @login_required
 @seller_required

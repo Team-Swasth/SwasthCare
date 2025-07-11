@@ -17,7 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+from . import views  # Now uses the new home view from this file
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -29,8 +29,8 @@ urlpatterns = [
     path("profile/edit/", views.edit_profile_view, name="edit_profile"),
     path("create-seller/", views.create_seller_view, name="create_seller"),
     path("search-history/", views.search_history_view, name="search_history"),
-    path("seller/", include("seller.urls")),  # Include seller app URLs
-    path("consumer/", include("consumer.urls")),  # Include consumer app URLs
+    path("seller/", include("seller.urls")),
+    path("consumer/", include("consumer.urls")),
     path("change-password/", views.change_password_view, name="change_password"),
     path("forgot-password/", views.forgot_password_view, name="forgot_password"),
     path("reset-password/<str:uidb64>/<str:token>/", views.reset_password_view, name="reset_password"),

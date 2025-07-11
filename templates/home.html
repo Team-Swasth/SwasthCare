@@ -4,114 +4,115 @@
 
 {% block content %}
 <div class="background-container">
-<div class="header text-center mb-5">
-    {% if user.is_authenticated %}
-    <h1 class="display-4">Welcome back, {{ user.get_full_name|default:user.username }}!</h1>
-    <p class="lead">Your trusted platform for comprehensive product transparency and health-conscious decisions</p>
-    {% else %}
-    <h1 class="display-4">Welcome to SwasthCare</h1>
-    <p class="lead">Revolutionizing product transparency through intelligent scanning and comprehensive information
-        sharing</p>
+    <div class="header text-center mb-5">
+        {% if user.is_authenticated %}
+        <h1 class="display-4">Welcome back, {{ user.get_full_name|default:user.username }}!</h1>
+        <p class="lead">Your trusted platform for comprehensive product transparency and health-conscious decisions</p>
+        {% else %}
+        <h1 class="display-4">Welcome to SwasthCare</h1>
+        <p class="lead">Revolutionizing product transparency through intelligent scanning and comprehensive information
+            sharing</p>
+        {% endif %}
+    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show auto-dismiss-alert" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="progress mt-2" style="height: 3px;">
+            <div class="progress-bar bg-{{ message.tags }}" role="progressbar" style="width: 100%"></div>
+        </div>
+    </div>
+    {% endfor %}
     {% endif %}
-</div>
 
-{% if messages %}
-{% for message in messages %}
-<div class="alert alert-{{ message.tags }} alert-dismissible fade show auto-dismiss-alert" role="alert">
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    <div class="progress mt-2" style="height: 3px;">
-        <div class="progress-bar bg-{{ message.tags }}" role="progressbar" style="width: 100%"></div>
+    {% if user.is_authenticated %}
+    {% if user.userprofile.is_seller %}
+    <div class="alert alert-info alert-dismissible fade show auto-dismiss-alert" role="alert">
+        <i class="bi bi-info-circle"></i>
+        Welcome back! You're logged in as a <strong>Seller</strong>.
+        <a href="/" class="alert-link">Go to your dashboard</a> to manage your products.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="progress mt-2" style="height: 3px;">
+            <div class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
+        </div>
     </div>
-</div>
-{% endfor %}
-{% endif %}
+    {% elif user.userprofile.is_consumer %}
+    <div class="alert alert-info alert-dismissible fade show auto-dismiss-alert" role="alert">
+        <i class="bi bi-info-circle"></i>
+        Welcome back! You're logged in as a <strong>Consumer</strong>.
+        <a href="/" class="alert-link">Go to your dashboard</a> to start scanning products.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="progress mt-2" style="height: 3px;">
+            <div class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
 
-{% if user.is_authenticated %}
-{% if user.userprofile.is_seller %}
-<div class="alert alert-info alert-dismissible fade show auto-dismiss-alert" role="alert">
-    <i class="bi bi-info-circle"></i>
-    Welcome back! You're logged in as a <strong>Seller</strong>.
-    <a href="/" class="alert-link">Go to your dashboard</a> to manage your products.
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    <div class="progress mt-2" style="height: 3px;">
-        <div class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
-    </div>
-</div>
-{% elif user.userprofile.is_consumer %}
-<div class="alert alert-info alert-dismissible fade show auto-dismiss-alert" role="alert">
-    <i class="bi bi-info-circle"></i>
-    Welcome back! You're logged in as a <strong>Consumer</strong>.
-    <a href="/" class="alert-link">Go to your dashboard</a> to start scanning products.
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    <div class="progress mt-2" style="height: 3px;">
-        <div class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
-    </div>
-</div>
-{% endif %}
-{% endif %}
-
-<div class="row justify-content-center">
-    <div class="col-md-5">
-        <div class="card h-100">
-            <div class="card-header">
-                <h3>I'm a Seller</h3>
-            </div>
-            <div class="card-body">
-                <div class="text-center mb-3">
-                    <i class="bi bi-shop fs-1 text-success"></i>
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h3>I'm a Seller</h3>
                 </div>
-                <p>Upload and showcase your products with complete transparency - share nutritional details, ingredient
-                    lists, and allergen information to build consumer trust.</p>
-                {% if user.is_authenticated %}
-                <a href="/seller/upload/" class="btn btn-primary btn-lg w-100 mt-3">Seller Portal</a>
-                {% else %}
-                <a href="/login/?next=/" class="btn btn-primary btn-lg w-100 mt-3">Login to Access</a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    <div class="col-md-5">
-        <div class="card h-100">
-            <div class="card-header">
-                <h3>I'm a Consumer</h3>
-            </div>
-            <div class="card-body">
-                <div class="text-center mb-3">
-                    <i class="bi bi-person fs-1 text-success"></i>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-shop fs-1 text-success"></i>
+                    </div>
+                    <p>Upload and showcase your products with complete transparency - share nutritional details,
+                        ingredient
+                        lists, and allergen information to build consumer trust.</p>
+                    {% if user.is_authenticated %}
+                    <a href="/" class="btn btn-primary btn-lg w-100 mt-3">Seller Portal</a>
+                    {% else %}
+                    <a href="/login/?next=/seller/" class="btn btn-primary btn-lg w-100 mt-3">Login to Access</a>
+                    {% endif %}
                 </div>
-                <p>Discover what's really in your products - scan barcodes for instant access to comprehensive
-                    nutritional data, allergen warnings, and ingredient transparency.</p>
-                {% if user.is_authenticated %}
-                <a href="/consumer/" class="btn btn-primary btn-lg w-100 mt-3">Consumer App</a>
-                {% else %}
-                <a href="/login/?next=/consumer/" class="btn btn-primary btn-lg w-100 mt-3">Login to Access</a>
-                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h3>I'm a Consumer</h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-person fs-1 text-success"></i>
+                    </div>
+                    <p>Discover what's really in your products - scan barcodes for instant access to comprehensive
+                        nutritional data, allergen warnings, and ingredient transparency.</p>
+                    {% if user.is_authenticated %}
+                    <a href="/consumer/" class="btn btn-primary btn-lg w-100 mt-3">Consumer App</a>
+                    {% else %}
+                    <a href="/login/?next=/consumer/" class="btn btn-primary btn-lg w-100 mt-3">Login to Access</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-{% if not user.is_authenticated %}
-<div class="text-center mt-5">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Ready to Make Better Choices?</h5>
-            <p class="card-text">Be among the first to join our innovative platform empowering health-conscious
-                consumers with complete product transparency!</p>
-            <a href="/register/" class="btn btn-success btn-lg me-2">
-                <i class="bi bi-person-plus"></i> Register Now
-            </a>
-            <a href="/login/" class="btn btn-outline-success btn-lg">
-                <i class="bi bi-box-arrow-in-right"></i> Login
-            </a>
+    {% if not user.is_authenticated %}
+    <div class="text-center mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Ready to Make Better Choices?</h5>
+                <p class="card-text">Be among the first to join our innovative platform empowering health-conscious
+                    consumers with complete product transparency!</p>
+                <a href="/register/" class="btn btn-success btn-lg me-2">
+                    <i class="bi bi-person-plus"></i> Register Now
+                </a>
+                <a href="/login/" class="btn btn-outline-success btn-lg">
+                    <i class="bi bi-box-arrow-in-right"></i> Login
+                </a>
+            </div>
         </div>
     </div>
-</div>
-{% endif %}
+    {% endif %}
 
-<div class="text-center mt-5 text-secondary">
-    <p>© 2025 SwasthCare. All rights reserved.</p>
-</div>
+    <div class="text-center mt-5 text-secondary">
+        <p>© 2025 SwasthCare. All rights reserved.</p>
+    </div>
 </div>
 {% endblock %}

@@ -169,10 +169,17 @@
 
                     <!-- Action Buttons -->
                     <div class="form-actions">
-                        <a href="{% url 'upload_document' %}" class="btn btn-outline-secondary">
+                        {% if editing_item %}
+                        <a href="{% url 'list_food_items' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i>
+                            Back to All Items
+                        </a>
+                        {% else %}
+                        <a href="{% url 'seller_upload' %}" class="btn btn-outline-secondary">
                             <i class="bi bi-arrow-left"></i>
                             Back to Upload
                         </a>
+                        {% endif %}
                         <button type="submit" class="btn btn-success" id="saveBtn">
                             <i class="bi bi-check-circle"></i>
                             Save Product Data
@@ -1195,7 +1202,7 @@ grid-template-columns: 1fr 1fr;
                         </div>
 
                         <div class="actions">
-                            <a href="{% url 'upload_document' %}" class="btn btn-secondary">Cancel</a>
+                            <a href="{% url 'seller_upload' %}" class="btn btn-secondary">Cancel</a>
                             <button type="submit" class="btn btn-primary" id="saveBtn">Save Product Data</button>
                         </div>
                     </form>

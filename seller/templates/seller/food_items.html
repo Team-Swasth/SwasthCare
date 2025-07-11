@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}SwasthCare - All Food Items{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-4">All Food Items</h1>
+    {% if food_items %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Barcode</th>
+                <th>Product Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in food_items %}
+            <tr onclick="window.location.href='{% url 'edit_food_item' item.id %}';" style="cursor: pointer;">
+                <td>{{ item.barcode }}</td>
+                <td>{{ item.prod_name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No food items found.</p>
+    {% endif %}
+    <a href="{% url 'seller_home' %}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+{% endblock %}
