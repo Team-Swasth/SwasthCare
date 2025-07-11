@@ -93,25 +93,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-6">
-                <div class="action-card">
-                    <div class="card-icon-wrapper">
-                        <i class="bi bi-card-list"></i>
-                    </div>
-                    <div class="card-content">
-                        <h5 class="card-title">
-                            <i class="bi bi-card-list me-2"></i>View All Products
-                        </h5>
-                        <p class="card-description">
-                            Browse all your uploaded food items.
-                        </p>
-                        <a href="{% url 'list_food_items' %}" class="btn btn-primary btn-action">
-                            <i class="bi bi-arrow-right me-2"></i>View Products
-                        </a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -130,6 +111,16 @@
                     <h6>Profile Management</h6>
                     <p class="text-muted small">View and update your profile information</p>
                     <a href="{% url 'profile' %}" class="btn btn-sm btn-outline-primary">View Profile</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-card-list text-primary"></i>
+                    </div>
+                    <h6>View All Products</h6>
+                    <p class="text-muted small">Browse all your uploaded food items</p>
+                    <a href="{% url 'list_food_items' %}" class="btn btn-sm btn-outline-primary">View Products</a>
                 </div>
             </div>
             <div class="col-md-4">

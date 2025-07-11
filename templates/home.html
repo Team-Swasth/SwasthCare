@@ -32,7 +32,7 @@
     <div class="alert alert-info alert-dismissible fade show auto-dismiss-alert" role="alert">
         <i class="bi bi-info-circle"></i>
         Welcome back! You're logged in as a <strong>Seller</strong>.
-        <a href="/" class="alert-link">Go to your dashboard</a> to manage your products.
+        <a href="/seller/" class="alert-link">Go to your dashboard</a> to manage your products.
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         <div class="progress mt-2" style="height: 3px;">
             <div class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
@@ -42,7 +42,7 @@
     <div class="alert alert-info alert-dismissible fade show auto-dismiss-alert" role="alert">
         <i class="bi bi-info-circle"></i>
         Welcome back! You're logged in as a <strong>Consumer</strong>.
-        <a href="/" class="alert-link">Go to your dashboard</a> to start scanning products.
+        <a href="/consumer/" class="alert-link">Go to your dashboard</a> to start scanning products.
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         <div class="progress mt-2" style="height: 3px;">
             <div class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
@@ -65,7 +65,7 @@
                         ingredient
                         lists, and allergen information to build consumer trust.</p>
                     {% if user.is_authenticated %}
-                    <a href="/" class="btn btn-primary btn-lg w-100 mt-3">Seller Portal</a>
+                    <a href="/seller/" class="btn btn-primary btn-lg w-100 mt-3">Seller Portal</a>
                     {% else %}
                     <a href="/login/?next=/seller/" class="btn btn-primary btn-lg w-100 mt-3">Login to Access</a>
                     {% endif %}
