@@ -1,0 +1,7 @@
+# Azure Developer CLI configuration for SwasthCare
+name: SwasthCare
+services:
+  SwasthCare:
+    project: .
+    language: python
+    host: appservice

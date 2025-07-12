@@ -1,0 +1,57 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"environmentName": {
+			"value": "${AZURE_ENV_NAME}"
+		},
+		"location": {
+			"value": "${AZURE_LOCATION}"
+		},
+		"resourceGroupName": {
+			"value": "rg-${AZURE_ENV_NAME}"
+		},
+		"DJANGO_SECRET_KEY": {
+			"value": "${SECRET_KEY}"
+		},
+		"DATABASE_URL": {
+			"value": "${COSMOS_CONN_STRING}"
+		},
+		"AZURE_STORAGE_CONNECTION_STRING": {
+			"value": "${AZURE_STORAGE_CONNECTION_STRING}"
+		},
+		"DB_NAME": {
+			"value": "${DB_NAME}"
+		},
+		"DB_USER": {
+			"value": "${DB_USER}"
+		},
+		"DB_PASSWORD": {
+			"value": "${DB_PASSWORD}"
+		},
+		"DB_HOST": {
+			"value": "${DB_HOST}"
+		},
+		"DB_PORT": {
+			"value": "${DB_PORT}"
+		},
+		"AZURE_DI_ENDPOINT": {
+			"value": "${AZURE_DI_ENDPOINT}"
+		},
+		"AZURE_DI_API_KEY": {
+			"value": "${AZURE_DI_API_KEY}"
+		},
+		"AZURE_AI_ENDPOINT": {
+			"value": "${AZURE_AI_ENDPOINT}"
+		},
+		"AZURE_AI_API_KEY": {
+			"value": "${AZURE_AI_API_KEY}"
+		},
+		"AZURE_COMMUNICATION_CONNECTION_STRING": {
+			"value": "${AZURE_COMMUNICATION_CONNECTION_STRING}"
+		},
+		"AZURE_COMMUNICATION_FROM_EMAIL": {
+			"value": "${AZURE_COMMUNICATION_FROM_EMAIL}"
+		}
+	}
+}

@@ -137,3 +137,9 @@ setup_azure_communication.py
 migrations/__init__.py
 migrations/*.py
 migrations/*.py
+
+# Infrastructure folder
+infra/
+*.bicep
+*.parameters.json
+*.gitkeep

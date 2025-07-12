@@ -29,7 +29,22 @@ def chat_about_product(product_json, user_question, stream=False):
         "Answer the user's question based only on the provided product data. "
         "If the answer is not present in the data, say 'Sorry, that information is not available.'"
     )
-    product_json_str = json.dumps(product_json, indent=2)
+    # Convert any datetime objects in product_json to strings
+    def convert_datetime(obj):
+        if isinstance(obj, dict):
+            return {k: convert_datetime(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [convert_datetime(v) for v in obj]
+        elif hasattr(obj, 'isoformat'):
+            try:
+                return obj.isoformat()
+            except Exception:
+                return str(obj)
+        else:
+            return obj
+
+    product_json_serializable = convert_datetime(product_json)
+    product_json_str = json.dumps(product_json_serializable, indent=2)
     user_prompt = (
         f"Product details:\n```\n{product_json_str}\n```\n\n"
         f"User question: {user_question}"

@@ -25,9 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-for-dev')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True')
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
+
+ALLOWED_HOSTS += os.getenv('ALLOWED_HOSTS', '').split(',')
 
 
 # Application definition
@@ -144,16 +146,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
-# Email Configuration
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development - prints to console
-
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
-DEFAULT_FROM_EMAIL = 'SwasthCare <noreply@swasthcare.com>'
 
 # MongoDB Configuration for product data
 COSMOSDB_URI = os.getenv("COSMOS_CONN_STRING")
