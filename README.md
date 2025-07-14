@@ -2,6 +2,10 @@
 
 SwasthCare is a comprehensive platform designed to empower consumers and sellers by providing transparency in product information. It leverages Azure services for AI-powered analysis, document intelligence, and communication.
 
+## Working Demo
+
+[![Team Swasth - SwasthCare](https://img.youtube.com/vi/3PDhfSx_l1c/0.jpg)](https://www.youtube.com/watch?v=3PDhfSx_l1c)
+
 ## Features
 
 - **Consumer Dashboard**: Scan barcodes to access detailed product information, including nutritional data, ingredients, and allergen warnings.
